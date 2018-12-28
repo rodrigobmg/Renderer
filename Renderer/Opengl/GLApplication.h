@@ -7,8 +7,11 @@ class GLApplication : public IApplication
 {
 public:
 	GLApplication(int windowHeight, int windowWidth, const char* name);
+	GLApplication(GLApplication& other) = delete;
+	GLApplication& operator=(GLApplication& other) = delete;
 	~GLApplication();
-	virtual void Start() override;
+
+	virtual void Run() override;
 
 private:
 	static IWindow*	m_window;

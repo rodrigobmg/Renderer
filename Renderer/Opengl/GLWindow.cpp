@@ -1,11 +1,11 @@
-#include "GLFWindow.h"
+#include "GLWindow.h"
 
 #include <Externals/GLAD/Includes.h>
 #include <Externals/GLFW/Includes.h>
 #include <General/Logger.h>
 #include <assert.h>
 
-GLFWindow::GLFWindow(int windowWidth, int windowHeight, const char* name)
+GLWindow::GLWindow(int windowWidth, int windowHeight, const char* name)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -32,43 +32,43 @@ GLFWindow::GLFWindow(int windowWidth, int windowHeight, const char* name)
 	glfwSetFramebufferSizeCallback(m_window, FrameBufferSizeCallback);
 }
 
-GLFWindow::~GLFWindow()
+GLWindow::~GLWindow()
 {
 	glfwTerminate();
 }
 
-bool GLFWindow::Closed() const
+bool GLWindow::Closed() const
 {
 	return glfwWindowShouldClose(m_window);
 }
 
-void GLFWindow::ProcessInputs()
+void GLWindow::ProcessInputs()
 {
 	ProcessKeyboardInput(m_window);
 	glfwPollEvents();
 }
 
-void GLFWindow::SwapBuffers()
+void GLWindow::SwapBuffers()
 {
 	glfwSwapBuffers(m_window);
 }
 
-void GLFWindow::MouseCallback(GLFWwindow * window, double xpos, double ypos)
+void GLWindow::MouseCallback(GLFWwindow * window, double xpos, double ypos)
 {
 }
 
-void GLFWindow::ScrollCallback(GLFWwindow * window, double xoffset, double yoffset)
+void GLWindow::ScrollCallback(GLFWwindow * window, double xoffset, double yoffset)
 {
 }
 
-void GLFWindow::ProcessKeyboardInput(GLFWwindow * window)
+void GLWindow::ProcessKeyboardInput(GLFWwindow * window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
 }
 
-void GLFWindow::FrameBufferSizeCallback(GLFWwindow * window, int width, int height)
+void GLWindow::FrameBufferSizeCallback(GLFWwindow * window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }

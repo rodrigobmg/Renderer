@@ -4,11 +4,11 @@
 
 struct GLFWwindow;
 
-class GLFWindow : public IWindow
+class GLWindow : public IWindow
 {
 public:
-	GLFWindow(int windowWidth, int windowHeight, const char* name);
-	~GLFWindow();
+	GLWindow(int windowWidth, int windowHeight, const char* name);
+	~GLWindow();
 	virtual bool Closed() const override;
 	virtual void ProcessInputs() override;
 	virtual void SwapBuffers() override;

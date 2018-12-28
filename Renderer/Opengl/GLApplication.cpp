@@ -1,6 +1,6 @@
 #include "GLApplication.h"
 
-#include "GLFWindow.h"
+#include "GLWindow.h"
 #include <cassert>
 
 IWindow* GLApplication::m_window = nullptr;
@@ -8,7 +8,7 @@ IWindow* GLApplication::m_window = nullptr;
 GLApplication::GLApplication(int windowHeight, int windowWidth, const char* name)
 {
 	assert(!m_window);
-	m_window = new GLFWindow(windowHeight, windowWidth, name);
+	m_window = new GLWindow(windowHeight, windowWidth, name);
 	assert(m_window);
 }
 
@@ -17,7 +17,7 @@ GLApplication::~GLApplication()
 	delete m_window;
 }
 
-void GLApplication::Start()
+void GLApplication::Run()
 {
 	while (!m_window->Closed())
 	{

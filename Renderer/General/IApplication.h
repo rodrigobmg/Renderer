@@ -4,5 +4,5 @@ class IApplication
 {
 public:
 	virtual ~IApplication() {};
-	virtual void Start() = 0;
+	virtual void Run() = 0;
 };
