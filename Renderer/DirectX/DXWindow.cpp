@@ -1,6 +1,7 @@
 #include "DXWindow.h"
 
 #include <General/Logger.h>
+#include <General/Input.h>
 #include <cassert>
 
 DXWindow::DXWindow(int windowWidth, int windowHeight, const char* name)
@@ -53,11 +54,12 @@ DXWindow::DXWindow(int windowWidth, int windowHeight, const char* name)
 
 DXWindow::~DXWindow()
 {
+	//Shutdown input
+	Input::Shutdown();
+
 	// Show the mouse cursor.
 	ShowCursor(true);
 
-	// Remove the window.
-	DestroyWindow(m_hwnd);
 	m_hwnd = NULL;
 
 	// Remove the application instance.
@@ -84,6 +86,11 @@ void DXWindow::SwapBuffers()
 {
 }
 
+void DXWindow::Close()
+{
+	DestroyWindow(m_hwnd);
+}
+
 LRESULT CALLBACK DXWindow::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
 	switch (umessage)
@@ -99,6 +106,18 @@ LRESULT CALLBACK DXWindow::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM
 	case WM_CLOSE:
 	{
 		PostQuitMessage(0);
+		return 0;
+	}
+
+	case WM_KEYDOWN :
+	{
+		Input::SetKeyDown(static_cast<unsigned int>(wparam));
+		return 0;
+	}
+
+	case WM_KEYUP:
+	{
+		Input::SetKeyUp(static_cast<unsigned int>(wparam));
 		return 0;
 	}
 

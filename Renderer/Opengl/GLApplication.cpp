@@ -2,6 +2,7 @@
 
 #include "GLWindow.h"
 #include <cassert>
+#include <General/Input.h>
 
 IWindow* GLApplication::m_window = nullptr;
 
@@ -22,6 +23,15 @@ void GLApplication::Run()
 	while (!m_window->Closed())
 	{
 		m_window->ProcessInputs();
+		Update();
 		m_window->SwapBuffers();
+	}
+}
+
+void GLApplication::Update()
+{
+	if (Input::GetKeyDown(Input::KEY_ESC))
+	{
+		m_window->Close();
 	}
 }

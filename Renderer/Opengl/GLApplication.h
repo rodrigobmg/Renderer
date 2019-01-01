@@ -14,5 +14,7 @@ public:
 	virtual void Run() override;
 
 private:
+	virtual void Update() override;
+
 	static IWindow*	m_window;
 };

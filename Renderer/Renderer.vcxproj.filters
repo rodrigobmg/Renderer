@@ -8,6 +8,9 @@
     <ClCompile Include="Opengl\GLWindow.cpp" />
     <ClCompile Include="DirectX\DXApplication.cpp" />
     <ClCompile Include="DirectX\DXWindow.cpp" />
+    <ClCompile Include="DirectX\DXInputMap.cpp" />
+    <ClCompile Include="Opengl\GLInputMap.cpp" />
+    <ClCompile Include="General\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
@@ -19,5 +22,9 @@
     <ClInclude Include="Opengl\GLWindow.h" />
     <ClInclude Include="DirectX\DXApplication.h" />
     <ClInclude Include="DirectX\DXWindow.h" />
+    <ClInclude Include="General\Input.h" />
+    <ClInclude Include="DirectX\DXInputMap.h" />
+    <ClInclude Include="Opengl\GLInputMap.h" />
+    <ClInclude Include="General\IInputMap.h" />
   </ItemGroup>
 </Project>

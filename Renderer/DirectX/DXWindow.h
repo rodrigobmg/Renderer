@@ -14,12 +14,13 @@ public:
 	virtual bool Closed() const override;
 	virtual void ProcessInputs() override;
 	virtual void SwapBuffers() override;
+	virtual void Close() override;
 
 private:
 	static LRESULT CALLBACK HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 
 	LPCSTR		m_applicationName;
 	HINSTANCE	m_hinstance;
-	HWND		m_hwnd{};
+	HWND		m_hwnd;
 	MSG			m_msg;
 };
