@@ -3,28 +3,26 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="General\Logger.cpp" />
-    <ClCompile Include="Opengl\GLApplication.cpp" />
     <ClCompile Include="Externals\GLAD\src\glad.c" />
     <ClCompile Include="Opengl\GLWindow.cpp" />
-    <ClCompile Include="DirectX\DXApplication.cpp" />
     <ClCompile Include="DirectX\DXWindow.cpp" />
     <ClCompile Include="DirectX\DXInputMap.cpp" />
     <ClCompile Include="Opengl\GLInputMap.cpp" />
     <ClCompile Include="General\Input.cpp" />
+    <ClCompile Include="General\Application.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
     <ClInclude Include="General\IWindow.h" />
     <ClInclude Include="General\Logger.h" />
-    <ClInclude Include="Opengl\GLApplication.h" />
     <ClInclude Include="General\Pointers.h" />
     <ClInclude Include="General\ApplicationMgr.h" />
     <ClInclude Include="Opengl\GLWindow.h" />
-    <ClInclude Include="DirectX\DXApplication.h" />
     <ClInclude Include="DirectX\DXWindow.h" />
     <ClInclude Include="General\Input.h" />
     <ClInclude Include="DirectX\DXInputMap.h" />
     <ClInclude Include="Opengl\GLInputMap.h" />
     <ClInclude Include="General\IInputMap.h" />
+    <ClInclude Include="General\Application.h" />
   </ItemGroup>
 </Project>
