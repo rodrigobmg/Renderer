@@ -3,6 +3,7 @@
 #include"IApplication.h"
 
 class IWindow;
+class IGraphics;
 class Application : public IApplication
 {
 public:
@@ -12,5 +13,6 @@ public:
 	virtual void Update() override;
 
 private:
-	static IWindow*	m_window;
+	IWindow*	m_window;
+	IGraphics*	m_graphics;
 };

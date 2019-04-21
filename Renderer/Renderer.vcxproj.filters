@@ -10,6 +10,8 @@
     <ClCompile Include="Opengl\GLInputMap.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Application.cpp" />
+    <ClCompile Include="DirectX\DXGraphics.cpp" />
+    <ClCompile Include="General\Math\Matrix3d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
@@ -24,5 +26,8 @@
     <ClInclude Include="Opengl\GLInputMap.h" />
     <ClInclude Include="General\IInputMap.h" />
     <ClInclude Include="General\Application.h" />
+    <ClInclude Include="General\IGraphics.h" />
+    <ClInclude Include="DirectX\DXGraphics.h" />
+    <ClInclude Include="General\Math\Matrix3d.h" />
   </ItemGroup>
 </Project>

@@ -1,19 +1,29 @@
 #include "Application.h"
 
 #include <General/Input.h>
+
 #include <DirectX/DXWindow.h>
+#include <DirectX/DXGraphics.h>
+
 #include <Opengl/GLWindow.h>
+
 #include <cassert>
 
-IWindow* Application::m_window = nullptr;
+const bool kFullscreen = false;
+const bool kVsyncEnabled = true;
+const float kScreenDepth = 1000.0f;
+const float kScreenNear = 0.1f;
 
 Application::Application(int windowWidth, int windowHeight, const char* name)
 {
 	assert(!m_window);
 #ifdef DIRECTX
 	m_window = new DXWindow(windowWidth, windowHeight, name);
+	m_graphics = new DXGraphics();
+	m_graphics->Initialize(windowWidth, windowHeight, kVsyncEnabled, m_window, kFullscreen, kScreenDepth, kScreenNear);
 #elif OPENGL
 	m_window = new GLWindow(windowWidth, windowHeight, name);
+	m_graphics = nullptr;
 #else
 #error Unsupported platform
 #endif // DIRECTX
@@ -22,7 +32,14 @@ Application::Application(int windowWidth, int windowHeight, const char* name)
 
 Application::~Application()
 {
-	delete m_window;
+	if (m_window)
+	{
+		delete m_window;
+	}
+	if (m_graphics)
+	{
+		delete m_graphics;
+	}
 }
 
 void Application::Run()
@@ -31,6 +48,10 @@ void Application::Run()
 	{
 		m_window->ProcessInputs();
 		Update();
+		if (m_graphics)
+		{
+			m_graphics->Render();
+		}
 		m_window->SwapBuffers();
 	}
 }
