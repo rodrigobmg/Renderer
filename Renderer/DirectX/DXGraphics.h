@@ -24,8 +24,8 @@ public:
 
 private:
 	bool						m_vsyncEnabled;
-	int							m_videoCardMemory;
-	char						m_videoCardDescriptiion[128];
+	int							m_graphicsDeviceMemory;
+	char						m_graphicsDeviceDescription[128];
 	IDXGISwapChain*				m_swapChain;
 	ID3D11Device*				m_device;
 	ID3D11DeviceContext*		m_deviceContext;
