@@ -2,6 +2,8 @@
 
 #include "General/IGraphics.h"
 
+#include <DirectXMath.h>
+
 struct IDXGISwapChain;
 struct ID3D11Device;
 struct ID3D11DeviceContext;
@@ -19,7 +21,7 @@ public:
 	~DXGraphics();
 
 	virtual bool Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear);
-	virtual void Render();
+	virtual void Render(float r, float g, float b, float a);
 	virtual void Shutdown();
 
 private:
@@ -34,4 +36,7 @@ private:
 	ID3D11DepthStencilState*	m_depthStencilState;
 	ID3D11DepthStencilView*		m_depthStencilView;
 	ID3D11RasterizerState*		m_rasterState;
+	DirectX::XMMATRIX			m_projectionMatrix;
+	DirectX::XMMATRIX			m_worldMatrix;
+	DirectX::XMMATRIX			m_orthoMatrix;
 };

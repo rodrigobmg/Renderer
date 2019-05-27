@@ -16,6 +16,8 @@ public:
 	virtual void SwapBuffers() override;
 	virtual void Close() override;
 
+	HWND GetHandle() const { return m_hwnd; }
+
 private:
 	static LRESULT CALLBACK HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 

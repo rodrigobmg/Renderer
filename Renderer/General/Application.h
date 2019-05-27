@@ -11,8 +11,10 @@ public:
 	~Application();
 	virtual void Run() override;
 	virtual void Update() override;
+	virtual bool IsReady() const override { return m_ready; }
 
 private:
 	IWindow*	m_window;
 	IGraphics*	m_graphics;
+	bool		m_ready;
 };
