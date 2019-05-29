@@ -2,13 +2,18 @@
 
 #include <General/Input.h>
 
+#ifdef DIRECTX
 #include <DirectX/DXWindow.h>
 #include <DirectX/DXGraphics.h>
-
+#elif OPENGL
 #include <Opengl/GLWindow.h>
+#include <Opengl/GLGraphics.h>
+#else
+#error Unsupported platform
+#endif
 
 #include <cassert>
-
+#pragma optimize("", off)
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
 const float kScreenDepth = 1000.0f;
@@ -20,15 +25,14 @@ Application::Application(int windowWidth, int windowHeight, const char* name)
 	assert(!m_window);
 #ifdef DIRECTX
 	m_window = new DXWindow(windowWidth, windowHeight, name);
-	m_ready = m_window != nullptr;
 	m_graphics = new DXGraphics();
-	m_ready &= m_graphics->Initialize(windowWidth, windowHeight, kVsyncEnabled, m_window, kFullscreen, kScreenDepth, kScreenNear);
 #elif OPENGL
 	m_window = new GLWindow(windowWidth, windowHeight, name);
-	m_graphics = nullptr;
+	m_graphics = new GLGraphics();
 #else
 #error Unsupported platform
-#endif // DIRECTX
+#endif
+	m_ready =m_graphics->Initialize(windowWidth, windowHeight, kVsyncEnabled, m_window, kFullscreen, kScreenDepth, kScreenNear);
 	assert(m_window);
 }
 

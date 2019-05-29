@@ -1,6 +1,5 @@
 #include "GLWindow.h"
 
-#include <Externals/GLAD/Includes.h>
 #include <Externals/GLFW/Includes.h>
 #include <General/Logger.h>
 #include <General/Input.h>
@@ -21,16 +20,11 @@ GLWindow::GLWindow(int windowWidth, int windowHeight, const char* name)
 	}
 	
 	glfwMakeContextCurrent(m_window);
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		LOG("Failed to initialize GLAD");
-		assert(false);
-	}
 
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
  	glfwSetCursorPosCallback(m_window, MouseCallback);
  	glfwSetScrollCallback(m_window, ScrollCallback);
 	glfwSetKeyCallback(m_window, KeyCallback);
-	glViewport(0, 0, windowWidth, windowHeight);
 	glfwSetFramebufferSizeCallback(m_window, FrameBufferSizeCallback);
 }
 
@@ -83,5 +77,5 @@ void GLWindow::KeyCallback(GLFWwindow* window, int key, int scancode, int action
 
 void GLWindow::FrameBufferSizeCallback(GLFWwindow * window, int width, int height)
 {
-	glViewport(0, 0, width, height);
+	
 }

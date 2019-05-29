@@ -11,6 +11,7 @@
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Application.cpp" />
     <ClCompile Include="DirectX\DXGraphics.cpp" />
+    <ClCompile Include="Opengl\GLGraphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
@@ -27,5 +28,6 @@
     <ClInclude Include="General\Application.h" />
     <ClInclude Include="General\IGraphics.h" />
     <ClInclude Include="DirectX\DXGraphics.h" />
+    <ClInclude Include="Opengl\GLGraphics.h" />
   </ItemGroup>
 </Project>
