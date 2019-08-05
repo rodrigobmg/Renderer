@@ -7,7 +7,7 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 
-//Reference:http://www.rastertek.com/dx11tut03.html
+//Reference:http://www.rastertek.com/
 
 DXGraphics::DXGraphics()
 	:m_vsyncEnabled(false)
@@ -20,6 +20,9 @@ DXGraphics::DXGraphics()
 	,m_depthStencilState(nullptr)
 	,m_depthStencilView(nullptr)
 	,m_rasterState(nullptr)
+	,m_camera(nullptr)
+	,m_model(nullptr)
+	,m_colorShader(nullptr)
 {
 }
 
@@ -270,7 +273,7 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	D3D11_RASTERIZER_DESC rasterDesc;
 	D3D11_VIEWPORT viewport;
-	float fieldOfView, screenAspect;
+	//float fieldOfView, screenAspect;
 
 	if (!GetGraphicsDeviceInfo(screenWidth, screenHeight, refreshRateNumerator, refreshRateDenominator, m_graphicsDeviceMemory, m_graphicsDeviceDescription))
 	{
@@ -369,23 +372,67 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	m_deviceContext->RSSetViewports(1, &viewport);
 
 	//Set up projection matrix
-	fieldOfView = DirectX::XM_PI / 4.0f;
-	screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
+	float fieldOfView = Math::PI / 4.0f;
+	float screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
 
-	//Create the projection matrix
-	m_projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
+	////Create the projection matrix
+	m_projectionMatrix = Math::MatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
 
-	//Initialize world matrix to identity matrix
-	m_worldMatrix = DirectX::XMMatrixIdentity();
+	////Initialize world matrix to identity matrix
+	m_worldMatrix = Math::MatrixIdentity();
 
-	//Create orthographic projection matrix
-	m_orthoMatrix = DirectX::XMMatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
+	////Create orthographic projection matrix
+	m_orthoMatrix = Math::MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
+
+	// Create the camera object.
+	m_camera = new Camera();
+	if (!m_camera)
+	{
+		return false;
+	}
+
+	// Set the initial position of the camera.
+	m_camera->SetPosition(0.0f, 0.0f, -10.0f);
+
+	// Create the model object.
+	m_model = new DXMesh(m_device, m_deviceContext);
+	if (!m_model)
+	{
+		return false;
+	}
+
+	// Initialize the model object.
+	result = m_model->Initialize();
+	if (!result)
+	{
+		MessageBox(reinterpret_cast<const DXWindow*>(window)->GetHandle(), LPCSTR("Could not initialize the model object."), LPCSTR("Error"), MB_OK);
+		return false;
+	}
+
+	// Create the color shader object.
+	m_colorShader = new ColorShader();
+	if (!m_colorShader)
+	{
+		return false;
+	}
+
+	// Initialize the color shader object.
+	result = m_colorShader->Initialize(m_device, reinterpret_cast<const DXWindow*>(window)->GetHandle());
+	if (!result)
+	{
+		MessageBox(reinterpret_cast<const DXWindow*>(window)->GetHandle(), LPCSTR("Could not initialize the color shader object."), LPCSTR("Error"), MB_OK);
+		return false;
+	}
 
 	return true;
 }
 
 void DXGraphics::Render(float r, float g, float b, float a)
 {
+
+	Matrix4d viewMatrix;
+	bool result;
+
 	float color[4];
 	color[0] = r;
 	color[1] = g;
@@ -398,6 +445,22 @@ void DXGraphics::Render(float r, float g, float b, float a)
 	//Clear depth buffer
 	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+	// Generate the view matrix based on the camera's position.
+	m_camera->Render();
+
+	// Get the world, view, and projection matrices from the camera and d3d objects.
+	m_camera->GetViewMatrix(viewMatrix);
+
+	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_model->Render();
+
+	// Render the model using the color shader.
+	result = m_colorShader->Render(m_deviceContext, m_model->GetIndexCount(), m_worldMatrix, viewMatrix, m_projectionMatrix);
+	if (!result)
+	{
+		return;
+	}
+	
 	// Present the back buffer to the screen since rendering is complete.
 	if (m_vsyncEnabled)
 	{
@@ -413,6 +476,29 @@ void DXGraphics::Render(float r, float g, float b, float a)
 
 void DXGraphics::Shutdown()
 {
+	// Release the color shader object.
+	if (m_colorShader)
+	{
+		m_colorShader->Shutdown();
+		delete m_colorShader;
+		m_colorShader = nullptr;
+	}
+
+	// Release the model object.
+	if (m_model)
+	{
+		m_model->Shutdown();
+		delete m_model;
+		m_model = nullptr;
+	}
+
+	// Release the camera object.
+	if (m_camera)
+	{
+		delete m_camera;
+		m_camera = nullptr;
+	}
+
 	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
 	if (m_swapChain)
 	{

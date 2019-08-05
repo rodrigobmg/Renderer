@@ -13,7 +13,7 @@
 #endif
 
 #include <cassert>
-#pragma optimize("", off)
+
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
 const float kScreenDepth = 1000.0f;
@@ -57,7 +57,7 @@ void Application::Run()
 		Update();
 		if (m_graphics)
 		{
-			m_graphics->Render(0.5f, 0.5f, 0.5f, 1.0f);
+			m_graphics->Render(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 		m_window->SwapBuffers();
 	}

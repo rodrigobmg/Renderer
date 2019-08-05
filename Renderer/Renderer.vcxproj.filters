@@ -12,6 +12,10 @@
     <ClCompile Include="General\Application.cpp" />
     <ClCompile Include="DirectX\DXGraphics.cpp" />
     <ClCompile Include="Opengl\GLGraphics.cpp" />
+    <ClCompile Include="DirectX\DXMesh.cpp" />
+    <ClCompile Include="DirectX\ColorShader.cpp" />
+    <ClCompile Include="DirectX\Camera.cpp" />
+    <ClCompile Include="General\Math\Math.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
@@ -29,5 +33,14 @@
     <ClInclude Include="General\IGraphics.h" />
     <ClInclude Include="DirectX\DXGraphics.h" />
     <ClInclude Include="Opengl\GLGraphics.h" />
+    <ClInclude Include="General\IMesh.h" />
+    <ClInclude Include="DirectX\DXMesh.h" />
+    <ClInclude Include="General\Math\Math.h" />
+    <ClInclude Include="DirectX\ColorShader.h" />
+    <ClInclude Include="DirectX\Camera.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DirectX\Shaders\color.vs" />
+    <None Include="DirectX\Shaders\color.ps" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "General/IGraphics.h"
-
-#include <DirectXMath.h>
+#include <General\IGraphics.h>
+#include "Camera.h"
+#include "DXMesh.h"
+#include "ColorShader.h"
 
 struct IDXGISwapChain;
 struct ID3D11Device;
@@ -20,9 +21,9 @@ public:
 	DXGraphics& operator=(const DXGraphics&) = delete;
 	~DXGraphics();
 
-	virtual bool Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear);
-	virtual void Render(float r, float g, float b, float a);
-	virtual void Shutdown();
+	virtual bool Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear) override;
+	virtual void Render(float r, float g, float b, float a) override;
+	virtual void Shutdown() override;
 
 private:
 	bool						m_vsyncEnabled;
@@ -36,7 +37,10 @@ private:
 	ID3D11DepthStencilState*	m_depthStencilState;
 	ID3D11DepthStencilView*		m_depthStencilView;
 	ID3D11RasterizerState*		m_rasterState;
-	DirectX::XMMATRIX			m_projectionMatrix;
-	DirectX::XMMATRIX			m_worldMatrix;
-	DirectX::XMMATRIX			m_orthoMatrix;
+	Camera*						m_camera;
+	DXMesh*						m_model;
+	ColorShader*				m_colorShader;
+	Matrix4d					m_projectionMatrix;
+	Matrix4d					m_worldMatrix;
+	Matrix4d					m_orthoMatrix;
 };
