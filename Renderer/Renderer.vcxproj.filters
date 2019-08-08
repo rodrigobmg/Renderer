@@ -16,6 +16,8 @@
     <ClCompile Include="DirectX\ColorShader.cpp" />
     <ClCompile Include="DirectX\Camera.cpp" />
     <ClCompile Include="General\Math\Math.cpp" />
+    <ClCompile Include="DirectX\Texture.cpp" />
+    <ClCompile Include="TextureShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
@@ -38,9 +40,16 @@
     <ClInclude Include="General\Math\Math.h" />
     <ClInclude Include="DirectX\ColorShader.h" />
     <ClInclude Include="DirectX\Camera.h" />
+    <ClInclude Include="DirectX\Texture.h" />
+    <ClInclude Include="TextureShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\Shaders\color.vs" />
     <None Include="DirectX\Shaders\color.ps" />
+    <None Include="packages.config" />
+    <None Include="DirectX\Shaders\texture.ps" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="DirectX\Shaders\texture.vs" />
   </ItemGroup>
 </Project>

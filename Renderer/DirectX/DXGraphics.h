@@ -3,7 +3,7 @@
 #include <General\IGraphics.h>
 #include "Camera.h"
 #include "DXMesh.h"
-#include "ColorShader.h"
+#include "TextureShader.h"
 
 struct IDXGISwapChain;
 struct ID3D11Device;
@@ -39,7 +39,7 @@ private:
 	ID3D11RasterizerState*		m_rasterState;
 	Camera*						m_camera;
 	DXMesh*						m_model;
-	ColorShader*				m_colorShader;
+	TextureShader*				m_textureShader;
 	Matrix4d					m_projectionMatrix;
 	Matrix4d					m_worldMatrix;
 	Matrix4d					m_orthoMatrix;

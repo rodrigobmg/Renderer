@@ -22,7 +22,7 @@ DXGraphics::DXGraphics()
 	,m_rasterState(nullptr)
 	,m_camera(nullptr)
 	,m_model(nullptr)
-	,m_colorShader(nullptr)
+	,m_textureShader(nullptr)
 {
 }
 
@@ -395,7 +395,7 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	m_camera->SetPosition(0.0f, 0.0f, -10.0f);
 
 	// Create the model object.
-	m_model = new DXMesh(m_device, m_deviceContext);
+	m_model = new DXMesh(m_device, m_deviceContext, "Shaders/seafloor.dds");
 	if (!m_model)
 	{
 		return false;
@@ -410,17 +410,17 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	}
 
 	// Create the color shader object.
-	m_colorShader = new ColorShader();
-	if (!m_colorShader)
+	m_textureShader = new TextureShader();
+	if (!m_textureShader)
 	{
 		return false;
 	}
 
 	// Initialize the color shader object.
-	result = m_colorShader->Initialize(m_device, reinterpret_cast<const DXWindow*>(window)->GetHandle());
+	result = m_textureShader->Initialize(m_device, reinterpret_cast<const DXWindow*>(window)->GetHandle());
 	if (!result)
 	{
-		MessageBox(reinterpret_cast<const DXWindow*>(window)->GetHandle(), LPCSTR("Could not initialize the color shader object."), LPCSTR("Error"), MB_OK);
+		MessageBox(reinterpret_cast<const DXWindow*>(window)->GetHandle(), LPCSTR("Could not initialize the texture shader object."), LPCSTR("Error"), MB_OK);
 		return false;
 	}
 
@@ -455,7 +455,7 @@ void DXGraphics::Render(float r, float g, float b, float a)
 	m_model->Render();
 
 	// Render the model using the color shader.
-	result = m_colorShader->Render(m_deviceContext, m_model->GetIndexCount(), m_worldMatrix, viewMatrix, m_projectionMatrix);
+	result = m_textureShader->Render(m_deviceContext, m_model->GetIndexCount(), m_worldMatrix, viewMatrix, m_projectionMatrix, m_model->GetTexture());
 	if (!result)
 	{
 		return;
@@ -477,11 +477,11 @@ void DXGraphics::Render(float r, float g, float b, float a)
 void DXGraphics::Shutdown()
 {
 	// Release the color shader object.
-	if (m_colorShader)
+	if (m_textureShader)
 	{
-		m_colorShader->Shutdown();
-		delete m_colorShader;
-		m_colorShader = nullptr;
+		m_textureShader->Shutdown();
+		delete m_textureShader;
+		m_textureShader = nullptr;
 	}
 
 	// Release the model object.

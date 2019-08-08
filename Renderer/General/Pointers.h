@@ -78,6 +78,7 @@ public:
 	bool operator!() const { return pointer == nullptr; }
 	T& operator*() const { return *pointer; }
 	T* operator->() const { return pointer; }
+	T* Get() const { return pointer; }
 
 	void swap(SmartPointer& swapPointer)
 	{

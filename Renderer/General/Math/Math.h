@@ -5,6 +5,7 @@
 typedef DirectX::XMMATRIX Matrix4d;
 typedef DirectX::XMFLOAT4 Vector4d;
 typedef DirectX::XMFLOAT3 Vector3d;
+typedef DirectX::XMFLOAT2 Vector2d;
 #endif
 
 namespace Math

@@ -1,12 +1,15 @@
 #include "DXMesh.h"
+#include "Texture.h"
 
-DXMesh::DXMesh(const SmartPointer<ID3D11Device>& device, ID3D11DeviceContext* deviceContext)
-	:m_device(device),
-	m_deviceContext(deviceContext),
-	m_vertexBuffer(nullptr),
-	m_indexBuffer(nullptr),
-	m_vertexCount(0),
-	m_indexCount(0)
+DXMesh::DXMesh(const SmartPointer<ID3D11Device>& device, ID3D11DeviceContext* deviceContext, const char* textureFileName)
+	:m_device(device)
+	,m_deviceContext(deviceContext)
+	,m_vertexBuffer(nullptr)
+	,m_indexBuffer(nullptr)
+	,m_texture(nullptr)
+	,m_textureFileName(textureFileName)
+	,m_vertexCount(0)
+	,m_indexCount(0)
 {
 }
 
@@ -29,6 +32,11 @@ void DXMesh::Render()
 	RenderBuffers();
 }
 
+ID3D11ShaderResourceView * DXMesh::GetTexture()
+{
+	return m_texture->GetTexture();
+}
+
 bool DXMesh::InitializeBuffers()
 {
 
@@ -44,13 +52,13 @@ bool DXMesh::InitializeBuffers()
 	using namespace Math;
 
 	vertices[0].position = Vector3d(-1.0f, -1.0f, 0.0f);
-	vertices[0].color = Vector4d(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[0].uv = Vector2d(0.0f, 1.0f);
 
 	vertices[1].position = Vector3d(0.0f, 1.0f, 0.0f);
-	vertices[1].color = Vector4d(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[1].uv = Vector2d(0.5f, 0.0f);
 
 	vertices[2].position = Vector3d(1.0f, -1.0f, 0.0f);
-	vertices[2].color = Vector4d(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[2].uv = Vector2d(1.0f, 1.0f);
 
 	indices[0] = 0;
 	indices[1] = 1;
@@ -98,11 +106,20 @@ bool DXMesh::InitializeBuffers()
 	delete[] vertices;
 	delete[] indices;
 
+	// Load the texture for this model.
+	result = LoadTexture();
+	if (!result)
+	{
+		return false;
+	}
+
 	return true;
 }
 
 void DXMesh::ShutdownBuffers()
 {
+	ReleaseTexture();
+
 	if (m_indexBuffer)
 	{
 		m_indexBuffer->Release();
@@ -131,5 +148,27 @@ void DXMesh::RenderBuffers()
 
 		//Set the type of primitive that should be rendered from this vertex buffer in this case triangles
 		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	}
+}
+
+bool DXMesh::LoadTexture()
+{
+	m_texture = new Texture();
+	if (!m_texture)
+	{
+		return false;
+	}
+
+	std::wstring wide_string = std::wstring(m_textureFileName.begin(), m_textureFileName.end());
+	return m_texture->Initialize(m_device.Get(), const_cast<wchar_t*>(wide_string.c_str()));
+}
+
+void DXMesh::ReleaseTexture()
+{
+	if (m_texture)
+	{
+		m_texture->Shutdown();
+		delete m_texture;
+		m_texture = nullptr;
 	}
 }
