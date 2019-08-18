@@ -18,7 +18,7 @@
 #include <d3d11.h>
 
 //Reference:http://www.rastertek.com/
-#pragma optimize("", off)
+
 DXGraphics::DXGraphics()
 	:m_device(nullptr)
 	,m_deviceContext(nullptr)
