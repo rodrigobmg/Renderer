@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Pointers.h"
 #include "IApplication.h"
 #include "Application.h"
+#include <memory>
 
-typedef SmartPointer<IApplication> ApplicationPtr;
+typedef std::unique_ptr<IApplication> ApplicationPtr;
 
 namespace ApplicationMgr
 {

@@ -15,6 +15,11 @@ Vector3d Math::Vec3TransformCoord(const Vector3d & vector, const Matrix4d & tran
 #endif // DIRECTX
 }
 
+Matrix4d Math::MatrixRotationRollPitchYawDeg(float roll, float pitch, float yaw)
+{
+	return MatrixRotationRollPitchYaw(roll * DEG2RAD, pitch * DEG2RAD, yaw * DEG2RAD);
+}
+
 Matrix4d Math::MatrixRotationRollPitchYaw(float roll, float pitch, float yaw)
 {
 #ifdef DIRECTX
@@ -77,4 +82,38 @@ Matrix4d Math::MatrixOrthographicLH(float width, float height, float nearZ, floa
 #ifdef DIRECTX
 	return XMMatrixOrthographicLH(width, height, nearZ, farZ);
 #endif
+}
+
+Matrix4d Math::MatrixTranslation(const Vector3d & translation)
+{
+#ifdef DIRECTX
+	return XMMatrixTranslation(translation.x, translation.y, translation.z);
+#endif
+}
+
+Matrix4d Math::MatrixScale(const Vector3d & scale)
+{
+#ifdef DIRECTX
+	return XMMatrixScaling(scale.x, scale.y, scale.z);
+#endif
+}
+
+Matrix4d Math::MatrixMultiply(const Matrix4d & m1, const Matrix4d & m2)
+{
+#ifdef DIRECTX
+	return XMMatrixMultiply(m1, m2);
+#endif
+}
+
+Transform::Transform()
+	:m_position(0.0f, 0.0f, 0.0f)
+	,m_rotation(0.0f, 0.0f, 0.0f)
+	,m_scale(1.0f, 1.0f, 1.0f)
+{
+}
+
+const Matrix4d Transform::GetMatrix()
+{
+	using namespace Math;
+	return MatrixMultiply(MatrixScale(m_scale), MatrixMultiply(MatrixRotationRollPitchYaw(m_rotation.x, m_rotation.y, m_rotation.z), MatrixTranslation(m_position)));
 }

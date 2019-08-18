@@ -1,9 +1,13 @@
 //Globals
-cbuffer MatrixBuffer
+cbuffer FrameBufferData
 {
-	matrix worldMatrix;
 	matrix viewMatrix;
 	matrix projectionMatrix;
+};
+
+cbuffer ObjectBufferData
+{
+	matrix worldMatrix;
 };
 
 //InputTypes
@@ -19,7 +23,7 @@ struct PixelInputType
 	float4 color : COLOR;
 };
 
-PixelInputType ColorVertexShader(VertexInputType input)
+PixelInputType main(VertexInputType input)
 {
 	PixelInputType output;
 	

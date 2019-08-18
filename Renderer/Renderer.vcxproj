@@ -208,10 +208,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="DirectX\ColorShader.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="DirectX\DXConstantBuffer.cpp" />
     <ClCompile Include="DirectX\DXGraphics.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -224,19 +221,23 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="DirectX\DXFrameConstantBuffer.cpp" />
+    <ClCompile Include="DirectX\DXObjectConstantBuffer.cpp" />
+    <ClCompile Include="DirectX\DXShader.cpp" />
     <ClCompile Include="DirectX\DXWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="DirectX\Texture.cpp" />
-    <ClCompile Include="Externals\GLAD\src\glad.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="General\Application.cpp" />
+    <ClCompile Include="General\IndexArray.cpp" />
     <ClCompile Include="General\Input.cpp" />
+    <ClCompile Include="General\Loader.cpp" />
     <ClCompile Include="General\Logger.cpp" />
+    <ClCompile Include="General\Material.cpp" />
     <ClCompile Include="General\Math\Math.cpp" />
+    <ClCompile Include="General\Object.cpp" />
+    <ClCompile Include="General\VertexArray.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Opengl\GLGraphics.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -250,14 +251,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="TextureShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX\Camera.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="DirectX\ColorShader.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
@@ -273,22 +269,37 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="DirectX\DXFrameConstantBuffer.h" />
+    <ClInclude Include="DirectX\DXObjectConstantBuffer.h" />
+    <ClInclude Include="DirectX\DXShader.h" />
     <ClInclude Include="DirectX\DXWindow.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="DirectX\DXConstantBuffer.h" />
+    <ClInclude Include="General\Material.h" />
+    <ClInclude Include="General\Object.h" />
+    <ClInclude Include="General\ObjectConstantBuffer.h" />
+    <ClInclude Include="General\FrameConstantBuffer.h" />
     <ClInclude Include="DirectX\Texture.h" />
+    <ClInclude Include="Externals\TinyGLTF\Include.h" />
     <ClInclude Include="General\Application.h" />
     <ClInclude Include="General\ApplicationMgr.h" />
+    <ClInclude Include="General\IConstantBuffer.h" />
+    <ClInclude Include="General\IndexArray.h" />
     <ClInclude Include="General\IApplication.h" />
     <ClInclude Include="General\IGraphics.h" />
+    <ClInclude Include="General\IIndexArray.h" />
     <ClInclude Include="General\IInputMap.h" />
     <ClInclude Include="General\IMesh.h" />
     <ClInclude Include="General\Input.h" />
+    <ClInclude Include="General\IShader.h" />
+    <ClInclude Include="General\IVertexArray.h" />
     <ClInclude Include="General\IWindow.h" />
+    <ClInclude Include="General\Loader.h" />
     <ClInclude Include="General\Logger.h" />
     <ClInclude Include="General\Math\Math.h" />
-    <ClInclude Include="General\Pointers.h" />
+    <ClInclude Include="General\VertexArray.h" />
     <ClInclude Include="Opengl\GLGraphics.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -301,7 +312,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="TextureShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\Shaders\color.ps">
@@ -317,6 +327,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="DirectX\Shaders\texture.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="DirectX\Shaders\seafloor.dds" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,21 +1,15 @@
 #pragma once
 
-#include <General/Math/Math.h>
+#include <General/IVertexArray.h>
+#include <General/IIndexArray.h>
+#include <string>
 
+class IGraphics;
 class IMesh
 {
 public:
 	virtual ~IMesh() {};
 
-	virtual bool Initialize() = 0;
-	virtual void Shutdown() = 0;
+	virtual bool Initialize(const std::string& fileName, const IGraphics& graphics) = 0;
 	virtual void Render() = 0;
-	virtual int GetIndexCount() const = 0;
-
-protected:
-	struct VertexType
-	{
-		Vector3d position;
-		Vector4d color;
-	};
 };

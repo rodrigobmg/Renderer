@@ -10,6 +10,7 @@ public:
 	Application(int windowWidth, int windowHeight, const char* name);
 	~Application();
 	virtual void Run() override;
+	void Render();
 	virtual void Update() override;
 	virtual bool IsReady() const override { return m_ready; }
 

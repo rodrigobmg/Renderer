@@ -1,9 +1,8 @@
 #pragma once
 
 #include <General\IGraphics.h>
-#include "Camera.h"
-#include "DXMesh.h"
-#include "TextureShader.h"
+#include <vector>
+#include <General/Math/Math.h>
 
 struct IDXGISwapChain;
 struct ID3D11Device;
@@ -13,6 +12,9 @@ struct ID3D11Texture2D;
 struct ID3D11DepthStencilState;
 struct ID3D11DepthStencilView;
 struct ID3D11RasterizerState;
+class Camera;
+class IConstantBuffer;
+struct FrameConstantBufferData;
 class DXGraphics : public IGraphics
 {
 public:
@@ -22,25 +24,30 @@ public:
 	~DXGraphics();
 
 	virtual bool Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear) override;
-	virtual void Render(float r, float g, float b, float a) override;
+	virtual void Render() override;
 	virtual void Shutdown() override;
 
+	virtual std::shared_ptr<IVertexArray> CreateVertexArray(const std::vector<VertexFormat>& vertexData) const override;
+	virtual std::shared_ptr<IIndexArray> CreateIndexArray(const std::vector<uint16_t>& indexData) const override;
+	virtual std::shared_ptr<Core::Object> CreateObject() override;
+	virtual std::shared_ptr<Core::Object> CreateObject(const std::string& meshPath, const std::string& vertexShaderPath, const std::string& pixelShaderPath) override;
+
 private:
-	bool						m_vsyncEnabled;
-	int							m_graphicsDeviceMemory;
-	char						m_graphicsDeviceDescription[128];
-	IDXGISwapChain*				m_swapChain;
-	ID3D11Device*				m_device;
-	ID3D11DeviceContext*		m_deviceContext;
-	ID3D11RenderTargetView*		m_renderTargetView;
-	ID3D11Texture2D*			m_depthStencilBuffer;
-	ID3D11DepthStencilState*	m_depthStencilState;
-	ID3D11DepthStencilView*		m_depthStencilView;
-	ID3D11RasterizerState*		m_rasterState;
-	Camera*						m_camera;
-	DXMesh*						m_model;
-	TextureShader*				m_textureShader;
-	Matrix4d					m_projectionMatrix;
-	Matrix4d					m_worldMatrix;
-	Matrix4d					m_orthoMatrix;
+	std::unique_ptr<ID3D11Device>				m_device;
+	std::unique_ptr<ID3D11DeviceContext>		m_deviceContext;
+	IDXGISwapChain*								m_swapChain;
+	ID3D11RenderTargetView*						m_renderTargetView;
+	ID3D11Texture2D*							m_depthStencilBuffer;
+	ID3D11DepthStencilState*					m_depthStencilState;
+	ID3D11DepthStencilView*						m_depthStencilView;
+	ID3D11RasterizerState*						m_rasterState;
+	Camera*										m_camera;
+	Matrix4d									m_projectionMatrix;
+	Matrix4d									m_orthoMatrix;
+	std::vector<std::shared_ptr<Core::Object>>	m_objects;
+	std::unique_ptr<IConstantBuffer>			m_frameConstantBuffer;
+	FrameConstantBufferData*					m_frameConstantBufferData;
+	bool										m_vsyncEnabled;
+	int											m_graphicsDeviceMemory;
+	char										m_graphicsDeviceDescription[128];
 };

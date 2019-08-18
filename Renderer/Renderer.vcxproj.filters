@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="General\Logger.cpp" />
-    <ClCompile Include="Externals\GLAD\src\glad.c" />
     <ClCompile Include="Opengl\GLWindow.cpp" />
     <ClCompile Include="DirectX\DXWindow.cpp" />
     <ClCompile Include="DirectX\DXInputMap.cpp" />
@@ -13,17 +12,23 @@
     <ClCompile Include="DirectX\DXGraphics.cpp" />
     <ClCompile Include="Opengl\GLGraphics.cpp" />
     <ClCompile Include="DirectX\DXMesh.cpp" />
-    <ClCompile Include="DirectX\ColorShader.cpp" />
     <ClCompile Include="DirectX\Camera.cpp" />
     <ClCompile Include="General\Math\Math.cpp" />
     <ClCompile Include="DirectX\Texture.cpp" />
-    <ClCompile Include="TextureShader.cpp" />
+    <ClCompile Include="General\Loader.cpp" />
+    <ClCompile Include="General\VertexArray.cpp" />
+    <ClCompile Include="General\IndexArray.cpp" />
+    <ClCompile Include="DirectX\DXConstantBuffer.cpp" />
+    <ClCompile Include="DirectX\DXShader.cpp" />
+    <ClCompile Include="General\Material.cpp" />
+    <ClCompile Include="DirectX\DXObjectConstantBuffer.cpp" />
+    <ClCompile Include="DirectX\DXFrameConstantBuffer.cpp" />
+    <ClCompile Include="General\Object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
     <ClInclude Include="General\IWindow.h" />
     <ClInclude Include="General\Logger.h" />
-    <ClInclude Include="General\Pointers.h" />
     <ClInclude Include="General\ApplicationMgr.h" />
     <ClInclude Include="Opengl\GLWindow.h" />
     <ClInclude Include="DirectX\DXWindow.h" />
@@ -38,10 +43,24 @@
     <ClInclude Include="General\IMesh.h" />
     <ClInclude Include="DirectX\DXMesh.h" />
     <ClInclude Include="General\Math\Math.h" />
-    <ClInclude Include="DirectX\ColorShader.h" />
     <ClInclude Include="DirectX\Camera.h" />
     <ClInclude Include="DirectX\Texture.h" />
-    <ClInclude Include="TextureShader.h" />
+    <ClInclude Include="General\IVertexArray.h" />
+    <ClInclude Include="General\IIndexArray.h" />
+    <ClInclude Include="General\IShader.h" />
+    <ClInclude Include="General\Loader.h" />
+    <ClInclude Include="General\VertexArray.h" />
+    <ClInclude Include="Externals\TinyGLTF\Include.h" />
+    <ClInclude Include="General\IndexArray.h" />
+    <ClInclude Include="General\IConstantBuffer.h" />
+    <ClInclude Include="DirectX\DXConstantBuffer.h" />
+    <ClInclude Include="DirectX\DXShader.h" />
+    <ClInclude Include="General\Material.h" />
+    <ClInclude Include="General\ObjectConstantBuffer.h" />
+    <ClInclude Include="General\FrameConstantBuffer.h" />
+    <ClInclude Include="DirectX\DXObjectConstantBuffer.h" />
+    <ClInclude Include="DirectX\DXFrameConstantBuffer.h" />
+    <ClInclude Include="General\Object.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\Shaders\color.vs" />
@@ -51,5 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="DirectX\Shaders\texture.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="DirectX\Shaders\seafloor.dds" />
   </ItemGroup>
 </Project>

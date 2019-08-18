@@ -14,8 +14,7 @@ public:
 	Vector3d GetPosition() const;
 	Vector3d SetPosition() const;
 
-	void Render();
-	void GetViewMatrix(Matrix4d& viewMatrix);
+	const Matrix4d& GetViewMatrix();
 
 private:
 	Matrix4d m_viewMatrix;

@@ -1,125 +1,18 @@
 #include "DXMesh.h"
-#include "Texture.h"
 
-DXMesh::DXMesh(const SmartPointer<ID3D11Device>& device, ID3D11DeviceContext* deviceContext, const char* textureFileName)
-	:m_device(device)
-	,m_deviceContext(deviceContext)
-	,m_vertexBuffer(nullptr)
-	,m_indexBuffer(nullptr)
-	,m_texture(nullptr)
-	,m_textureFileName(textureFileName)
-	,m_vertexCount(0)
-	,m_indexCount(0)
+#include <General\Loader.h>
+#include <d3d11.h>
+
+DXMesh::DXMesh(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
+	: m_device(device)
+	, m_deviceContext(deviceContext)
+	, m_vertexBuffer(nullptr)
+	, m_indexBuffer(nullptr)
 {
 }
 
-DXMesh::DXMesh(DXMesh & other)
+DXMesh::~DXMesh()
 {
-}
-
-bool DXMesh::Initialize()
-{
-	return InitializeBuffers();
-}
-
-void DXMesh::Shutdown()
-{
-	ShutdownBuffers();
-}
-
-void DXMesh::Render()
-{
-	RenderBuffers();
-}
-
-ID3D11ShaderResourceView * DXMesh::GetTexture()
-{
-	return m_texture->GetTexture();
-}
-
-bool DXMesh::InitializeBuffers()
-{
-
-	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-	D3D11_SUBRESOURCE_DATA vertexData, indexData;
-
-	m_vertexCount = 3;
-	m_indexCount = 3;
-
-	VertexType* vertices = new VertexType[m_vertexCount];
-	unsigned long* indices = new unsigned long[m_indexCount];
-
-	using namespace Math;
-
-	vertices[0].position = Vector3d(-1.0f, -1.0f, 0.0f);
-	vertices[0].uv = Vector2d(0.0f, 1.0f);
-
-	vertices[1].position = Vector3d(0.0f, 1.0f, 0.0f);
-	vertices[1].uv = Vector2d(0.5f, 0.0f);
-
-	vertices[2].position = Vector3d(1.0f, -1.0f, 0.0f);
-	vertices[2].uv = Vector2d(1.0f, 1.0f);
-
-	indices[0] = 0;
-	indices[1] = 1;
-	indices[2] = 2;
-
-	//Set up the description of the static vertex buffer
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
-	vertexBufferDesc.StructureByteStride = 0;
-
-	//Give the subresource struct a pointer to the vertex data
-	vertexData.pSysMem = vertices;
-	vertexData.SysMemPitch = 0;
-	vertexData.SysMemSlicePitch = 0;
-
-	//Create the vertex buffer
-	HRESULT result = m_device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	//Set up the description of the static index buffer
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
-	indexBufferDesc.StructureByteStride = 0;
-
-	indexData.pSysMem = indices;
-	indexData.SysMemPitch = 0;
-	indexData.SysMemSlicePitch = 0;
-
-	result = m_device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	//Release the arrays
-	delete[] vertices;
-	delete[] indices;
-
-	// Load the texture for this model.
-	result = LoadTexture();
-	if (!result)
-	{
-		return false;
-	}
-
-	return true;
-}
-
-void DXMesh::ShutdownBuffers()
-{
-	ReleaseTexture();
-
 	if (m_indexBuffer)
 	{
 		m_indexBuffer->Release();
@@ -133,9 +26,43 @@ void DXMesh::ShutdownBuffers()
 	}
 }
 
-void DXMesh::RenderBuffers()
+bool DXMesh::Initialize(const std::string& fileName, const IGraphics& graphics)
 {
-	unsigned int stride = sizeof(VertexType);
+	//Todo: load mesh
+	MeshData meshData;
+	Loader::LoadMesh(fileName, meshData, graphics);
+	
+	m_vertices = meshData.m_vertexData;
+	m_indices = meshData.m_indexData;
+
+	switch (meshData.m_primitiveType)
+	{
+	case PrimitiveType::Points:
+		m_topology = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
+		break;
+	case PrimitiveType::Line:
+		m_topology = D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
+		break;
+	case PrimitiveType::LineStrip:
+		m_topology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;
+		break;
+	case PrimitiveType::Triangles:
+		m_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+		break;
+	case PrimitiveType::TriangleStrip:
+		m_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+		break;
+	default:
+		assert("Unsupported topology");
+		break;
+	}
+
+	return InitializeBuffers();
+}
+
+void DXMesh::Render()
+{
+	unsigned int stride = sizeof(VertexFormat);
 	unsigned int offset = 0;
 
 	if (m_deviceContext)
@@ -144,31 +71,58 @@ void DXMesh::RenderBuffers()
 		m_deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 
 		//Set the index buffer to active in the input assembler so it can be rendered
-		m_deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+		m_deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
-		//Set the type of primitive that should be rendered from this vertex buffer in this case triangles
-		m_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		//Set the type of primitive that should be rendered
+		m_deviceContext->IASetPrimitiveTopology(m_topology);
+		assert(m_indices);
+		m_deviceContext->DrawIndexed(static_cast<UINT>(m_indices->GetIndexCount()), 0, 0);
 	}
 }
 
-bool DXMesh::LoadTexture()
+bool DXMesh::InitializeBuffers()
 {
-	m_texture = new Texture();
-	if (!m_texture)
+
+	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+
+	//Set up the description of the static vertex buffer
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(VertexFormat) * static_cast<UINT>(m_vertices->GetVertexCount());
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.StructureByteStride = 0;
+
+	//Give the subresource struct a pointer to the vertex data
+	vertexData.pSysMem = m_vertices->GetVertexData();
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+	//Create the vertex buffer
+	HRESULT result = m_device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
+	if (FAILED(result))
 	{
 		return false;
 	}
 
-	std::wstring wide_string = std::wstring(m_textureFileName.begin(), m_textureFileName.end());
-	return m_texture->Initialize(m_device.Get(), const_cast<wchar_t*>(wide_string.c_str()));
-}
+	//Set up the description of the static index buffer
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = static_cast<UINT>(sizeof(uint16_t) * m_indices->GetIndexCount());
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
 
-void DXMesh::ReleaseTexture()
-{
-	if (m_texture)
+	indexData.pSysMem = m_indices->GetIndexData();
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
+	result = m_device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
+	if (FAILED(result))
 	{
-		m_texture->Shutdown();
-		delete m_texture;
-		m_texture = nullptr;
+		return false;
 	}
+
+	return true;
 }

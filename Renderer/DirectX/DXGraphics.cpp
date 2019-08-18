@@ -1,28 +1,36 @@
 #include "DXGraphics.h"
 
 #include "DXWindow.h"
-#include <stdlib.h>
+#include "Camera.h"
+#include "DXMesh.h"
+#include "DXFrameConstantBuffer.h"
+#include "DXShader.h"
+#include "DXObjectConstantBuffer.h"
 
+#include <General/VertexArray.h>
+#include <General/IndexArray.h>
+#include <General/Object.h>
+#include <General/Material.h>
+
+#include <stdlib.h>
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <d3d11.h>
 
 //Reference:http://www.rastertek.com/
-
+#pragma optimize("", off)
 DXGraphics::DXGraphics()
-	:m_vsyncEnabled(false)
-	,m_graphicsDeviceMemory(0)
-	,m_swapChain(nullptr)
-	,m_device(nullptr)
+	:m_device(nullptr)
 	,m_deviceContext(nullptr)
+	,m_swapChain(nullptr)
 	,m_renderTargetView(nullptr)
 	,m_depthStencilBuffer(nullptr)
 	,m_depthStencilState(nullptr)
 	,m_depthStencilView(nullptr)
 	,m_rasterState(nullptr)
 	,m_camera(nullptr)
-	,m_model(nullptr)
-	,m_textureShader(nullptr)
+	,m_vsyncEnabled(false)
+	,m_graphicsDeviceMemory(0)
 {
 }
 
@@ -287,8 +295,12 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 	//Create the swap chain, D3D device and D3D device context
+	ID3D11Device* device;
+	ID3D11DeviceContext* deviceContext;
 	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain,
-		&m_device, NULL, &m_deviceContext);
+		&device, NULL, &deviceContext);
+	m_device.reset(device);
+	m_deviceContext.reset(deviceContext);
 	if (FAILED(result))
 	{
 		return false;
@@ -375,15 +387,6 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	float fieldOfView = Math::PI / 4.0f;
 	float screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
 
-	////Create the projection matrix
-	m_projectionMatrix = Math::MatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
-
-	////Initialize world matrix to identity matrix
-	m_worldMatrix = Math::MatrixIdentity();
-
-	////Create orthographic projection matrix
-	m_orthoMatrix = Math::MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
-
 	// Create the camera object.
 	m_camera = new Camera();
 	if (!m_camera)
@@ -392,75 +395,40 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	}
 
 	// Set the initial position of the camera.
-	m_camera->SetPosition(0.0f, 0.0f, -10.0f);
+	m_camera->SetPosition(0.0f, 1.0f, -5.0f);
 
-	// Create the model object.
-	m_model = new DXMesh(m_device, m_deviceContext, "Shaders/seafloor.dds");
-	if (!m_model)
-	{
-		return false;
-	}
+	m_frameConstantBuffer.reset(new DXFrameConstantBuffer(m_device, m_deviceContext));
+	m_frameConstantBufferData = new FrameConstantBufferData();
 
-	// Initialize the model object.
-	result = m_model->Initialize();
-	if (!result)
-	{
-		MessageBox(reinterpret_cast<const DXWindow*>(window)->GetHandle(), LPCSTR("Could not initialize the model object."), LPCSTR("Error"), MB_OK);
-		return false;
-	}
+	//Create the projection matrix
+	m_frameConstantBufferData->m_projection = Math::MatrixTranspose(Math::MatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
 
-	// Create the color shader object.
-	m_textureShader = new TextureShader();
-	if (!m_textureShader)
-	{
-		return false;
-	}
-
-	// Initialize the color shader object.
-	result = m_textureShader->Initialize(m_device, reinterpret_cast<const DXWindow*>(window)->GetHandle());
-	if (!result)
-	{
-		MessageBox(reinterpret_cast<const DXWindow*>(window)->GetHandle(), LPCSTR("Could not initialize the texture shader object."), LPCSTR("Error"), MB_OK);
-		return false;
-	}
+	//Create orthographic projection matrix
+	m_orthoMatrix = Math::MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 
 	return true;
 }
 
-void DXGraphics::Render(float r, float g, float b, float a)
+static const float kClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+void DXGraphics::Render()
 {
-
-	Matrix4d viewMatrix;
-	bool result;
-
-	float color[4];
-	color[0] = r;
-	color[1] = g;
-	color[2] = b;
-	color[3] = a;
-
 	//Clear back buffer
-	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
+	m_deviceContext->ClearRenderTargetView(m_renderTargetView, kClearColor);
 
 	//Clear depth buffer
 	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	// Generate the view matrix based on the camera's position.
-	m_camera->Render();
 
-	// Get the world, view, and projection matrices from the camera and d3d objects.
-	m_camera->GetViewMatrix(viewMatrix);
+	// Get the view, and projection matrices and set them in the per frame constant buffer
+	m_frameConstantBufferData->m_view = Math::MatrixTranspose(m_camera->GetViewMatrix());
+	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
 
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_model->Render();
-
-	// Render the model using the color shader.
-	result = m_textureShader->Render(m_deviceContext, m_model->GetIndexCount(), m_worldMatrix, viewMatrix, m_projectionMatrix, m_model->GetTexture());
-	if (!result)
+	using namespace std;
+	for (shared_ptr<Core::Object>& object : m_objects)
 	{
-		return;
+		object->Render();
 	}
-	
+
 	// Present the back buffer to the screen since rendering is complete.
 	if (m_vsyncEnabled)
 	{
@@ -476,20 +444,18 @@ void DXGraphics::Render(float r, float g, float b, float a)
 
 void DXGraphics::Shutdown()
 {
-	// Release the color shader object.
-	if (m_textureShader)
+	// Release all the objects
+	m_objects.clear();
+
+	//Release constant buffer
+	if (m_frameConstantBuffer)
 	{
-		m_textureShader->Shutdown();
-		delete m_textureShader;
-		m_textureShader = nullptr;
+		m_frameConstantBuffer.release();
 	}
 
-	// Release the model object.
-	if (m_model)
+	if (m_frameConstantBufferData)
 	{
-		m_model->Shutdown();
-		delete m_model;
-		m_model = nullptr;
+		delete m_frameConstantBufferData;
 	}
 
 	// Release the camera object.
@@ -538,13 +504,13 @@ void DXGraphics::Shutdown()
 	if (m_deviceContext)
 	{
 		m_deviceContext->Release();
-		m_deviceContext = nullptr;
+		m_deviceContext.release();
 	}
 
 	if (m_device)
 	{
 		m_device->Release();
-		m_device = nullptr;
+		m_device.release();
 	}
 
 	if (m_swapChain)
@@ -552,6 +518,49 @@ void DXGraphics::Shutdown()
 		m_swapChain->Release();
 		m_swapChain = nullptr;
 	}
+}
 
-	return;
+std::shared_ptr<IVertexArray> DXGraphics::CreateVertexArray(const std::vector<VertexFormat>& vertexData) const
+{
+	using namespace std;
+	shared_ptr<IVertexArray> vertexArray = shared_ptr<IVertexArray>(new VertexArray(vertexData.size(), vertexData.data()));
+	return vertexArray;
+}
+
+std::shared_ptr<IIndexArray> DXGraphics::CreateIndexArray(const std::vector<uint16_t>& indexData) const
+{
+	using namespace std;
+	shared_ptr<IIndexArray> indexArray = shared_ptr<IIndexArray>(new IndexArray(indexData.size(), indexData.data()));
+	return indexArray;
+}
+
+std::shared_ptr<Core::Object> DXGraphics::CreateObject()
+{
+	using namespace std;
+	shared_ptr<Core::Object> newObject(new Core::Object());
+	m_objects.push_back(newObject);
+	return newObject;
+}
+
+std::shared_ptr<Core::Object> DXGraphics::CreateObject(const std::string & meshPath, const std::string & vertexShaderPath, const std::string & pixelShaderPath)
+{
+	using namespace std;
+	shared_ptr<IMesh> mesh(new DXMesh(m_device, m_deviceContext));
+	if (mesh->Initialize(meshPath, *this))
+	{
+		shared_ptr<IShader> vertexShader(new DXShader(m_deviceContext, m_device, ShaderType::VERTEX_SHADER));
+		if (vertexShader->Initialize(vertexShaderPath.c_str()))
+		{
+			shared_ptr<IShader> pixelShader(new DXShader(m_deviceContext, m_device, ShaderType::PIXEL_SHADER));
+			if (pixelShader->Initialize(pixelShaderPath.c_str()))
+			{
+				shared_ptr<Core::Material> material(new Core::Material(vertexShader, pixelShader));
+				shared_ptr<IConstantBuffer> objectConstantBuffer(new DXObjectConstantBuffer(m_device, m_deviceContext));
+				shared_ptr<Core::Object> newObject(new Core::Object(mesh, material, objectConstantBuffer));
+				m_objects.push_back(newObject);
+				return newObject;
+			}
+		}
+	}
+	return nullptr;
 }

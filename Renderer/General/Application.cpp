@@ -1,6 +1,7 @@
 #include "Application.h"
 
-#include <General/Input.h>
+#include "Input.h"
+#include "Object.h"
 
 #ifdef DIRECTX
 #include <DirectX/DXWindow.h>
@@ -32,7 +33,10 @@ Application::Application(int windowWidth, int windowHeight, const char* name)
 #else
 #error Unsupported platform
 #endif
-	m_ready =m_graphics->Initialize(windowWidth, windowHeight, kVsyncEnabled, m_window, kFullscreen, kScreenDepth, kScreenNear);
+	m_ready = m_graphics->Initialize(windowWidth, windowHeight, kVsyncEnabled, m_window, kFullscreen, kScreenDepth, kScreenNear);
+
+	std::shared_ptr<Core::Object> object = m_graphics->CreateObject("teapot.glb", "Shaders/color.vs", "Shaders/color.ps");
+	m_ready &= object != nullptr;
 	assert(m_window);
 }
 
@@ -44,6 +48,7 @@ Application::~Application()
 	}
 	if (m_graphics)
 	{
+		m_graphics->Shutdown();
 		delete m_graphics;
 	}
 }
@@ -55,11 +60,16 @@ void Application::Run()
 	{
 		m_window->ProcessInputs();
 		Update();
-		if (m_graphics)
-		{
-			m_graphics->Render(0.0f, 0.0f, 0.0f, 1.0f);
-		}
+		Render();
 		m_window->SwapBuffers();
+	}
+}
+
+void Application::Render()
+{
+	if (m_graphics)
+	{
+		m_graphics->Render();
 	}
 }
 

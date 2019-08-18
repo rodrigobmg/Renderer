@@ -43,7 +43,7 @@ Vector3d Camera::SetPosition() const
 	return Vector3d(m_rotationX, m_rotationY, m_rotationZ);
 }
 
-void Camera::Render()
+const Matrix4d& Camera::GetViewMatrix()
 {
 	using namespace Math;
 
@@ -83,9 +83,6 @@ void Camera::Render()
 
 	// Finally create the view matrix from the three updated vectors.
 	m_viewMatrix = MatrixLookAtLH(position, lookAt, up);
-}
 
-void Camera::GetViewMatrix(Matrix4d & viewMatrix)
-{
-	viewMatrix = m_viewMatrix;
+	return m_viewMatrix;
 }
