@@ -1,7 +1,6 @@
 #include "DXGraphics.h"
 
 #include "DXWindow.h"
-#include "Camera.h"
 #include "DXMesh.h"
 #include "DXFrameConstantBuffer.h"
 #include "DXShader.h"
@@ -11,11 +10,7 @@
 #include <General/IndexArray.h>
 #include <General/Object.h>
 #include <General/Material.h>
-
-#include <stdlib.h>
-#include <dxgi.h>
-#include <d3dcommon.h>
-#include <d3d11.h>
+#include <General/Camera.h>
 
 //Reference:http://www.rastertek.com/
 
@@ -395,7 +390,9 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	}
 
 	// Set the initial position of the camera.
-	m_camera->SetPosition(0.0f, 1.0f, -5.0f);
+	Transform transform;
+	transform.m_position = Vector3d(0.0f, 1.0f, -5.0f);
+	m_camera->SetTransform(transform);
 
 	m_frameConstantBuffer.reset(new DXFrameConstantBuffer(m_device, m_deviceContext));
 	m_frameConstantBufferData = new FrameConstantBufferData();

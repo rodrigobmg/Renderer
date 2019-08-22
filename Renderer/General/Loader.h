@@ -1,8 +1,6 @@
 #pragma once
 #include "IVertexArray.h"
 #include "IIndexArray.h"
-#include <memory>
-#include <string>
 
 struct MeshData
 {

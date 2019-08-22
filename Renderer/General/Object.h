@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <General/Math/Math.h>
 
 class IMesh;

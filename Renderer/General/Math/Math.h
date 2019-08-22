@@ -1,26 +1,5 @@
 #pragma once
 
-#ifdef DIRECTX
-#include <DirectXMath.h>
-typedef DirectX::XMMATRIX Matrix4d;
-typedef DirectX::XMFLOAT4 Vector4d;
-typedef DirectX::XMFLOAT3 Vector3d;
-typedef DirectX::XMFLOAT2 Vector2d;
-#endif
-
-class Transform
-{
-public:
-	Transform();
-	~Transform(){}
-
-	const Matrix4d GetMatrix();
-
-	Vector3d	m_position;
-	Vector3d	m_rotation;
-	Vector3d	m_scale;
-};
-
 namespace Math
 {
 	static const float DEG2RAD = 0.0174532925f;
@@ -39,4 +18,5 @@ namespace Math
 	Matrix4d MatrixTranslation(const Vector3d& translation);
 	Matrix4d MatrixScale(const Vector3d& scale);
 	Matrix4d MatrixMultiply(const Matrix4d& m1, const Matrix4d& m2);
+	Matrix4d MatrixInverse(const Matrix4d& matrix);
 }

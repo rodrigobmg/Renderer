@@ -1,8 +1,5 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-
 class IWindow;
 class IVertexArray;
 class IIndexArray;

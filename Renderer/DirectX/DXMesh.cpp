@@ -1,7 +1,6 @@
 #include "DXMesh.h"
 
 #include <General\Loader.h>
-#include <d3d11.h>
 
 DXMesh::DXMesh(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
 	: m_device(device)

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 //Class which creates a single global static instance of itself, states are set by the window classes (still to be determined)
 //Custom key and mouse mappings for DX and GL platforms will reside in the specific implementations
 namespace Input

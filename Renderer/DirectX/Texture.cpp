@@ -1,6 +1,5 @@
 #include "Texture.h"
 #include "DirectXTex.h"
-#include <memory>
 
 Texture::Texture()
 	:m_texture(nullptr)

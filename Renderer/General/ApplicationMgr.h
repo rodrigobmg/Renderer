@@ -2,7 +2,6 @@
 
 #include "IApplication.h"
 #include "Application.h"
-#include <memory>
 
 typedef std::unique_ptr<IApplication> ApplicationPtr;
 

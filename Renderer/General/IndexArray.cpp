@@ -1,5 +1,4 @@
 #include "IndexArray.h"
-#include <memory>
 
 IndexArray::IndexArray(size_t indexCount, const uint16_t* indexData)
 	:m_indexCount(indexCount)

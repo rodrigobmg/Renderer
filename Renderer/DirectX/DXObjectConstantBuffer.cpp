@@ -1,5 +1,4 @@
 #include "DXObjectConstantBuffer.h"
-#include <d3d11.h>
 
 DXObjectConstantBuffer::DXObjectConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
 	: DXConstantBuffer(device, deviceContext, sizeof(ObjectConstantBufferData), 1)

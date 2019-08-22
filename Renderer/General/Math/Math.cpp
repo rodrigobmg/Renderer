@@ -29,9 +29,7 @@ Matrix4d Math::MatrixRotationRollPitchYaw(float roll, float pitch, float yaw)
 
 Vector3d Math::VectorAdd(const Vector3d & lhs, const Vector3d & rhs)
 {
-#ifdef DIRECTX
 	return Vector3d(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
-#endif // DIRECTX
 }
 
 Matrix4d Math::MatrixLookAtLH(const Vector3d & position, const Vector3d & lookAt, const Vector3d & up)
@@ -102,6 +100,13 @@ Matrix4d Math::MatrixMultiply(const Matrix4d & m1, const Matrix4d & m2)
 {
 #ifdef DIRECTX
 	return XMMatrixMultiply(m1, m2);
+#endif
+}
+
+Matrix4d Math::MatrixInverse(const Matrix4d & matrix)
+{
+#ifdef DIRECTX
+	return XMMatrixInverse(NULL, matrix);
 #endif
 }
 

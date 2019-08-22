@@ -1,6 +1,4 @@
 #pragma once
-#include <memory>
-#include <d3d11.h>
 
 struct ID3D11Buffer;
 struct ID3D11Device;

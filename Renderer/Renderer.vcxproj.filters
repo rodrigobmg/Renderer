@@ -12,7 +12,6 @@
     <ClCompile Include="DirectX\DXGraphics.cpp" />
     <ClCompile Include="Opengl\GLGraphics.cpp" />
     <ClCompile Include="DirectX\DXMesh.cpp" />
-    <ClCompile Include="DirectX\Camera.cpp" />
     <ClCompile Include="General\Math\Math.cpp" />
     <ClCompile Include="DirectX\Texture.cpp" />
     <ClCompile Include="General\Loader.cpp" />
@@ -24,6 +23,8 @@
     <ClCompile Include="DirectX\DXObjectConstantBuffer.cpp" />
     <ClCompile Include="DirectX\DXFrameConstantBuffer.cpp" />
     <ClCompile Include="General\Object.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="General\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
@@ -43,7 +44,6 @@
     <ClInclude Include="General\IMesh.h" />
     <ClInclude Include="DirectX\DXMesh.h" />
     <ClInclude Include="General\Math\Math.h" />
-    <ClInclude Include="DirectX\Camera.h" />
     <ClInclude Include="DirectX\Texture.h" />
     <ClInclude Include="General\IVertexArray.h" />
     <ClInclude Include="General\IIndexArray.h" />
@@ -61,6 +61,10 @@
     <ClInclude Include="DirectX\DXObjectConstantBuffer.h" />
     <ClInclude Include="DirectX\DXFrameConstantBuffer.h" />
     <ClInclude Include="General\Object.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="General\ICamera.h" />
+    <ClInclude Include="General\Math\MathDefines.h" />
+    <ClInclude Include="General\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\Shaders\color.vs" />

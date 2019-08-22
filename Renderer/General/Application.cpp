@@ -13,8 +13,6 @@
 #error Unsupported platform
 #endif
 
-#include <cassert>
-
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
 const float kScreenDepth = 1000.0f;

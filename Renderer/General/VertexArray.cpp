@@ -1,5 +1,4 @@
 #include "VertexArray.h"
-#include <memory>
 
 VertexArray::VertexArray(size_t vertexCount, const VertexFormat * vertexData)
 	:m_vertexCount(vertexCount)

@@ -2,7 +2,6 @@
 
 #include <General/IVertexArray.h>
 #include <General/IIndexArray.h>
-#include <string>
 
 class IGraphics;
 class IMesh

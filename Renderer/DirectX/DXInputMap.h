@@ -1,8 +1,6 @@
 #pragma once
 
 #include <General/IInputMap.h>
-#include <map>
-#include <cassert>
 
 class DXInputMap : public IInputMap
 {

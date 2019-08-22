@@ -2,8 +2,6 @@
 
 #include "IInputMap.h"
 
-#include <cassert>
-
 #ifdef DIRECTX
 #include <DirectX/DXInputMap.h>
 #elif OPENGL

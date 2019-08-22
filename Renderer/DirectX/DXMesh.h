@@ -1,9 +1,6 @@
 #pragma once
 
 #include <General/IMesh.h>
-#include <string>
-#include <d3d11.h>
-#include <memory>
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;

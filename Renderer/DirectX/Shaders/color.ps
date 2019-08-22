@@ -2,9 +2,12 @@ struct PixelInputType
 {
 	float4 position : SV_POSITION;
 	float4 color : COLOR;
+	float4 normal : NORMAL;
 };
 
 float4 main(PixelInputType input) : SV_TARGET
 {
-	return input.color;
+	float4 lightDir = float4(0,0,-1,0);
+	float intensity = clamp(dot(normalize(input.normal), lightDir),0,1);
+	return input.color * intensity;
 }

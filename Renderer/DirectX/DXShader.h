@@ -1,7 +1,6 @@
 #pragma once
 
 #include <General/IShader.h>
-#include <memory>
 
 struct ID3D11VertexShader;
 struct ID3D11DeviceContext;

@@ -2,7 +2,6 @@
 
 #include <General/Logger.h>
 #include <General/Input.h>
-#include <cassert>
 
 DXWindow::DXWindow(int windowWidth, int windowHeight, const char* name)
 {

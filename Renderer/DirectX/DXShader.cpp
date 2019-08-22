@@ -2,9 +2,6 @@
 
 #include <d3dcompiler.h>
 #include <General/Logger.h>
-#include <d3d11.h>
-#include <string>
-#include <cassert>
 
 DXShader::DXShader(std::unique_ptr<ID3D11DeviceContext>& deviceContext, std::unique_ptr<ID3D11Device>& device, ShaderType type)
 	: m_deviceContext(deviceContext)
@@ -94,7 +91,7 @@ bool DXShader::Initialize(const char * shaderFilePath)
 
 	if (m_type == ShaderType::VERTEX_SHADER)
 	{
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[2];
+		D3D11_INPUT_ELEMENT_DESC inputElementDesc[3];
 		inputElementDesc[0].SemanticName = "POSITION";
 		inputElementDesc[0].SemanticIndex = 0;
 		inputElementDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -111,7 +108,16 @@ bool DXShader::Initialize(const char * shaderFilePath)
 		inputElementDesc[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		inputElementDesc[1].InstanceDataStepRate = 0;
 
-		result = m_device->CreateInputLayout(inputElementDesc, 2, shaderBuffer->GetBufferPointer(),
+		inputElementDesc[2].SemanticName = "NORMAL";
+		inputElementDesc[2].SemanticIndex = 0;
+		inputElementDesc[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+		inputElementDesc[2].InputSlot = 0;
+		inputElementDesc[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+		inputElementDesc[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+		inputElementDesc[2].InstanceDataStepRate = 0;
+
+		int numberOfElements = sizeof(inputElementDesc) / sizeof(inputElementDesc[0]);
+		result = m_device->CreateInputLayout(inputElementDesc, numberOfElements, shaderBuffer->GetBufferPointer(),
 			shaderBuffer->GetBufferSize(), &m_layout);
 
 		if (FAILED(result))
