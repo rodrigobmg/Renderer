@@ -1,7 +1,5 @@
 #pragma once
 
-#include <General/Math/Math.h>
-
 class IMesh;
 class Material;
 class IConstantBuffer;

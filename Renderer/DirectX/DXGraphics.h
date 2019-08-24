@@ -1,7 +1,6 @@
 #pragma once
 
 #include <General\IGraphics.h>
-#include <General/Math/Math.h>
 
 struct IDXGISwapChain;
 struct ID3D11Device;
@@ -14,6 +13,7 @@ struct ID3D11RasterizerState;
 class ICamera;
 class IConstantBuffer;
 struct FrameConstantBufferData;
+class IPointLight;
 class DXGraphics : public IGraphics
 {
 public:
@@ -40,12 +40,13 @@ private:
 	ID3D11DepthStencilState*					m_depthStencilState;
 	ID3D11DepthStencilView*						m_depthStencilView;
 	ID3D11RasterizerState*						m_rasterState;
-	ICamera*										m_camera;
+	ICamera*									m_camera;
 	Matrix4d									m_projectionMatrix;
 	Matrix4d									m_orthoMatrix;
 	std::vector<std::shared_ptr<Core::Object>>	m_objects;
 	std::unique_ptr<IConstantBuffer>			m_frameConstantBuffer;
 	FrameConstantBufferData*					m_frameConstantBufferData;
+	IPointLight*								m_pointLight;
 	bool										m_vsyncEnabled;
 	int											m_graphicsDeviceMemory;
 	char										m_graphicsDeviceDescription[128];

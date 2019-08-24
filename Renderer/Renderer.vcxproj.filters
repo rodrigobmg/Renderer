@@ -25,6 +25,7 @@
     <ClCompile Include="General\Object.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="General\Camera.cpp" />
+    <ClCompile Include="General\PointLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
@@ -63,8 +64,10 @@
     <ClInclude Include="General\Object.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="General\ICamera.h" />
-    <ClInclude Include="General\Math\MathDefines.h" />
     <ClInclude Include="General\Camera.h" />
+    <ClInclude Include="General\ILight.h" />
+    <ClInclude Include="General\IPointLight.h" />
+    <ClInclude Include="General\PointLight.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\Shaders\color.vs" />

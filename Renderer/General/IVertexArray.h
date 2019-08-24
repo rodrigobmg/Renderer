@@ -1,5 +1,4 @@
 #pragma once
-#include <General/Math/Math.h>
 
 struct VertexFormat
 {

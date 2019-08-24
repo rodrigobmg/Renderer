@@ -14,7 +14,6 @@ bool DXFrameConstantBuffer::SetData(const void * data)
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	FrameConstantBufferData* targetData;
-	unsigned int bufferNumber;
 	const FrameConstantBufferData* sourceData = reinterpret_cast<const FrameConstantBufferData*>(data);
 
 	// Lock the constant buffer so it can be written to.
@@ -31,11 +30,9 @@ bool DXFrameConstantBuffer::SetData(const void * data)
 	// Unlock the constant buffer.
 	m_deviceContext->Unmap(m_buffer, 0);
 
-	// Set the position of the constant buffer in the vertex shader.
-	bufferNumber = 0;
-
 	// Finally set the constant buffer in the vertex shader with the updated values.
 	m_deviceContext->VSSetConstantBuffers(m_bufferNumber, 1, &m_buffer);
+	m_deviceContext->PSSetConstantBuffers(m_bufferNumber, 1, &m_buffer);
 
 	return true;
 }

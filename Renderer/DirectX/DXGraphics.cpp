@@ -11,6 +11,7 @@
 #include <General/Object.h>
 #include <General/Material.h>
 #include <General/Camera.h>
+#include <General/PointLight.h>
 
 //Reference:http://www.rastertek.com/
 
@@ -403,6 +404,8 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	//Create orthographic projection matrix
 	m_orthoMatrix = Math::MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 
+	m_pointLight = new PointLight(Color(1.0f), Vector3d(0.0f, 5.0f, -5.0f));
+
 	return true;
 }
 
@@ -418,6 +421,17 @@ void DXGraphics::Render()
 
 	// Get the view, and projection matrices and set them in the per frame constant buffer
 	m_frameConstantBufferData->m_view = Math::MatrixTranspose(m_camera->GetViewMatrix());
+	Color lightColor = m_pointLight->GetColor();
+	Vector3d lightPosition = m_pointLight->GetPosition();
+	m_frameConstantBufferData->m_pointLightData.m_color.x = lightColor.m_r;
+	m_frameConstantBufferData->m_pointLightData.m_color.y = lightColor.m_g;
+	m_frameConstantBufferData->m_pointLightData.m_color.z = lightColor.m_b;
+	m_frameConstantBufferData->m_pointLightData.m_color.w = lightColor.m_a;
+	m_frameConstantBufferData->m_pointLightData.m_position.x = lightPosition.x;
+	m_frameConstantBufferData->m_pointLightData.m_position.y = lightPosition.y;
+	m_frameConstantBufferData->m_pointLightData.m_position.z = lightPosition.z;
+	m_frameConstantBufferData->m_pointLightData.m_position.w = 1.0f;
+
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
 
 	using namespace std;
@@ -443,6 +457,11 @@ void DXGraphics::Shutdown()
 {
 	// Release all the objects
 	m_objects.clear();
+
+	if (m_pointLight)
+	{
+		delete m_pointLight;
+	}
 
 	//Release constant buffer
 	if (m_frameConstantBuffer)

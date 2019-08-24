@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 #include <stdio.h>
-#pragma optimize("", off)
+
 void Logger::Log(const char * format, ...)
 {
 	const size_t lenTemp = 256;

@@ -245,6 +245,7 @@
     <ClCompile Include="General\Material.cpp" />
     <ClCompile Include="General\Math\Math.cpp" />
     <ClCompile Include="General\Object.cpp" />
+    <ClCompile Include="General\PointLight.cpp" />
     <ClCompile Include="General\VertexArray.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Opengl\GLGraphics.cpp">
@@ -292,8 +293,9 @@
     </ClInclude>
     <ClInclude Include="DirectX\DXConstantBuffer.h" />
     <ClInclude Include="General\ICamera.h" />
+    <ClInclude Include="General\ILight.h" />
+    <ClInclude Include="General\IPointLight.h" />
     <ClInclude Include="General\Material.h" />
-    <ClInclude Include="General\Math\MathDefines.h" />
     <ClInclude Include="General\Object.h" />
     <ClInclude Include="General\ObjectConstantBuffer.h" />
     <ClInclude Include="General\FrameConstantBuffer.h" />
@@ -315,6 +317,7 @@
     <ClInclude Include="General\Loader.h" />
     <ClInclude Include="General\Logger.h" />
     <ClInclude Include="General\Math\Math.h" />
+    <ClInclude Include="General\PointLight.h" />
     <ClInclude Include="General\VertexArray.h" />
     <ClInclude Include="Opengl\GLGraphics.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
