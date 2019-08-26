@@ -241,7 +241,6 @@
     <ClCompile Include="General\IndexArray.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Loader.cpp" />
-    <ClCompile Include="General\Logger.cpp" />
     <ClCompile Include="General\Material.cpp" />
     <ClCompile Include="General\Math\Math.cpp" />
     <ClCompile Include="General\Object.cpp" />
@@ -315,7 +314,6 @@
     <ClInclude Include="General\IVertexArray.h" />
     <ClInclude Include="General\IWindow.h" />
     <ClInclude Include="General\Loader.h" />
-    <ClInclude Include="General\Logger.h" />
     <ClInclude Include="General\Math\Math.h" />
     <ClInclude Include="General\PointLight.h" />
     <ClInclude Include="General\VertexArray.h" />

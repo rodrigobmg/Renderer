@@ -1,6 +1,5 @@
 #include "DXWindow.h"
 
-#include <General/Logger.h>
 #include <General/Input.h>
 
 DXWindow::DXWindow(int windowWidth, int windowHeight, const char* name)
@@ -10,7 +9,7 @@ DXWindow::DXWindow(int windowWidth, int windowHeight, const char* name)
 
 	// Get the instance of this application.
 	m_hinstance = GetModuleHandle(NULL);
-	LOG("Error: %d", GetLastError());
+	printf("Error: %d", GetLastError());
 
 	// Give the application a name.
 	m_applicationName = name;

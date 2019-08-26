@@ -1,6 +1,5 @@
 #include "Loader.h"
 #include <Externals/TinyGLTF/Include.h>
-#include <General/Logger.h>
 #include <General/IGraphics.h>
 
 bool Loader::LoadMesh(const std::string& path, MeshData& meshData, const IGraphics& graphics)
@@ -17,11 +16,11 @@ bool Loader::LoadMesh(const std::string& path, MeshData& meshData, const IGraphi
 	bool result = loader.LoadBinaryFromFile(&model, &err, &warn, path);
 
 	if (!warn.empty()) {
-		Logger::Log("Warn: %s\n", warn.c_str());
+		printf("Warn: %s\n", warn.c_str());
 	}
 
 	if (!err.empty()) {
-		Logger::Log("Err: %s\n", err.c_str());
+		printf("Error: %s\n", err.c_str());
 	}
 
 	if (result)
@@ -33,7 +32,7 @@ bool Loader::LoadMesh(const std::string& path, MeshData& meshData, const IGraphi
 		const Mesh& mesh = model.meshes[0];
 		if (mesh.primitives.size() > 1)
 		{
-			Logger::Log("More than one primitive in %s", path);
+			printf("More than one primitive in %s", path.c_str());
 		}
 		const Primitive& primitive = mesh.primitives[0];
 
@@ -55,7 +54,7 @@ bool Loader::LoadMesh(const std::string& path, MeshData& meshData, const IGraphi
 			meshData.m_primitiveType = PrimitiveType::TriangleStrip;
 			break;
 		default:
-			Logger::Log("Unsupported primitive type %s", primitive.mode);
+			printf("Unsupported primitive type %d", primitive.mode);
 			return false;
 		}
 

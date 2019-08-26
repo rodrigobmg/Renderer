@@ -1,7 +1,6 @@
 #include "DXShader.h"
 
 #include <d3dcompiler.h>
-#include <General/Logger.h>
 
 DXShader::DXShader(std::unique_ptr<ID3D11DeviceContext>& deviceContext, std::unique_ptr<ID3D11Device>& device, ShaderType type)
 	: m_deviceContext(deviceContext)
@@ -49,7 +48,7 @@ bool DXShader::Initialize(const char * shaderFilePath)
 		shaderTarget = "ps_5_0";
 		break;
 	default:
-		Logger::Log("Invalid Shader Type");
+		printf("Invalid Shader Type");
 		return false;
 	}
 
@@ -64,12 +63,12 @@ bool DXShader::Initialize(const char * shaderFilePath)
 		if (errorMessage)
 		{
 			const char* compileErrors = (char*)(errorMessage->GetBufferPointer());
-			Logger::Log("Error compiling shader %s", shaderFilePath);
-			Logger::Log("%s", compileErrors);
+			printf("Error compiling shader %s", shaderFilePath);
+			printf("%s", compileErrors);
 		}
 		else
 		{
-			Logger::Log("Missing Shader File");
+			printf("Missing Shader File");
 		}
 		return false;
 	}
@@ -85,7 +84,7 @@ bool DXShader::Initialize(const char * shaderFilePath)
 
 	if (FAILED(result))
 	{
-		Logger::Log("Failed to create shader");
+		printf("Failed to create shader");
 		return false;
 	}
 
@@ -122,7 +121,7 @@ bool DXShader::Initialize(const char * shaderFilePath)
 
 		if (FAILED(result))
 		{
-			Logger::Log("Failed to input layout");
+			printf("Failed to input layout");
 			return false;
 		}
 	}

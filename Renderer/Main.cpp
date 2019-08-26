@@ -1,4 +1,3 @@
-#include <General/Logger.h>
 #include <General/ApplicationMgr.h>
 
 int main(int argc, char** argv)
