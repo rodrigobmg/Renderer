@@ -3,47 +3,42 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Opengl\GLWindow.cpp" />
-    <ClCompile Include="DirectX\DXWindow.cpp" />
-    <ClCompile Include="DirectX\DXInputMap.cpp" />
     <ClCompile Include="Opengl\GLInputMap.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Application.cpp" />
-    <ClCompile Include="DirectX\DXGraphics.cpp" />
     <ClCompile Include="Opengl\GLGraphics.cpp" />
-    <ClCompile Include="DirectX\DXMesh.cpp" />
     <ClCompile Include="General\Math\Math.cpp" />
-    <ClCompile Include="DirectX\Texture.cpp" />
     <ClCompile Include="General\Loader.cpp" />
     <ClCompile Include="General\VertexArray.cpp" />
     <ClCompile Include="General\IndexArray.cpp" />
-    <ClCompile Include="DirectX\DXConstantBuffer.cpp" />
-    <ClCompile Include="DirectX\DXShader.cpp" />
     <ClCompile Include="General\Material.cpp" />
-    <ClCompile Include="DirectX\DXObjectConstantBuffer.cpp" />
-    <ClCompile Include="DirectX\DXFrameConstantBuffer.cpp" />
     <ClCompile Include="General\Object.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="General\Camera.cpp" />
     <ClCompile Include="General\PointLight.cpp" />
+    <ClCompile Include="Directx11\Texture.cpp" />
+    <ClCompile Include="Directx11\DX11ConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\DX11FrameConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\DX11Graphics.cpp" />
+    <ClCompile Include="Directx11\DX11InputMap.cpp" />
+    <ClCompile Include="Directx11\DX11Mesh.cpp" />
+    <ClCompile Include="Directx11\DX11ObjectConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\DX11Shader.cpp" />
+    <ClCompile Include="Directx11\DX11Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
     <ClInclude Include="General\IWindow.h" />
     <ClInclude Include="General\ApplicationMgr.h" />
     <ClInclude Include="Opengl\GLWindow.h" />
-    <ClInclude Include="DirectX\DXWindow.h" />
     <ClInclude Include="General\Input.h" />
-    <ClInclude Include="DirectX\DXInputMap.h" />
     <ClInclude Include="Opengl\GLInputMap.h" />
     <ClInclude Include="General\IInputMap.h" />
     <ClInclude Include="General\Application.h" />
     <ClInclude Include="General\IGraphics.h" />
-    <ClInclude Include="DirectX\DXGraphics.h" />
     <ClInclude Include="Opengl\GLGraphics.h" />
     <ClInclude Include="General\IMesh.h" />
-    <ClInclude Include="DirectX\DXMesh.h" />
     <ClInclude Include="General\Math\Math.h" />
-    <ClInclude Include="DirectX\Texture.h" />
     <ClInclude Include="General\IVertexArray.h" />
     <ClInclude Include="General\IIndexArray.h" />
     <ClInclude Include="General\IShader.h" />
@@ -52,13 +47,9 @@
     <ClInclude Include="Externals\TinyGLTF\Include.h" />
     <ClInclude Include="General\IndexArray.h" />
     <ClInclude Include="General\IConstantBuffer.h" />
-    <ClInclude Include="DirectX\DXConstantBuffer.h" />
-    <ClInclude Include="DirectX\DXShader.h" />
     <ClInclude Include="General\Material.h" />
     <ClInclude Include="General\ObjectConstantBuffer.h" />
     <ClInclude Include="General\FrameConstantBuffer.h" />
-    <ClInclude Include="DirectX\DXObjectConstantBuffer.h" />
-    <ClInclude Include="DirectX\DXFrameConstantBuffer.h" />
     <ClInclude Include="General\Object.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="General\ICamera.h" />
@@ -66,6 +57,15 @@
     <ClInclude Include="General\ILight.h" />
     <ClInclude Include="General\IPointLight.h" />
     <ClInclude Include="General\PointLight.h" />
+    <ClInclude Include="Directx11\Texture.h" />
+    <ClInclude Include="Directx11\DX11ConstantBuffer.h" />
+    <ClInclude Include="Directx11\DX11FrameConstantBuffer.h" />
+    <ClInclude Include="Directx11\DX11Graphics.h" />
+    <ClInclude Include="Directx11\DX11InputMap.h" />
+    <ClInclude Include="Directx11\DX11Mesh.h" />
+    <ClInclude Include="Directx11\DX11ObjectConstantBuffer.h" />
+    <ClInclude Include="Directx11\DX11Shader.h" />
+    <ClInclude Include="Directx11\DX11Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\Shaders\color.vs" />

@@ -1,4 +1,4 @@
-#include "DXMesh.h"
+#include "DX11Mesh.h"
 
 #include <General\Loader.h>
 

@@ -3,9 +3,9 @@
 #include "Input.h"
 #include "Object.h"
 
-#ifdef DIRECTX
-#include <DirectX/DXWindow.h>
-#include <DirectX/DXGraphics.h>
+#ifdef DIRECTX11
+#include <Directx11/DX11Window.h>
+#include <Directx11/DX11Graphics.h>
 #elif OPENGL
 #include <Opengl/GLWindow.h>
 #include <Opengl/GLGraphics.h>
@@ -20,7 +20,7 @@ Application::Application(int windowWidth, int windowHeight, const char* name)
 	:m_ready(false)
 {
 	assert(!m_window);
-#ifdef DIRECTX
+#ifdef DIRECTX11
 	m_window = new DXWindow(windowWidth, windowHeight, name);
 	m_graphics = new DXGraphics();
 #elif OPENGL

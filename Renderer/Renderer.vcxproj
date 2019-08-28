@@ -106,7 +106,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PreprocessorDefinitions>OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <UndefinePreprocessorDefinitions>DIRECTX</UndefinePreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>DIRECTX11</UndefinePreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
@@ -133,7 +133,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <PreprocessorDefinitions>DIRECTX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DIRECTX11;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>OPENGL</UndefinePreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -168,7 +168,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PreprocessorDefinitions>OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <UndefinePreprocessorDefinitions>DIRECTX</UndefinePreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>DIRECTX11</UndefinePreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
@@ -199,7 +199,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <PreprocessorDefinitions>DIRECTX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DIRECTX11;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>OPENGL</UndefinePreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -234,27 +234,27 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="DirectX\DXConstantBuffer.cpp" />
-    <ClCompile Include="DirectX\DXGraphics.cpp">
+    <ClCompile Include="Directx11\DX11ConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\DX11Graphics.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="DirectX\DXInputMap.cpp">
+    <ClCompile Include="Directx11\DX11InputMap.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="DirectX\DXMesh.cpp">
+    <ClCompile Include="Directx11\DX11Mesh.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="DirectX\DXFrameConstantBuffer.cpp" />
-    <ClCompile Include="DirectX\DXObjectConstantBuffer.cpp" />
-    <ClCompile Include="DirectX\DXShader.cpp" />
-    <ClCompile Include="DirectX\DXWindow.cpp">
+    <ClCompile Include="Directx11\DX11FrameConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\DX11ObjectConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\DX11Shader.cpp" />
+    <ClCompile Include="Directx11\DX11Window.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="DirectX\Texture.cpp" />
+    <ClCompile Include="Directx11\Texture.cpp" />
     <ClCompile Include="General\Application.cpp" />
     <ClCompile Include="General\IndexArray.cpp" />
     <ClCompile Include="General\Input.cpp" />
@@ -289,26 +289,26 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="DirectX\DXGraphics.h">
+    <ClInclude Include="Directx11\DX11Graphics.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="DirectX\DXInputMap.h">
+    <ClInclude Include="Directx11\DX11InputMap.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="DirectX\DXMesh.h">
+    <ClInclude Include="Directx11\DX11Mesh.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="DirectX\DXFrameConstantBuffer.h" />
-    <ClInclude Include="DirectX\DXObjectConstantBuffer.h" />
-    <ClInclude Include="DirectX\DXShader.h" />
-    <ClInclude Include="DirectX\DXWindow.h">
+    <ClInclude Include="Directx11\DX11FrameConstantBuffer.h" />
+    <ClInclude Include="Directx11\DX11ObjectConstantBuffer.h" />
+    <ClInclude Include="Directx11\DX11Shader.h" />
+    <ClInclude Include="Directx11\DX11Window.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="DirectX\DXConstantBuffer.h" />
+    <ClInclude Include="Directx11\DX11ConstantBuffer.h" />
     <ClInclude Include="General\ICamera.h" />
     <ClInclude Include="General\ILight.h" />
     <ClInclude Include="General\IPointLight.h" />
@@ -316,7 +316,7 @@
     <ClInclude Include="General\Object.h" />
     <ClInclude Include="General\ObjectConstantBuffer.h" />
     <ClInclude Include="General\FrameConstantBuffer.h" />
-    <ClInclude Include="DirectX\Texture.h" />
+    <ClInclude Include="Directx11\Texture.h" />
     <ClInclude Include="Externals\TinyGLTF\Include.h" />
     <ClInclude Include="General\Application.h" />
     <ClInclude Include="General\ApplicationMgr.h" />

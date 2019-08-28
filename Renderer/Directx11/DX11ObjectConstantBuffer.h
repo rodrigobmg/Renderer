@@ -1,7 +1,7 @@
 #pragma once
 
 #include <General/ObjectConstantBuffer.h>
-#include "DXConstantBuffer.h"
+#include "DX11ConstantBuffer.h"
 
 class DXObjectConstantBuffer : public ObjectConstantBuffer, public DXConstantBuffer
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <General/FrameConstantBuffer.h>
-#include "DXConstantBuffer.h"
+#include "DX11ConstantBuffer.h"
 
 class DXFrameConstantBuffer : public FrameConstantBuffer, public DXConstantBuffer
 {

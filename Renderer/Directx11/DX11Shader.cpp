@@ -1,4 +1,4 @@
-#include "DXShader.h"
+#include "DX11Shader.h"
 
 #include <d3dcompiler.h>
 

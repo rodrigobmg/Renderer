@@ -1,4 +1,4 @@
-#include "DXFrameConstantBuffer.h"
+#include "DX11FrameConstantBuffer.h"
 
 DXFrameConstantBuffer::DXFrameConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
 	: DXConstantBuffer(device, deviceContext, sizeof(FrameConstantBufferData), 0)

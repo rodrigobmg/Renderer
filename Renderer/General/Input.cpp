@@ -2,8 +2,8 @@
 
 #include "IInputMap.h"
 
-#ifdef DIRECTX
-#include <DirectX/DXInputMap.h>
+#ifdef DIRECTX11
+#include <Directx11/DX11InputMap.h>
 #elif OPENGL
 #include <OpenGL/GLInputMap.h>
 #endif // DIRECTX
@@ -13,7 +13,7 @@ IInputMap* k_inputMap = nullptr;
 
 void InitializeKeyMap()
 {
-#ifdef DIRECTX
+#ifdef DIRECTX11
 	k_inputMap = new DXInputMap();
 #elif OPENGL
 	k_inputMap = new GLInputMap();

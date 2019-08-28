@@ -1,6 +1,6 @@
 #include "Math.h"
 
-#ifdef DIRECTX
+#ifdef DIRECTX11
 using namespace DirectX;
 #endif
 
@@ -8,7 +8,7 @@ namespace Math
 {
 	Vector3d Vec3TransformCoord(const Vector3d & vector, const Matrix4d & transformationMatrix)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		XMVECTOR array;
 		array.m128_f32[0] = vector.x;
 		array.m128_f32[1] = vector.y;
@@ -24,7 +24,7 @@ namespace Math
 
 	Matrix4d MatrixRotationRollPitchYaw(float roll, float pitch, float yaw)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		return XMMatrixRotationRollPitchYaw(roll, pitch, yaw);
 #endif // DIRECTX
 	}
@@ -36,7 +36,7 @@ namespace Math
 
 	Matrix4d MatrixLookAtLH(const Vector3d & position, const Vector3d & lookAt, const Vector3d & up)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		XMVECTOR vPosition;
 		vPosition.m128_f32[0] = position.x;
 		vPosition.m128_f32[1] = position.y;
@@ -57,7 +57,7 @@ namespace Math
 
 	Matrix4d MatrixTranspose(const Matrix4d & matrix)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		return XMMatrixTranspose(matrix);
 #endif // DIRECTX
 
@@ -65,49 +65,49 @@ namespace Math
 
 	Matrix4d MatrixPerspectiveFovLH(float FOV, float aspectRatio, float nearZ, float farZ)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		return XMMatrixPerspectiveFovLH(FOV, aspectRatio, nearZ, farZ);
 #endif
 	}
 
 	Matrix4d MatrixIdentity()
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		return XMMatrixIdentity();
 #endif
 	}
 
 	Matrix4d MatrixOrthographicLH(float width, float height, float nearZ, float farZ)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		return XMMatrixOrthographicLH(width, height, nearZ, farZ);
 #endif
 	}
 
 	Matrix4d MatrixTranslation(const Vector3d & translation)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		return XMMatrixTranslation(translation.x, translation.y, translation.z);
 #endif
 	}
 
 	Matrix4d MatrixScale(const Vector3d & scale)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		return XMMatrixScaling(scale.x, scale.y, scale.z);
 #endif
 	}
 
 	Matrix4d MatrixMultiply(const Matrix4d & m1, const Matrix4d & m2)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		return XMMatrixMultiply(m1, m2);
 #endif
 	}
 
 	Matrix4d MatrixInverse(const Matrix4d & matrix)
 	{
-#ifdef DIRECTX
+#ifdef DIRECTX11
 		return XMMatrixInverse(NULL, matrix);
 #endif
 	}

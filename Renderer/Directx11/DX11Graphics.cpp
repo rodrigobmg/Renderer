@@ -1,10 +1,10 @@
-#include "DXGraphics.h"
+#include "DX11Graphics.h"
 
-#include "DXWindow.h"
-#include "DXMesh.h"
-#include "DXFrameConstantBuffer.h"
-#include "DXShader.h"
-#include "DXObjectConstantBuffer.h"
+#include "DX11Window.h"
+#include "DX11Mesh.h"
+#include "DX11FrameConstantBuffer.h"
+#include "DX11Shader.h"
+#include "DX11ObjectConstantBuffer.h"
 
 #include <General/VertexArray.h>
 #include <General/IndexArray.h>

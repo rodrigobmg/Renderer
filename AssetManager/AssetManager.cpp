@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#ifdef DIRECTX
+#ifdef DIRECTX11
 #define PLATFORM_DIR "DirectX"
 #elif
 #define PLATFORM_DIR "Opengl"

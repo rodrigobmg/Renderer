@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef DIRECTX
+#ifdef DIRECTX11
 #include <DirectXMath.h>
 typedef DirectX::XMMATRIX Matrix4d;
 typedef DirectX::XMFLOAT4 Vector4d;
