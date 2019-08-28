@@ -6,8 +6,6 @@
 #include <DirectX/DXInputMap.h>
 #elif OPENGL
 #include <OpenGL/GLInputMap.h>
-#else
-#error Platform not supported
 #endif // DIRECTX
 
 bool k_keyStates[Input::Keys::SIZE];
@@ -19,8 +17,6 @@ void InitializeKeyMap()
 	k_inputMap = new DXInputMap();
 #elif OPENGL
 	k_inputMap = new GLInputMap();
-#else
-#error Platform not supported
 #endif // DIRECTX
 }
 

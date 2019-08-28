@@ -9,8 +9,6 @@
 #elif OPENGL
 #include <Opengl/GLWindow.h>
 #include <Opengl/GLGraphics.h>
-#else
-#error Unsupported platform
 #endif
 
 const bool kFullscreen = false;
@@ -28,12 +26,10 @@ Application::Application(int windowWidth, int windowHeight, const char* name)
 #elif OPENGL
 	m_window = new GLWindow(windowWidth, windowHeight, name);
 	m_graphics = new GLGraphics();
-#else
-#error Unsupported platform
 #endif
 	m_ready = m_graphics->Initialize(windowWidth, windowHeight, kVsyncEnabled, m_window, kFullscreen, kScreenDepth, kScreenNear);
 
-	std::shared_ptr<Core::Object> object = m_graphics->CreateObject("teapot.glb", "Shaders/color.vs", "Shaders/color.ps");
+	std::shared_ptr<Core::Object> object = m_graphics->CreateObject("Assets/teapot.glb", "Assets/DirectX/Shaders/color.vs", "Assets/DirectX/Shaders/color.ps");
 	m_ready &= object != nullptr;
 	assert(m_window);
 }
