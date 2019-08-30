@@ -2,11 +2,14 @@
 
 #ifdef DIRECTX11
 #define PLATFORM_DIR "DirectX"
-#elif
+#elif OPENGL
 #define PLATFORM_DIR "Opengl"
 #else
 #error Platform not supported
 #endif // DIRECTX
+
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
 
 int main(int argc, char** argv)
 {

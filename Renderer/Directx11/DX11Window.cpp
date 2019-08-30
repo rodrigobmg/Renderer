@@ -2,7 +2,7 @@
 
 #include <General/Input.h>
 
-DXWindow::DXWindow(int windowWidth, int windowHeight, const char* name)
+DX11Window::DX11Window(int windowWidth, int windowHeight, const char* name)
 {
 	WNDCLASSEX wc;
 	int posX, posY;
@@ -50,7 +50,7 @@ DXWindow::DXWindow(int windowWidth, int windowHeight, const char* name)
 	ShowCursor(false);
 }
 
-DXWindow::~DXWindow()
+DX11Window::~DX11Window()
 {
 	//Shutdown input
 	Input::Shutdown();
@@ -65,12 +65,12 @@ DXWindow::~DXWindow()
 	m_hinstance = NULL;
 }
 
-bool DXWindow::Closed() const
+bool DX11Window::Closed() const
 {
 	return m_msg.message == WM_QUIT;
 }
 
-void DXWindow::ProcessInputs()
+void DX11Window::ProcessInputs()
 {
 	ZeroMemory(&m_msg, sizeof(MSG));
 	if (PeekMessage(&m_msg, NULL, 0, 0, PM_REMOVE))
@@ -80,16 +80,16 @@ void DXWindow::ProcessInputs()
 	}
 }
 
-void DXWindow::SwapBuffers()
+void DX11Window::SwapBuffers()
 {
 }
 
-void DXWindow::Close()
+void DX11Window::Close()
 {
 	DestroyWindow(m_hwnd);
 }
 
-LRESULT CALLBACK DXWindow::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK DX11Window::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
 	switch (umessage)
 	{

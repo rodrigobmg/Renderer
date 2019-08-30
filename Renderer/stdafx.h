@@ -1,5 +1,5 @@
 #pragma once
-#define _CRTDBG_MAP_ALLOC
+
 #include <string>
 #include <vector>
 #include <memory>
@@ -10,6 +10,5 @@
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <map>
-#include <crtdbg.h>
 
 #include <General/Math/Math.h>

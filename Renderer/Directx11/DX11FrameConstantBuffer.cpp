@@ -1,15 +1,15 @@
 #include "DX11FrameConstantBuffer.h"
 
-DXFrameConstantBuffer::DXFrameConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
-	: DXConstantBuffer(device, deviceContext, sizeof(FrameConstantBufferData), 0)
+DX11FrameConstantBuffer::DX11FrameConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
+	: DX11ConstantBuffer(device, deviceContext, sizeof(FrameConstantBufferData), 0)
 {
 }
 
-DXFrameConstantBuffer::~DXFrameConstantBuffer()
+DX11FrameConstantBuffer::~DX11FrameConstantBuffer()
 {
 }
 
-bool DXFrameConstantBuffer::SetData(const void * data)
+bool DX11FrameConstantBuffer::SetData(const void * data)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;

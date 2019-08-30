@@ -1,8 +1,10 @@
 #include "DX11Shader.h"
-
 #include <d3dcompiler.h>
 
-DXShader::DXShader(std::unique_ptr<ID3D11DeviceContext>& deviceContext, std::unique_ptr<ID3D11Device>& device, ShaderType type)
+static const char* kMainMethod = "main";
+static const int kWCHARLength = 4096;
+
+DX11Shader::DX11Shader(std::unique_ptr<ID3D11DeviceContext>& deviceContext, std::unique_ptr<ID3D11Device>& device, ShaderType type)
 	: m_deviceContext(deviceContext)
 	, m_device(device)
 	, m_vertexShader(nullptr)
@@ -10,7 +12,7 @@ DXShader::DXShader(std::unique_ptr<ID3D11DeviceContext>& deviceContext, std::uni
 {
 }
 
-DXShader::~DXShader()
+DX11Shader::~DX11Shader()
 {
 	if (m_layout)
 	{
@@ -31,7 +33,7 @@ DXShader::~DXShader()
 	}
 }
 
-bool DXShader::Initialize(const char * shaderFilePath)
+bool DX11Shader::Initialize(const char * shaderFilePath)
 {
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* shaderBuffer;
@@ -52,11 +54,17 @@ bool DXShader::Initialize(const char * shaderFilePath)
 		return false;
 	}
 
-	wchar_t* wString = new wchar_t[4096];
-	MultiByteToWideChar(CP_ACP, 0, shaderFilePath, -1, wString, 4096);
+	unique_ptr<wchar_t> wString(new wchar_t[kWCHARLength]);
+	MultiByteToWideChar(CP_ACP, 0, shaderFilePath, -1, wString.get(), kWCHARLength);
 
-	HRESULT result = D3DCompileFromFile(LPCWSTR(wString), NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main",
-		shaderTarget.c_str(), D3DCOMPILE_ENABLE_STRICTNESS, 0, &shaderBuffer, &errorMessage);
+	UINT compileFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#ifdef DEBUG_SHADERS
+	compileFlags = D3DCOMPILE_DEBUG;
+#endif // DEBUG_SHADERS
+
+
+	HRESULT result = D3DCompileFromFile(LPCWSTR(wString.get()), NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, kMainMethod,
+		shaderTarget.c_str(), compileFlags, 0, &shaderBuffer, &errorMessage);
 
 	if (FAILED(result))
 	{
@@ -126,10 +134,19 @@ bool DXShader::Initialize(const char * shaderFilePath)
 		}
 	}
 
+	shaderBuffer->Release();
+	shaderBuffer = nullptr;
+
+	if (errorMessage)
+	{
+		errorMessage->Release();
+		errorMessage = nullptr;
+	}
+
 	return true;
 }
 
-void DXShader::Render()
+void DX11Shader::Render()
 {
 	if (m_type == ShaderType::VERTEX_SHADER)
 	{

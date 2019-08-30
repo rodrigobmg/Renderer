@@ -2,7 +2,7 @@
 
 #include <General\Loader.h>
 
-DXMesh::DXMesh(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
+DX11Mesh::DX11Mesh(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
 	: m_device(device)
 	, m_deviceContext(deviceContext)
 	, m_vertexBuffer(nullptr)
@@ -10,7 +10,7 @@ DXMesh::DXMesh(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11Devi
 {
 }
 
-DXMesh::~DXMesh()
+DX11Mesh::~DX11Mesh()
 {
 	if (m_indexBuffer)
 	{
@@ -25,7 +25,7 @@ DXMesh::~DXMesh()
 	}
 }
 
-bool DXMesh::Initialize(const std::string& fileName, const IGraphics& graphics)
+bool DX11Mesh::Initialize(const std::string& fileName, const IGraphics& graphics)
 {
 	//Todo: load mesh
 	MeshData meshData;
@@ -59,7 +59,7 @@ bool DXMesh::Initialize(const std::string& fileName, const IGraphics& graphics)
 	return InitializeBuffers();
 }
 
-void DXMesh::Render()
+void DX11Mesh::Render()
 {
 	unsigned int stride = sizeof(VertexFormat);
 	unsigned int offset = 0;
@@ -79,7 +79,7 @@ void DXMesh::Render()
 	}
 }
 
-bool DXMesh::InitializeBuffers()
+bool DX11Mesh::InitializeBuffers()
 {
 
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;

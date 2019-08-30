@@ -14,7 +14,7 @@ IInputMap* k_inputMap = nullptr;
 void InitializeKeyMap()
 {
 #ifdef DIRECTX11
-	k_inputMap = new DXInputMap();
+	k_inputMap = new DX11InputMap();
 #elif OPENGL
 	k_inputMap = new GLInputMap();
 #endif // DIRECTX

@@ -1,16 +1,16 @@
 #include "DX11ObjectConstantBuffer.h"
 
-DXObjectConstantBuffer::DXObjectConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
-	: DXConstantBuffer(device, deviceContext, sizeof(ObjectConstantBufferData), 1)
+DX11ObjectConstantBuffer::DX11ObjectConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
+	: DX11ConstantBuffer(device, deviceContext, sizeof(ObjectConstantBufferData), 1)
 {
 }
 
-DXObjectConstantBuffer::~DXObjectConstantBuffer()
+DX11ObjectConstantBuffer::~DX11ObjectConstantBuffer()
 {
-	DXConstantBuffer::~DXConstantBuffer();
+	DX11ConstantBuffer::~DX11ConstantBuffer();
 }
 
-bool DXObjectConstantBuffer::SetData(const void * data)
+bool DX11ObjectConstantBuffer::SetData(const void * data)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;

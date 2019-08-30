@@ -3,13 +3,13 @@
 #include <General/IWindow.h>
 #include <windows.h>
 
-class DXWindow : public IWindow
+class DX11Window : public IWindow
 {
 public:
-	DXWindow(int windowWidth, int windowHeight, const char* name);
-	DXWindow(DXWindow& other) = delete;
-	DXWindow& operator=(DXWindow& other) = delete;
-	~DXWindow();
+	DX11Window(int windowWidth, int windowHeight, const char* name);
+	DX11Window(DX11Window& other) = delete;
+	DX11Window& operator=(DX11Window& other) = delete;
+	~DX11Window();
 
 	virtual bool Closed() const override;
 	virtual void ProcessInputs() override;

@@ -2,11 +2,11 @@
 
 #include <General/IInputMap.h>
 
-class DXInputMap : public IInputMap
+class DX11InputMap : public IInputMap
 {
 public:
-	DXInputMap();
-	~DXInputMap() {}
+	DX11InputMap();
+	~DX11InputMap() {}
 
 	virtual unsigned int GetMappedValue(unsigned int key) const  override { assert(m_keyMap.find(key) != m_keyMap.end()); return m_keyMap.at(key); }
 private:

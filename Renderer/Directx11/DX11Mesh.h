@@ -7,12 +7,12 @@ struct ID3D11DeviceContext;
 struct ID3D11Buffer;
 class IVertexArray;
 class IIndexArray;
-class DXMesh : public IMesh
+class DX11Mesh : public IMesh
 {
 public:
-	DXMesh(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext);
-	DXMesh(DXMesh& other) = delete;
-	~DXMesh();
+	DX11Mesh(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext);
+	DX11Mesh(DX11Mesh& other) = delete;
+	~DX11Mesh();
 
 	virtual bool Initialize(const std::string& fileName, const IGraphics& graphics) override;
 	virtual void Render() override;

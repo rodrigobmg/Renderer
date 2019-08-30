@@ -3,12 +3,12 @@
 #include <General/ObjectConstantBuffer.h>
 #include "DX11ConstantBuffer.h"
 
-class DXObjectConstantBuffer : public ObjectConstantBuffer, public DXConstantBuffer
+class DX11ObjectConstantBuffer : public DX11ConstantBuffer
 {
 public:
-	DXObjectConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext);
-	DXObjectConstantBuffer(const DXObjectConstantBuffer&) = delete;
-	~DXObjectConstantBuffer();
+	DX11ObjectConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext);
+	DX11ObjectConstantBuffer(const DX11ObjectConstantBuffer&) = delete;
+	~DX11ObjectConstantBuffer();
 
 	virtual bool SetData(const void* data);
 };

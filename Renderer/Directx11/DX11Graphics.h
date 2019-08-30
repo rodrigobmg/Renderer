@@ -14,13 +14,13 @@ class ICamera;
 class IConstantBuffer;
 struct FrameConstantBufferData;
 class IPointLight;
-class DXGraphics : public IGraphics
+class DX11Graphics : public IGraphics
 {
 public:
-	DXGraphics();
-	DXGraphics(const DXGraphics&) = delete;
-	DXGraphics& operator=(const DXGraphics&) = delete;
-	~DXGraphics();
+	DX11Graphics();
+	DX11Graphics(const DX11Graphics&) = delete;
+	DX11Graphics& operator=(const DX11Graphics&) = delete;
+	~DX11Graphics();
 
 	virtual bool Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear) override;
 	virtual void Render() override;

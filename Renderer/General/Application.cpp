@@ -21,15 +21,15 @@ Application::Application(int windowWidth, int windowHeight, const char* name)
 {
 	assert(!m_window);
 #ifdef DIRECTX11
-	m_window = new DXWindow(windowWidth, windowHeight, name);
-	m_graphics = new DXGraphics();
+	m_window = new DX11Window(windowWidth, windowHeight, name);
+	m_graphics = new DX11Graphics();
 #elif OPENGL
 	m_window = new GLWindow(windowWidth, windowHeight, name);
 	m_graphics = new GLGraphics();
 #endif
 	m_ready = m_graphics->Initialize(windowWidth, windowHeight, kVsyncEnabled, m_window, kFullscreen, kScreenDepth, kScreenNear);
 
-	std::shared_ptr<Core::Object> object = m_graphics->CreateObject("Assets/Models/teapot.glb", "Assets/DirectX/Shaders/color.vs", "Assets/DirectX/Shaders/color.ps");
+	std::shared_ptr<Core::Object> object = m_graphics->CreateObject("Assets/Models/cube.glb", "Assets/DirectX/Shaders/color.vs", "Assets/DirectX/Shaders/color.ps");
 	m_ready &= object != nullptr;
 	assert(m_window);
 }

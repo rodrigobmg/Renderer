@@ -2,7 +2,7 @@
 
 #ifdef DIRECTX11
 #define PLATFORM_DIR "DirectX"
-#elif
+#elif OPENGL
 #define PLATFORM_DIR "Opengl"
 #else
 #error Platform not supported

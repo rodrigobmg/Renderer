@@ -4,7 +4,7 @@
 
 #include <windows.h>
 
-DXInputMap::DXInputMap()
+DX11InputMap::DX11InputMap()
 {
 	//Special characters
 	m_keyMap[VK_OEM_3] = Input::KEY_TILDE;

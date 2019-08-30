@@ -1,14 +1,15 @@
 #pragma once
+#include <General/IConstantBuffer.h>
 
 struct ID3D11Buffer;
 struct ID3D11Device;
 struct ID3D11DeviceContext;
-class DXConstantBuffer
+class DX11ConstantBuffer : public IConstantBuffer
 {
 public:
-	DXConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext,
+	DX11ConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext,
 		size_t constantBufferSize, int bufferNumber);
-	~DXConstantBuffer();
+	~DX11ConstantBuffer();
 
 protected:
 	std::unique_ptr<ID3D11Device>&			m_device;

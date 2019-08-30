@@ -15,7 +15,7 @@
 
 //Reference:http://www.rastertek.com/
 
-DXGraphics::DXGraphics()
+DX11Graphics::DX11Graphics()
 	:m_device(nullptr)
 	,m_deviceContext(nullptr)
 	,m_swapChain(nullptr)
@@ -30,7 +30,7 @@ DXGraphics::DXGraphics()
 {
 }
 
-DXGraphics::~DXGraphics()
+DX11Graphics::~DX11Graphics()
 {
 }
 
@@ -168,7 +168,7 @@ void InitSwapChainDescription(DXGI_SWAP_CHAIN_DESC &swapChainDesc, int screenWid
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
 	//Set the handle for the window to render to
-	swapChainDesc.OutputWindow = reinterpret_cast<const DXWindow*>(window)->GetHandle();
+	swapChainDesc.OutputWindow = reinterpret_cast<const DX11Window*>(window)->GetHandle();
 
 	//Turn multisampling off
 	swapChainDesc.SampleDesc.Count = 1;
@@ -263,7 +263,7 @@ void InitRasterDescription(D3D11_RASTERIZER_DESC &rasterDesc)
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 }
 
-bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear)
+bool DX11Graphics::Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear)
 {
 	m_vsyncEnabled = vsync;
 	HRESULT result;
@@ -277,7 +277,6 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	D3D11_RASTERIZER_DESC rasterDesc;
 	D3D11_VIEWPORT viewport;
-	//float fieldOfView, screenAspect;
 
 	if (!GetGraphicsDeviceInfo(screenWidth, screenHeight, refreshRateNumerator, refreshRateDenominator, m_graphicsDeviceMemory, m_graphicsDeviceDescription))
 	{
@@ -291,8 +290,8 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 	//Create the swap chain, D3D device and D3D device context
-	ID3D11Device* device;
-	ID3D11DeviceContext* deviceContext;
+	ID3D11Device* device = nullptr;
+	ID3D11DeviceContext* deviceContext = nullptr;
 	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain,
 		&device, NULL, &deviceContext);
 	m_device.reset(device);
@@ -392,10 +391,10 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 
 	// Set the initial position of the camera.
 	Transform transform;
-	transform.m_position = Vector3d(0.0f, 1.0f, -5.0f);
+	transform.m_position = Vector3d(0.0f, 1.0f, -50.0f);
 	m_camera->SetTransform(transform);
 
-	m_frameConstantBuffer.reset(new DXFrameConstantBuffer(m_device, m_deviceContext));
+	m_frameConstantBuffer.reset(new DX11FrameConstantBuffer(m_device, m_deviceContext));
 	m_frameConstantBufferData = new FrameConstantBufferData();
 
 	//Create the projection matrix
@@ -404,13 +403,13 @@ bool DXGraphics::Initialize(int screenWidth, int screenHeight, bool vsync, const
 	//Create orthographic projection matrix
 	m_orthoMatrix = Math::MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 
-	m_pointLight = new PointLight(Color(1.0f), Vector3d(0.0f, 5.0f, -5.0f));
+	m_pointLight = new PointLight(Color(1.0f), Vector3d(0.0f, 5.0f, -50.0f));
 
 	return true;
 }
 
 static const float kClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-void DXGraphics::Render()
+void DX11Graphics::Render()
 {
 	//Clear back buffer
 	m_deviceContext->ClearRenderTargetView(m_renderTargetView, kClearColor);
@@ -453,7 +452,7 @@ void DXGraphics::Render()
 	}
 }
 
-void DXGraphics::Shutdown()
+void DX11Graphics::Shutdown()
 {
 	// Release all the objects
 	m_objects.clear();
@@ -466,7 +465,7 @@ void DXGraphics::Shutdown()
 	//Release constant buffer
 	if (m_frameConstantBuffer)
 	{
-		m_frameConstantBuffer.release();
+		m_frameConstantBuffer.reset();
 	}
 
 	if (m_frameConstantBufferData)
@@ -536,21 +535,21 @@ void DXGraphics::Shutdown()
 	}
 }
 
-std::shared_ptr<IVertexArray> DXGraphics::CreateVertexArray(const std::vector<VertexFormat>& vertexData) const
+std::shared_ptr<IVertexArray> DX11Graphics::CreateVertexArray(const std::vector<VertexFormat>& vertexData) const
 {
 	using namespace std;
 	shared_ptr<IVertexArray> vertexArray = shared_ptr<IVertexArray>(new VertexArray(vertexData.size(), vertexData.data()));
 	return vertexArray;
 }
 
-std::shared_ptr<IIndexArray> DXGraphics::CreateIndexArray(const std::vector<uint16_t>& indexData) const
+std::shared_ptr<IIndexArray> DX11Graphics::CreateIndexArray(const std::vector<uint16_t>& indexData) const
 {
 	using namespace std;
 	shared_ptr<IIndexArray> indexArray = shared_ptr<IIndexArray>(new IndexArray(indexData.size(), indexData.data()));
 	return indexArray;
 }
 
-std::shared_ptr<Core::Object> DXGraphics::CreateObject()
+std::shared_ptr<Core::Object> DX11Graphics::CreateObject()
 {
 	using namespace std;
 	shared_ptr<Core::Object> newObject(new Core::Object());
@@ -558,20 +557,20 @@ std::shared_ptr<Core::Object> DXGraphics::CreateObject()
 	return newObject;
 }
 
-std::shared_ptr<Core::Object> DXGraphics::CreateObject(const std::string & meshPath, const std::string & vertexShaderPath, const std::string & pixelShaderPath)
+std::shared_ptr<Core::Object> DX11Graphics::CreateObject(const std::string & meshPath, const std::string & vertexShaderPath, const std::string & pixelShaderPath)
 {
 	using namespace std;
-	shared_ptr<IMesh> mesh(new DXMesh(m_device, m_deviceContext));
+	shared_ptr<IMesh> mesh(new DX11Mesh(m_device, m_deviceContext));
 	if (mesh->Initialize(meshPath, *this))
 	{
-		shared_ptr<IShader> vertexShader(new DXShader(m_deviceContext, m_device, ShaderType::VERTEX_SHADER));
+		shared_ptr<IShader> vertexShader(new DX11Shader(m_deviceContext, m_device, ShaderType::VERTEX_SHADER));
 		if (vertexShader->Initialize(vertexShaderPath.c_str()))
 		{
-			shared_ptr<IShader> pixelShader(new DXShader(m_deviceContext, m_device, ShaderType::PIXEL_SHADER));
+			shared_ptr<IShader> pixelShader(new DX11Shader(m_deviceContext, m_device, ShaderType::PIXEL_SHADER));
 			if (pixelShader->Initialize(pixelShaderPath.c_str()))
 			{
 				shared_ptr<Core::Material> material(new Core::Material(vertexShader, pixelShader));
-				shared_ptr<IConstantBuffer> objectConstantBuffer(new DXObjectConstantBuffer(m_device, m_deviceContext));
+				shared_ptr<IConstantBuffer> objectConstantBuffer(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
 				shared_ptr<Core::Object> newObject(new Core::Object(mesh, material, objectConstantBuffer));
 				m_objects.push_back(newObject);
 				return newObject;
