@@ -13,7 +13,7 @@ class IGraphics
 public:
 	virtual ~IGraphics() {};
 	
-	virtual bool Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear) = 0;
+	virtual bool Initialize(const IWindow* window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear) = 0;
 	virtual void Render() = 0;
 	virtual void Shutdown() = 0;
 	virtual SharedPtr<IVertexArray> CreateVertexArray(const vector<VertexFormat>& vertexData) const = 0;

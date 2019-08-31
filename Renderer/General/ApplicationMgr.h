@@ -7,8 +7,8 @@ typedef SharedPtr<IApplication> ApplicationPtr;
 
 namespace ApplicationMgr
 {
-	ApplicationPtr CreateApplication(int windowHeight, int windowWidth, const char* name)
+	ApplicationPtr CreateApplication(HINSTANCE hInstance, int windowHeight, int windowWidth, const char* name)
 	{
-		return ApplicationPtr(new Application(windowHeight, windowWidth, name));
+		return ApplicationPtr(new Application(hInstance, windowHeight, windowWidth, name));
 	}
 }

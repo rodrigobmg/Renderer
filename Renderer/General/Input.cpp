@@ -4,8 +4,6 @@
 
 #ifdef DIRECTX11
 #include <Directx11/DX11InputMap.h>
-#elif OPENGL
-#include <OpenGL/GLInputMap.h>
 #endif // DIRECTX
 
 bool k_keyStates[Input::Keys::SIZE];
@@ -15,8 +13,6 @@ void InitializeKeyMap()
 {
 #ifdef DIRECTX11
 	k_inputMap = new DX11InputMap();
-#elif OPENGL
-	k_inputMap = new GLInputMap();
 #endif // DIRECTX
 }
 

@@ -2,8 +2,6 @@
 
 #ifdef DIRECTX11
 #define PLATFORM_DIR "DirectX"
-#elif OPENGL
-#define PLATFORM_DIR "Opengl"
 #else
 #error Platform not supported
 #endif // DIRECTX
@@ -18,7 +16,7 @@ static const char* kApplicationName = "Renderer";
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine,int nCmdShow)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	ApplicationPtr app = ApplicationMgr::CreateApplication(kApplicationWindowWidth, kApplicationWindowHeight, kApplicationName);
+	ApplicationPtr app = ApplicationMgr::CreateApplication(hInstance, kApplicationWindowWidth, kApplicationWindowHeight, kApplicationName);
 	if (app->IsReady())
 	{
 		app->Run();

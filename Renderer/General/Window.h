@@ -1,22 +1,21 @@
 #pragma once
 
-#include <General/IWindow.h>
+#include "IWindow.h"
 #include <windows.h>
 
-class DX11Window : public IWindow
+class Window : public IWindow
 {
 public:
-	DX11Window(int windowWidth, int windowHeight, const char* name);
-	DX11Window(DX11Window& other) = delete;
-	DX11Window& operator=(DX11Window& other) = delete;
-	~DX11Window();
+	Window(HINSTANCE hInstance, int windowWidth, int windowHeight, const char* name);
+	Window(Window& other) = delete;
+	Window& operator=(Window& other) = delete;
+	~Window();
 
 	virtual bool Closed() const override;
 	virtual void ProcessInputs() override;
 	virtual void SwapBuffers() override;
 	virtual void Close() override;
-
-	HWND GetHandle() const { return m_hwnd; }
+	virtual HWND GetHandle() const override { return m_hwnd; }
 
 private:
 	static LRESULT CALLBACK HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);

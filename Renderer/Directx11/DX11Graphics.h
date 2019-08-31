@@ -22,7 +22,7 @@ public:
 	DX11Graphics& operator=(const DX11Graphics&) = delete;
 	~DX11Graphics();
 
-	virtual bool Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear) override;
+	virtual bool Initialize(const IWindow* window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear) override;
 	virtual void Render() override;
 	virtual void Shutdown() override;
 

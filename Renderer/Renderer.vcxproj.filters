@@ -21,7 +21,7 @@
     <ClCompile Include="Directx11\DX11Mesh.cpp" />
     <ClCompile Include="Directx11\DX11ObjectConstantBuffer.cpp" />
     <ClCompile Include="Directx11\DX11Shader.cpp" />
-    <ClCompile Include="Directx11\DX11Window.cpp" />
+    <ClCompile Include="General\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
@@ -59,8 +59,8 @@
     <ClInclude Include="Directx11\DX11Mesh.h" />
     <ClInclude Include="Directx11\DX11ObjectConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11Shader.h" />
-    <ClInclude Include="Directx11\DX11Window.h" />
     <ClInclude Include="General\IRenderer.h" />
+    <ClInclude Include="General\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\Shaders\color.vs" />

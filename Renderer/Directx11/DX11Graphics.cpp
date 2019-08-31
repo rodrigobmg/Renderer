@@ -1,11 +1,11 @@
 #include "DX11Graphics.h"
 
-#include "DX11Window.h"
 #include "DX11Mesh.h"
 #include "DX11FrameConstantBuffer.h"
 #include "DX11Shader.h"
 #include "DX11ObjectConstantBuffer.h"
 
+#include <General/IWindow.h>
 #include <General/VertexArray.h>
 #include <General/IndexArray.h>
 #include <General/Object.h>
@@ -168,7 +168,7 @@ void InitSwapChainDescription(DXGI_SWAP_CHAIN_DESC &swapChainDesc, int screenWid
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
 	//Set the handle for the window to render to
-	swapChainDesc.OutputWindow = reinterpret_cast<const DX11Window*>(window)->GetHandle();
+	swapChainDesc.OutputWindow = window->GetHandle();
 
 	//Turn multisampling off
 	swapChainDesc.SampleDesc.Count = 1;
@@ -263,7 +263,7 @@ void InitRasterDescription(D3D11_RASTERIZER_DESC &rasterDesc)
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 }
 
-bool DX11Graphics::Initialize(int screenWidth, int screenHeight, bool vsync, const IWindow* window, bool fullscreen, float screenDepth, float screenNear)
+bool DX11Graphics::Initialize(const IWindow* window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear)
 {
 	m_vsyncEnabled = vsync;
 	HRESULT result;

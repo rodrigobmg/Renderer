@@ -1,14 +1,14 @@
-#include "DX11Window.h"
+#include "Window.h"
 
 #include <General/Input.h>
 
-DX11Window::DX11Window(int windowWidth, int windowHeight, const char* name)
+Window::Window(HINSTANCE hInstance, int windowWidth, int windowHeight, const char* name)
 {
 	WNDCLASSEX wc;
 	int posX, posY;
 
 	// Get the instance of this application.
-	m_hinstance = GetModuleHandle(NULL);
+	m_hinstance = hInstance;
 	printf("Error: %d", GetLastError());
 
 	// Give the application a name.
@@ -50,7 +50,7 @@ DX11Window::DX11Window(int windowWidth, int windowHeight, const char* name)
 	ShowCursor(false);
 }
 
-DX11Window::~DX11Window()
+Window::~Window()
 {
 	//Shutdown input
 	Input::Shutdown();
@@ -65,12 +65,12 @@ DX11Window::~DX11Window()
 	m_hinstance = NULL;
 }
 
-bool DX11Window::Closed() const
+bool Window::Closed() const
 {
 	return m_msg.message == WM_QUIT;
 }
 
-void DX11Window::ProcessInputs()
+void Window::ProcessInputs()
 {
 	ZeroMemory(&m_msg, sizeof(MSG));
 	if (PeekMessage(&m_msg, NULL, 0, 0, PM_REMOVE))
@@ -80,16 +80,16 @@ void DX11Window::ProcessInputs()
 	}
 }
 
-void DX11Window::SwapBuffers()
+void Window::SwapBuffers()
 {
 }
 
-void DX11Window::Close()
+void Window::Close()
 {
 	DestroyWindow(m_hwnd);
 }
 
-LRESULT CALLBACK DX11Window::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK Window::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
 	switch (umessage)
 	{

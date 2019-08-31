@@ -7,7 +7,7 @@ class IGraphics;
 class Application : public IApplication
 {
 public:
-	Application(int windowWidth, int windowHeight, const char* name);
+	Application(HINSTANCE hInstance, int windowWidth, int windowHeight, const char* name);
 	~Application();
 	virtual void Run() override;
 	void Render();

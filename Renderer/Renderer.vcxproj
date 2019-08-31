@@ -260,7 +260,7 @@
     <ClCompile Include="Directx11\DX11FrameConstantBuffer.cpp" />
     <ClCompile Include="Directx11\DX11ObjectConstantBuffer.cpp" />
     <ClCompile Include="Directx11\DX11Shader.cpp" />
-    <ClCompile Include="Directx11\DX11Window.cpp">
+    <ClCompile Include="General\Window.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -302,7 +302,7 @@
     <ClInclude Include="Directx11\DX11FrameConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11ObjectConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11Shader.h" />
-    <ClInclude Include="Directx11\DX11Window.h">
+    <ClInclude Include="General\Window.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
