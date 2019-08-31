@@ -4,7 +4,7 @@
 static const char* kMainMethod = "main";
 static const int kWCHARLength = 4096;
 
-DX11Shader::DX11Shader(std::unique_ptr<ID3D11DeviceContext>& deviceContext, std::unique_ptr<ID3D11Device>& device, ShaderType type)
+DX11Shader::DX11Shader(UniquePtr<ID3D11DeviceContext>& deviceContext, UniquePtr<ID3D11Device>& device, ShaderType type)
 	: m_deviceContext(deviceContext)
 	, m_device(device)
 	, m_vertexShader(nullptr)
@@ -38,7 +38,6 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* shaderBuffer;
 
-	using namespace std;
 	string shaderTarget;
 
 	switch (m_type)
@@ -54,7 +53,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 		return false;
 	}
 
-	unique_ptr<wchar_t> wString(new wchar_t[kWCHARLength]);
+	SharedPtr<wchar_t> wString(new wchar_t[kWCHARLength]);
 	MultiByteToWideChar(CP_ACP, 0, shaderFilePath, -1, wString.get(), kWCHARLength);
 
 	UINT compileFlags = D3DCOMPILE_ENABLE_STRICTNESS;

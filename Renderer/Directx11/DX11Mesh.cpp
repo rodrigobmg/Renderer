@@ -2,7 +2,7 @@
 
 #include <General\Loader.h>
 
-DX11Mesh::DX11Mesh(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext)
+DX11Mesh::DX11Mesh(UniquePtr<ID3D11Device>& device, UniquePtr<ID3D11DeviceContext>& deviceContext)
 	: m_device(device)
 	, m_deviceContext(deviceContext)
 	, m_vertexBuffer(nullptr)
@@ -25,7 +25,7 @@ DX11Mesh::~DX11Mesh()
 	}
 }
 
-bool DX11Mesh::Initialize(const std::string& fileName, const IGraphics& graphics)
+bool DX11Mesh::Initialize(const string& fileName, const IGraphics& graphics)
 {
 	//Todo: load mesh
 	MeshData meshData;

@@ -12,7 +12,7 @@ Core::Object::Object()
 {
 }
 
-Core::Object::Object(std::shared_ptr<IMesh>& mesh, std::shared_ptr<Material>& material, std::shared_ptr<IConstantBuffer>& constantBuffer)
+Core::Object::Object(SharedPtr<IMesh>& mesh, SharedPtr<Material>& material, SharedPtr<IConstantBuffer>& constantBuffer)
 	: m_mesh(mesh)
 	, m_material(material)
 	, m_objectConstantBuffer(constantBuffer)

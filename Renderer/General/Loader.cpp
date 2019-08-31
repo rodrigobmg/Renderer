@@ -2,16 +2,15 @@
 #include <Externals/TinyGLTF/Include.h>
 #include <General/IGraphics.h>
 #pragma optimize("", off)
-bool Loader::LoadMesh(const std::string& path, MeshData& meshData, const IGraphics& graphics)
+bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& graphics)
 {
 	using namespace tinygltf;
-	using namespace std;
 
 	assert(!path.empty());
 	Object model;
 	TinyGLTF loader;
-	std::string err;
-	std::string warn;
+	string err;
+	string warn;
 
 	bool result = loader.LoadBinaryFromFile(&model, &err, &warn, path);
 
@@ -59,7 +58,7 @@ bool Loader::LoadMesh(const std::string& path, MeshData& meshData, const IGraphi
 		}
 
 		int indicesAccessor = primitive.indices;
-		map<string, int> attributes = primitive.attributes;
+		std::map<string, int> attributes = primitive.attributes;
 		int positionAccessor = -1;
 		int colorAccessor = -1;
 		int normalAccessor = -1;

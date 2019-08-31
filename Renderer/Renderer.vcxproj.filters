@@ -2,11 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Opengl\GLWindow.cpp" />
-    <ClCompile Include="Opengl\GLInputMap.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Application.cpp" />
-    <ClCompile Include="Opengl\GLGraphics.cpp" />
     <ClCompile Include="General\Math\Math.cpp" />
     <ClCompile Include="General\Loader.cpp" />
     <ClCompile Include="General\VertexArray.cpp" />
@@ -30,13 +27,10 @@
     <ClInclude Include="General\IApplication.h" />
     <ClInclude Include="General\IWindow.h" />
     <ClInclude Include="General\ApplicationMgr.h" />
-    <ClInclude Include="Opengl\GLWindow.h" />
     <ClInclude Include="General\Input.h" />
-    <ClInclude Include="Opengl\GLInputMap.h" />
     <ClInclude Include="General\IInputMap.h" />
     <ClInclude Include="General\Application.h" />
     <ClInclude Include="General\IGraphics.h" />
-    <ClInclude Include="Opengl\GLGraphics.h" />
     <ClInclude Include="General\IMesh.h" />
     <ClInclude Include="General\Math\Math.h" />
     <ClInclude Include="General\IVertexArray.h" />
@@ -66,6 +60,7 @@
     <ClInclude Include="Directx11\DX11ObjectConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11Shader.h" />
     <ClInclude Include="Directx11\DX11Window.h" />
+    <ClInclude Include="General\IRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\Shaders\color.vs" />

@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 			fs::copy(inputPath, outputPath, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
 			return 0;
 		}
-		catch (const std::exception& ex)
+		catch (const exception& ex)
 		{
 			cout << "Error processing files " << ex.what();
 			return -1;

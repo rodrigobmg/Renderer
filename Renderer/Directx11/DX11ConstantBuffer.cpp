@@ -1,6 +1,6 @@
 #include "DX11ConstantBuffer.h"
 
-DX11ConstantBuffer::DX11ConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext,
+DX11ConstantBuffer::DX11ConstantBuffer(UniquePtr<ID3D11Device>& device, UniquePtr<ID3D11DeviceContext>& deviceContext,
 	size_t constantBufferSize, int bufferNumber)
 	: m_device(device)
 	, m_deviceContext(deviceContext)

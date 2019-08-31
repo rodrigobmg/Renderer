@@ -9,16 +9,16 @@ namespace Core
 	public:
 		Material();
 		Material(const Material&) = delete;
-		Material(std::shared_ptr<IShader>& vertexShader, std::shared_ptr<IShader>& pixelShader);
+		Material(SharedPtr<IShader>& vertexShader, SharedPtr<IShader>& pixelShader);
 		~Material();
 
-		void SetVertexShader(std::shared_ptr<IShader>& shader) { m_vertexShader = shader; }
-		void SetPixelShader(std::shared_ptr<IShader>& shader) { m_pixelShader = shader; }
+		void SetVertexShader(SharedPtr<IShader>& shader) { m_vertexShader = shader; }
+		void SetPixelShader(SharedPtr<IShader>& shader) { m_pixelShader = shader; }
 
 		void Render();
 
 	private:
-		std::shared_ptr<IShader>	m_vertexShader;
-		std::shared_ptr<IShader>	m_pixelShader;
+		SharedPtr<IShader>	m_vertexShader;
+		SharedPtr<IShader>	m_pixelShader;
 	};
 }

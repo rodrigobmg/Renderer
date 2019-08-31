@@ -9,6 +9,6 @@ class IMesh
 public:
 	virtual ~IMesh() {};
 
-	virtual bool Initialize(const std::string& fileName, const IGraphics& graphics) = 0;
+	virtual bool Initialize(const string& fileName, const IGraphics& graphics) = 0;
 	virtual void Render() = 0;
 };

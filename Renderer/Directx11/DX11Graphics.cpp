@@ -290,12 +290,15 @@ bool DX11Graphics::Initialize(int screenWidth, int screenHeight, bool vsync, con
 	featureLevel = D3D_FEATURE_LEVEL_11_0;
 
 	//Create the swap chain, D3D device and D3D device context
-	ID3D11Device* device = nullptr;
-	ID3D11DeviceContext* deviceContext = nullptr;
-	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain,
-		&device, NULL, &deviceContext);
-	m_device.reset(device);
-	m_deviceContext.reset(deviceContext);
+	{
+		ID3D11Device* device = nullptr;
+		ID3D11DeviceContext* deviceContext = nullptr;
+		result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain,
+			&device, NULL, &deviceContext);
+		m_device.reset(device);
+		m_deviceContext.reset(deviceContext);
+	}
+
 	if (FAILED(result))
 	{
 		return false;
@@ -433,8 +436,7 @@ void DX11Graphics::Render()
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
 
-	using namespace std;
-	for (shared_ptr<Core::Object>& object : m_objects)
+	for (SharedPtr<Core::Object>& object : m_objects)
 	{
 		object->Render();
 	}
@@ -535,43 +537,39 @@ void DX11Graphics::Shutdown()
 	}
 }
 
-std::shared_ptr<IVertexArray> DX11Graphics::CreateVertexArray(const std::vector<VertexFormat>& vertexData) const
+SharedPtr<IVertexArray> DX11Graphics::CreateVertexArray(const vector<VertexFormat>& vertexData) const
 {
-	using namespace std;
-	shared_ptr<IVertexArray> vertexArray = shared_ptr<IVertexArray>(new VertexArray(vertexData.size(), vertexData.data()));
+	SharedPtr<IVertexArray> vertexArray(new VertexArray(vertexData.size(), vertexData.data()));
 	return vertexArray;
 }
 
-std::shared_ptr<IIndexArray> DX11Graphics::CreateIndexArray(const std::vector<uint16_t>& indexData) const
+SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const vector<uint16_t>& indexData) const
 {
-	using namespace std;
-	shared_ptr<IIndexArray> indexArray = shared_ptr<IIndexArray>(new IndexArray(indexData.size(), indexData.data()));
+	SharedPtr<IIndexArray> indexArray(new IndexArray(indexData.size(), indexData.data()));
 	return indexArray;
 }
 
-std::shared_ptr<Core::Object> DX11Graphics::CreateObject()
+SharedPtr<Core::Object> DX11Graphics::CreateObject()
 {
-	using namespace std;
-	shared_ptr<Core::Object> newObject(new Core::Object());
+	SharedPtr<Core::Object> newObject(new Core::Object());
 	m_objects.push_back(newObject);
 	return newObject;
 }
 
-std::shared_ptr<Core::Object> DX11Graphics::CreateObject(const std::string & meshPath, const std::string & vertexShaderPath, const std::string & pixelShaderPath)
+SharedPtr<Core::Object> DX11Graphics::CreateObject(const string & meshPath, const string & vertexShaderPath, const string & pixelShaderPath)
 {
-	using namespace std;
-	shared_ptr<IMesh> mesh(new DX11Mesh(m_device, m_deviceContext));
+	SharedPtr<IMesh> mesh(new DX11Mesh(m_device, m_deviceContext));
 	if (mesh->Initialize(meshPath, *this))
 	{
-		shared_ptr<IShader> vertexShader(new DX11Shader(m_deviceContext, m_device, ShaderType::VERTEX_SHADER));
+		SharedPtr<IShader> vertexShader(new DX11Shader(m_deviceContext, m_device, ShaderType::VERTEX_SHADER));
 		if (vertexShader->Initialize(vertexShaderPath.c_str()))
 		{
-			shared_ptr<IShader> pixelShader(new DX11Shader(m_deviceContext, m_device, ShaderType::PIXEL_SHADER));
+			SharedPtr<IShader> pixelShader(new DX11Shader(m_deviceContext, m_device, ShaderType::PIXEL_SHADER));
 			if (pixelShader->Initialize(pixelShaderPath.c_str()))
 			{
-				shared_ptr<Core::Material> material(new Core::Material(vertexShader, pixelShader));
-				shared_ptr<IConstantBuffer> objectConstantBuffer(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
-				shared_ptr<Core::Object> newObject(new Core::Object(mesh, material, objectConstantBuffer));
+				SharedPtr<Core::Material> material(new Core::Material(vertexShader, pixelShader));
+				SharedPtr<IConstantBuffer> objectConstantBuffer(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
+				SharedPtr<Core::Object> newObject(new Core::Object(mesh, material, objectConstantBuffer));
 				m_objects.push_back(newObject);
 				return newObject;
 			}

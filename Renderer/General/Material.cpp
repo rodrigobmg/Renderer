@@ -7,7 +7,7 @@ Core::Material::Material()
 {
 }
 
-Core::Material::Material(std::shared_ptr<IShader>& vertexShader, std::shared_ptr<IShader>& pixelShader)
+Core::Material::Material(SharedPtr<IShader>& vertexShader, SharedPtr<IShader>& pixelShader)
 	: m_vertexShader(vertexShader)
 	, m_pixelShader(pixelShader)
 {

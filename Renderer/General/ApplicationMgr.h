@@ -3,7 +3,7 @@
 #include "IApplication.h"
 #include "Application.h"
 
-typedef std::unique_ptr<IApplication> ApplicationPtr;
+typedef SharedPtr<IApplication> ApplicationPtr;
 
 namespace ApplicationMgr
 {

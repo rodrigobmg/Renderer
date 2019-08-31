@@ -6,7 +6,7 @@
 class DX11ObjectConstantBuffer : public DX11ConstantBuffer
 {
 public:
-	DX11ObjectConstantBuffer(std::unique_ptr<ID3D11Device>& device, std::unique_ptr<ID3D11DeviceContext>& deviceContext);
+	DX11ObjectConstantBuffer(UniquePtr<ID3D11Device>& device, UniquePtr<ID3D11DeviceContext>& deviceContext);
 	DX11ObjectConstantBuffer(const DX11ObjectConstantBuffer&) = delete;
 	~DX11ObjectConstantBuffer();
 
