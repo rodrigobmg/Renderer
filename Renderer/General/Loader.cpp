@@ -62,6 +62,7 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 		int positionAccessor = -1;
 		int colorAccessor = -1;
 		int normalAccessor = -1;
+		int uvAccessor = -1;
 		for (auto iter = attributes.begin(); iter != attributes.end(); iter++)
 		{
 			if (iter->first == "POSITION")
@@ -78,10 +79,16 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 			{
 				normalAccessor = iter->second;
 			}
+
+			if (iter->first == "TEXCOORD_0")
+			{
+				uvAccessor = iter->second;
+			}
 		}
 		assert(positionAccessor > -1);
 		assert(colorAccessor > -1);
 		assert(normalAccessor > -1);
+		assert(uvAccessor > -1);
 
 		//Index
 		{
@@ -190,6 +197,32 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 				vertexData[i].m_normal.x = *(vectorPtr);
 				vertexData[i].m_normal.y = *(vectorPtr + 1);
 				vertexData[i].m_normal.z = *(vectorPtr + 2);
+			}
+		}
+
+		//UV
+		{
+			const Accessor& accessor = model.accessors[uvAccessor];
+			assert(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
+			assert(accessor.type == TINYGLTF_TYPE_VEC2);
+			size_t offset = accessor.byteOffset;
+			int bufferViewIndex = accessor.bufferView;
+			size_t count = accessor.count;
+
+			const BufferView bufferView = model.bufferViews[bufferViewIndex];
+			int bufferIndex = bufferView.buffer;
+			offset += bufferView.byteOffset;
+
+			const Buffer& buffer = model.buffers[bufferIndex];
+			const unsigned char* data = buffer.data.data();
+
+			size_t stride = sizeof(float) * 2;
+			for (int i = 0; i < count; i++)
+			{
+				const float* vectorPtr = reinterpret_cast<const float*>(data + offset + i * stride);
+				assert(vectorPtr);
+				vertexData[i].m_texcoord0.x = *(vectorPtr);
+				vertexData[i].m_texcoord0.y = *(vectorPtr + 1);
 			}
 		}
 

@@ -11,6 +11,7 @@
 #include <map>
 
 #include <General/Math/Math.h>
+#include <General/Logger.h>
 
 template<typename T>
 using SharedPtr = std::shared_ptr<T>;

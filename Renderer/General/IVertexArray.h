@@ -5,6 +5,7 @@ struct VertexFormat
 	Vector3d	m_position;
 	Vector4d	m_color;
 	Vector3d	m_normal;
+	Vector2d	m_texcoord0;
 };
 
 enum class PrimitiveType

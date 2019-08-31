@@ -1,4 +1,5 @@
 #include "DX11Shader.h"
+#include "General/VertexArray.h"
 #include <d3dcompiler.h>
 
 static const char* kMainMethod = "main";
@@ -49,7 +50,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 		shaderTarget = "ps_5_0";
 		break;
 	default:
-		printf("Invalid Shader Type");
+		OutputDebugString("Invalid Shader Type");
 		return false;
 	}
 
@@ -57,8 +58,8 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 	MultiByteToWideChar(CP_ACP, 0, shaderFilePath, -1, wString.get(), kWCHARLength);
 
 	UINT compileFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#ifdef DEBUG_SHADERS
-	compileFlags = D3DCOMPILE_DEBUG;
+#ifdef _DEBUG
+	compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif // DEBUG_SHADERS
 
 
@@ -70,8 +71,8 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 		if (errorMessage)
 		{
 			const char* compileErrors = (char*)(errorMessage->GetBufferPointer());
-			printf("Error compiling shader %s", shaderFilePath);
-			printf("%s", compileErrors);
+			DEBUG_LOG("Error compiling shader %s", shaderFilePath);
+			DEBUG_LOG("%s", compileErrors);
 		}
 		else
 		{
@@ -97,30 +98,13 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 
 	if (m_type == ShaderType::VERTEX_SHADER)
 	{
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[3];
-		inputElementDesc[0].SemanticName = "POSITION";
-		inputElementDesc[0].SemanticIndex = 0;
-		inputElementDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		inputElementDesc[0].InputSlot = 0;
-		inputElementDesc[0].AlignedByteOffset = 0;
-		inputElementDesc[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		inputElementDesc[0].InstanceDataStepRate = 0;
-
-		inputElementDesc[1].SemanticName = "COLOR";
-		inputElementDesc[1].SemanticIndex = 0;
-		inputElementDesc[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		inputElementDesc[1].InputSlot = 0;
-		inputElementDesc[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		inputElementDesc[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		inputElementDesc[1].InstanceDataStepRate = 0;
-
-		inputElementDesc[2].SemanticName = "NORMAL";
-		inputElementDesc[2].SemanticIndex = 0;
-		inputElementDesc[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		inputElementDesc[2].InputSlot = 0;
-		inputElementDesc[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		inputElementDesc[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-		inputElementDesc[2].InstanceDataStepRate = 0;
+		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = 
+		{
+			{"POSITION",	0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	0,										D3D11_INPUT_PER_VERTEX_DATA,	0},
+			{"COLOR",		0,	DXGI_FORMAT_R32G32B32A32_FLOAT,	0,	offsetof(VertexFormat, m_color),		D3D11_INPUT_PER_VERTEX_DATA,	0},
+			{"NORMAL",		0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	offsetof(VertexFormat, m_normal),		D3D11_INPUT_PER_VERTEX_DATA,	0},
+			{"TEXCOORD",	0,	DXGI_FORMAT_R32G32_FLOAT,		0,	offsetof(VertexFormat, m_texcoord0),	D3D11_INPUT_PER_VERTEX_DATA,	0}
+		};
 
 		int numberOfElements = sizeof(inputElementDesc) / sizeof(inputElementDesc[0]);
 		result = m_device->CreateInputLayout(inputElementDesc, numberOfElements, shaderBuffer->GetBufferPointer(),
@@ -128,7 +112,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 
 		if (FAILED(result))
 		{
-			printf("Failed to input layout");
+			OutputDebugString("Failed to create input layout");
 			return false;
 		}
 	}

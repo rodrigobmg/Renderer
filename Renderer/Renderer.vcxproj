@@ -240,6 +240,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="General\Bitmap.cpp" />
     <ClCompile Include="General\Camera.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -283,6 +284,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="General\Bitmap.h" />
     <ClInclude Include="General\Camera.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -302,6 +304,7 @@
     <ClInclude Include="Directx11\DX11FrameConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11ObjectConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11Shader.h" />
+    <ClInclude Include="General\Logger.h" />
     <ClInclude Include="General\Window.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

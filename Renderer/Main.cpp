@@ -16,6 +16,7 @@ static const char* kApplicationName = "Renderer";
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine,int nCmdShow)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	DEBUG_LOG("Testing testing %d %d %d", 1, 2, 3);
 	ApplicationPtr app = ApplicationMgr::CreateApplication(hInstance, kApplicationWindowWidth, kApplicationWindowHeight, kApplicationName);
 	if (app->IsReady())
 	{
