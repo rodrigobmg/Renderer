@@ -105,7 +105,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -135,7 +135,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <PreprocessorDefinitions>DIRECTX11;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -207,7 +207,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <PreprocessorDefinitions>DIRECTX11;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -261,6 +261,11 @@
     <ClCompile Include="Directx11\DX11FrameConstantBuffer.cpp" />
     <ClCompile Include="Directx11\DX11ObjectConstantBuffer.cpp" />
     <ClCompile Include="Directx11\DX11Shader.cpp" />
+    <ClCompile Include="General\Math\Matrix4d.cpp" />
+    <ClCompile Include="General\Math\Transform.cpp" />
+    <ClCompile Include="General\Math\Vector2d.cpp" />
+    <ClCompile Include="General\Math\Vector3d.cpp" />
+    <ClCompile Include="General\Math\Vector4d.cpp" />
     <ClCompile Include="General\Window.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -271,7 +276,6 @@
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Loader.cpp" />
     <ClCompile Include="General\Material.cpp" />
-    <ClCompile Include="General\Math\Math.cpp" />
     <ClCompile Include="General\Object.cpp" />
     <ClCompile Include="General\PointLight.cpp" />
     <ClCompile Include="General\VertexArray.cpp" />
@@ -305,6 +309,12 @@
     <ClInclude Include="Directx11\DX11ObjectConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11Shader.h" />
     <ClInclude Include="General\Logger.h" />
+    <ClInclude Include="General\Color.h" />
+    <ClInclude Include="General\Math\Matrix4d.h" />
+    <ClInclude Include="General\Math\Transform.h" />
+    <ClInclude Include="General\Math\Vector2d.h" />
+    <ClInclude Include="General\Math\Vector3d.h" />
+    <ClInclude Include="General\Math\Vector4d.h" />
     <ClInclude Include="General\Window.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

@@ -4,7 +4,6 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="General\Application.cpp" />
-    <ClCompile Include="General\Math\Math.cpp" />
     <ClCompile Include="General\Loader.cpp" />
     <ClCompile Include="General\VertexArray.cpp" />
     <ClCompile Include="General\IndexArray.cpp" />
@@ -23,6 +22,11 @@
     <ClCompile Include="Directx11\DX11Shader.cpp" />
     <ClCompile Include="General\Window.cpp" />
     <ClCompile Include="General\Bitmap.cpp" />
+    <ClCompile Include="General\Math\Matrix4d.cpp" />
+    <ClCompile Include="General\Math\Vector3d.cpp" />
+    <ClCompile Include="General\Math\Transform.cpp" />
+    <ClCompile Include="General\Math\Vector4d.cpp" />
+    <ClCompile Include="General\Math\Vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="General\IApplication.h" />
@@ -64,6 +68,12 @@
     <ClInclude Include="General\Window.h" />
     <ClInclude Include="General\Bitmap.h" />
     <ClInclude Include="General\Logger.h" />
+    <ClInclude Include="General\Math\Matrix4d.h" />
+    <ClInclude Include="General\Math\Transform.h" />
+    <ClInclude Include="General\Math\Vector4d.h" />
+    <ClInclude Include="General\Math\Vector3d.h" />
+    <ClInclude Include="General\Color.h" />
+    <ClInclude Include="General\Math\Vector2d.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\Shaders\color.vs" />

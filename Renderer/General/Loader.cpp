@@ -139,9 +139,7 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 			{
 				const float* vectorPtr = reinterpret_cast<const float*>(data + offset + i * stride);
 				assert(vectorPtr);
-				vertexData[i].m_position.x = *(vectorPtr);
-				vertexData[i].m_position.y = *(vectorPtr + 1);
-				vertexData[i].m_position.z = *(vectorPtr + 2);
+				vertexData[i].m_position = vectorPtr;
 			}
 		}
 
@@ -166,10 +164,7 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 			{
 				const float* vectorPtr = reinterpret_cast<const float*>(data + offset + i * stride);
 				assert(vectorPtr);
-				vertexData[i].m_color.x = *(vectorPtr);
-				vertexData[i].m_color.y = *(vectorPtr + 1);
-				vertexData[i].m_color.z = *(vectorPtr + 2);
-				vertexData[i].m_color.w = *(vectorPtr + 3);
+				vertexData[i].m_color = vectorPtr;
 			}
 		}
 
@@ -194,9 +189,7 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 			{
 				const float* vectorPtr = reinterpret_cast<const float*>(data + offset + i * stride);
 				assert(vectorPtr);
-				vertexData[i].m_normal.x = *(vectorPtr);
-				vertexData[i].m_normal.y = *(vectorPtr + 1);
-				vertexData[i].m_normal.z = *(vectorPtr + 2);
+				vertexData[i].m_normal = vectorPtr;
 			}
 		}
 
@@ -221,8 +214,7 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 			{
 				const float* vectorPtr = reinterpret_cast<const float*>(data + offset + i * stride);
 				assert(vectorPtr);
-				vertexData[i].m_texcoord0.x = *(vectorPtr);
-				vertexData[i].m_texcoord0.y = *(vectorPtr + 1);
+				vertexData[i].m_texcoord0 = vectorPtr;
 			}
 		}
 

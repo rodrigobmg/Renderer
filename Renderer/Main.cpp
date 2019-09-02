@@ -1,11 +1,5 @@
 #include <General/ApplicationMgr.h>
 
-#ifdef DIRECTX11
-#define PLATFORM_DIR "DirectX"
-#else
-#error Platform not supported
-#endif // DIRECTX
-
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 

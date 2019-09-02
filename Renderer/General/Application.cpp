@@ -2,11 +2,9 @@
 
 #include "Input.h"
 #include "Object.h"
-
-#ifdef DIRECTX11
 #include "Window.h"
+
 #include <Directx11/DX11Graphics.h>
-#endif
 
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
@@ -18,9 +16,7 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 {
 	assert(!m_window);
 	m_window = new Window(hInstance, windowWidth, windowHeight, name);
-#ifdef DIRECTX11
 	m_graphics = new DX11Graphics();
-#endif
 	m_ready = m_graphics->Initialize(m_window, windowWidth, windowHeight, kVsyncEnabled, kFullscreen, kScreenDepth, kScreenNear);
 
 	SharedPtr<Core::Object> object = m_graphics->CreateObject("Assets/Models/cube.glb", "Assets/DirectX/Shaders/color.vs", "Assets/DirectX/Shaders/color.ps");

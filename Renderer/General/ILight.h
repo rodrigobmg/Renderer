@@ -1,4 +1,5 @@
 #pragma once
+#include "General/Color.h"
 
 class ILight
 {

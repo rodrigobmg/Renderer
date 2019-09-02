@@ -2,18 +2,14 @@
 
 #include "IInputMap.h"
 
-#ifdef DIRECTX11
 #include <Directx11/DX11InputMap.h>
-#endif // DIRECTX
 
 bool k_keyStates[Input::Keys::SIZE];
 IInputMap* k_inputMap = nullptr;
 
 void InitializeKeyMap()
 {
-#ifdef DIRECTX11
 	k_inputMap = new DX11InputMap();
-#endif // DIRECTX
 }
 
 bool Input::GetKeyDown(unsigned int keyCode)

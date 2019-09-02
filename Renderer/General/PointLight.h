@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IPointLight.h"
+#include <General/Math/Vector3d.h>
 
 class PointLight : public IPointLight
 {

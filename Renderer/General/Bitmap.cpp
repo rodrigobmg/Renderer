@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Bitmap.h"
 
+#include "Color.h"
+
 Bitmap::Bitmap()
 	: m_width(0)
 	, m_height(0)

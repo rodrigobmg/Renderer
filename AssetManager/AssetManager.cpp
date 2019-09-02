@@ -1,12 +1,5 @@
 #include "pch.h"
 
-#ifdef DIRECTX11
-#define PLATFORM_DIR "DirectX"
-#else
-#error Platform not supported
-#endif // DIRECTX
-
-
 int main(int argc, char *argv[])
 {
 	using namespace std;

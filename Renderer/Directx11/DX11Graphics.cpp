@@ -401,10 +401,10 @@ bool DX11Graphics::Initialize(const IWindow* window, int screenWidth, int screen
 	m_frameConstantBufferData = new FrameConstantBufferData();
 
 	//Create the projection matrix
-	m_frameConstantBufferData->m_projection = Math::MatrixTranspose(Math::MatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
+	m_frameConstantBufferData->m_projection = MatrixTranspose(MatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
 
 	//Create orthographic projection matrix
-	m_orthoMatrix = Math::MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
+	m_orthoMatrix = MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 
 	m_pointLight = new PointLight(Color(1.0f), Vector3d(0.0f, 5.0f, -50.0f));
 
@@ -422,17 +422,11 @@ void DX11Graphics::Render()
 
 
 	// Get the view, and projection matrices and set them in the per frame constant buffer
-	m_frameConstantBufferData->m_view = Math::MatrixTranspose(m_camera->GetViewMatrix());
+	m_frameConstantBufferData->m_view = MatrixTranspose(m_camera->GetViewMatrix());
 	Color lightColor = m_pointLight->GetColor();
 	Vector3d lightPosition = m_pointLight->GetPosition();
-	m_frameConstantBufferData->m_pointLightData.m_color.x = lightColor.m_r;
-	m_frameConstantBufferData->m_pointLightData.m_color.y = lightColor.m_g;
-	m_frameConstantBufferData->m_pointLightData.m_color.z = lightColor.m_b;
-	m_frameConstantBufferData->m_pointLightData.m_color.w = lightColor.m_a;
-	m_frameConstantBufferData->m_pointLightData.m_position.x = lightPosition.x;
-	m_frameConstantBufferData->m_pointLightData.m_position.y = lightPosition.y;
-	m_frameConstantBufferData->m_pointLightData.m_position.z = lightPosition.z;
-	m_frameConstantBufferData->m_pointLightData.m_position.w = 1.0f;
+	m_frameConstantBufferData->m_pointLightData.m_color = lightColor;
+	m_frameConstantBufferData->m_pointLightData.m_position = Vector4d(lightPosition.m_x, lightPosition.m_y, lightPosition.m_z, 1.0f);
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
 
