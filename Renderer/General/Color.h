@@ -1,5 +1,5 @@
 #pragma once
 
-#include <General/Math/Vector4d.h>
+#include <General/Vector4d.h>
 
 typedef Vector4d Color;

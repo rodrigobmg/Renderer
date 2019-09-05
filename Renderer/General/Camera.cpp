@@ -1,6 +1,5 @@
 #include "Camera.h"
-
-#include <General/Math/Vector4d.h>
+#include <General/Vector4d.h>
 
 Camera::Camera()
 {

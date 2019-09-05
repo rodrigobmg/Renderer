@@ -10,7 +10,7 @@
 #include <d3dcommon.h>
 #include <map>
 
-#include <General/Math/Math.h>
+#include <General/Math.h>
 #include <General/Logger.h>
 
 template<typename T>

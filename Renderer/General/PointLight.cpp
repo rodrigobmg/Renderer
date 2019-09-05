@@ -1,6 +1,6 @@
 #include "PointLight.h"
 
-#include <General/Math/Vector3d.h>
+#include <General/Vector3d.h>
 
 PointLight::PointLight()
 	: m_color(1.0f)

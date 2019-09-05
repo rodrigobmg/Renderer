@@ -1,7 +1,7 @@
 #pragma once
 
 #include <General/IGraphics.h>
-#include <General/Math/Matrix4d.h>
+#include <General/Matrix4d.h>
 
 struct IDXGISwapChain;
 struct ID3D11Device;

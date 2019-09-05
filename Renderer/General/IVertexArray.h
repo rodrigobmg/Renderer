@@ -1,7 +1,7 @@
 #pragma once
-#include <General/Math/Vector2d.h>
-#include <General/Math/Vector3d.h>
-#include <General/Math/Vector4d.h>
+#include <General/Vector2d.h>
+#include <General/Vector3d.h>
+#include <General/Vector4d.h>
 
 struct VertexFormat
 {
