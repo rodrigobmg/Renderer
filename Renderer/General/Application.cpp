@@ -1,7 +1,7 @@
 #include "Application.h"
 
 #include "Input.h"
-#include "Object.h"
+#include "SceneObject.h"
 #include "Window.h"
 
 #include <Directx11/DX11Graphics.h>
@@ -19,7 +19,7 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 	m_graphics = new DX11Graphics();
 	m_ready = m_graphics->Initialize(m_window, windowWidth, windowHeight, kVsyncEnabled, kFullscreen, kScreenDepth, kScreenNear);
 
-	SharedPtr<Core::Object> object = m_graphics->CreateObject("Assets/Models/cube.glb", "Assets/DirectX/Shaders/color.vs", "Assets/DirectX/Shaders/color.ps");
+	SharedPtr<SceneObject> object = m_graphics->CreateObject("Assets/Models/cube.glb", "Assets/DirectX/Shaders/color.vs", "Assets/DirectX/Shaders/color.ps");
 	m_ready &= object != nullptr;
 	assert(m_window);
 }

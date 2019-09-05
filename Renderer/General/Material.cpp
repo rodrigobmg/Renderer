@@ -1,23 +1,23 @@
 #include "Material.h"
 #include "IShader.h"
 
-Core::Material::Material()
+Material::Material()
 	: m_vertexShader(nullptr)
 	, m_pixelShader(nullptr)
 {
 }
 
-Core::Material::Material(SharedPtr<IShader>& vertexShader, SharedPtr<IShader>& pixelShader)
+Material::Material(SharedPtr<IShader>& vertexShader, SharedPtr<IShader>& pixelShader)
 	: m_vertexShader(vertexShader)
 	, m_pixelShader(pixelShader)
 {
 }
 
-Core::Material::~Material()
+Material::~Material()
 {
 }
 
-void Core::Material::Render()
+void Material::Render()
 {
 	if (m_vertexShader)
 	{

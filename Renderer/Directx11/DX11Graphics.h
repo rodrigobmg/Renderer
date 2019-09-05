@@ -29,8 +29,8 @@ public:
 
 	virtual SharedPtr<IVertexArray> CreateVertexArray(const vector<VertexFormat>& vertexData) const override;
 	virtual SharedPtr<IIndexArray> CreateIndexArray(const vector<uint16_t>& indexData) const override;
-	virtual SharedPtr<Core::Object> CreateObject() override;
-	virtual SharedPtr<Core::Object> CreateObject(const string& meshPath, const string& vertexShaderPath, const string& pixelShaderPath) override;
+	virtual SharedPtr<SceneObject> CreateObject() override;
+	virtual SharedPtr<SceneObject> CreateObject(const string& meshPath, const string& vertexShaderPath, const string& pixelShaderPath) override;
 
 private:
 	UniquePtr<ID3D11Device>			m_device;
@@ -44,7 +44,7 @@ private:
 	ICamera*						m_camera;
 	Matrix4d						m_projectionMatrix;
 	Matrix4d						m_orthoMatrix;
-	vector<SharedPtr<Core::Object>>	m_objects;
+	vector<SharedPtr<SceneObject>>	m_objects;
 	SharedPtr<IConstantBuffer>		m_frameConstantBuffer;
 	FrameConstantBufferData*		m_frameConstantBufferData;
 	IPointLight*					m_pointLight;

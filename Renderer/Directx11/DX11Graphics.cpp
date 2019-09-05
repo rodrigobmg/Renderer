@@ -8,7 +8,7 @@
 #include <General/IWindow.h>
 #include <General/VertexArray.h>
 #include <General/IndexArray.h>
-#include <General/Object.h>
+#include <General/SceneObject.h>
 #include <General/Material.h>
 #include <General/Camera.h>
 #include <General/PointLight.h>
@@ -430,7 +430,7 @@ void DX11Graphics::Render()
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
 
-	for (SharedPtr<Core::Object>& object : m_objects)
+	for (SharedPtr<SceneObject>& object : m_objects)
 	{
 		object->Render();
 	}
@@ -543,14 +543,14 @@ SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const vector<uint16_t>& in
 	return indexArray;
 }
 
-SharedPtr<Core::Object> DX11Graphics::CreateObject()
+SharedPtr<SceneObject> DX11Graphics::CreateObject()
 {
-	SharedPtr<Core::Object> newObject(new Core::Object());
+	SharedPtr<SceneObject> newObject(new SceneObject());
 	m_objects.push_back(newObject);
 	return newObject;
 }
 
-SharedPtr<Core::Object> DX11Graphics::CreateObject(const string & meshPath, const string & vertexShaderPath, const string & pixelShaderPath)
+SharedPtr<SceneObject> DX11Graphics::CreateObject(const string & meshPath, const string & vertexShaderPath, const string & pixelShaderPath)
 {
 	SharedPtr<IMesh> mesh(new DX11Mesh(m_device, m_deviceContext));
 	if (mesh->Initialize(meshPath, *this))
@@ -561,9 +561,9 @@ SharedPtr<Core::Object> DX11Graphics::CreateObject(const string & meshPath, cons
 			SharedPtr<IShader> pixelShader(new DX11Shader(m_deviceContext, m_device, ShaderType::PIXEL_SHADER));
 			if (pixelShader->Initialize(pixelShaderPath.c_str()))
 			{
-				SharedPtr<Core::Material> material(new Core::Material(vertexShader, pixelShader));
+				SharedPtr<Material> material(new Material(vertexShader, pixelShader));
 				SharedPtr<IConstantBuffer> objectConstantBuffer(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
-				SharedPtr<Core::Object> newObject(new Core::Object(mesh, material, objectConstantBuffer));
+				SharedPtr<SceneObject> newObject(new SceneObject(mesh, material, objectConstantBuffer));
 				m_objects.push_back(newObject);
 				return newObject;
 			}

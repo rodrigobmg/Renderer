@@ -21,14 +21,8 @@
     <ClCompile Include="General\Loader.cpp">
       <Filter>General</Filter>
     </ClCompile>
-    <ClCompile Include="General\Material.cpp">
-      <Filter>General\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="General\Matrix4d.cpp">
       <Filter>General\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="General\Object.cpp">
-      <Filter>General</Filter>
     </ClCompile>
     <ClCompile Include="General\PointLight.cpp">
       <Filter>General</Filter>
@@ -74,6 +68,12 @@
     </ClCompile>
     <ClCompile Include="Directx11\DX11InputMap.cpp">
       <Filter>Directx11\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Material.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="General\SceneObject.cpp">
+      <Filter>General</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,17 +150,11 @@
     <ClInclude Include="General\Logger.h">
       <Filter>General</Filter>
     </ClInclude>
-    <ClInclude Include="General\Material.h">
-      <Filter>General\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="General\Math.h">
       <Filter>General\Math</Filter>
     </ClInclude>
     <ClInclude Include="General\Matrix4d.h">
       <Filter>General\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="General\Object.h">
-      <Filter>General</Filter>
     </ClInclude>
     <ClInclude Include="General\ObjectConstantBuffer.h">
       <Filter>General\Graphics</Filter>
@@ -209,6 +203,12 @@
     </ClInclude>
     <ClInclude Include="Directx11\DX11InputMap.h">
       <Filter>Directx11\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Material.h">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="General\SceneObject.h">
+      <Filter>General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

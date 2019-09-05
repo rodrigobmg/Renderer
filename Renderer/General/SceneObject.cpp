@@ -1,10 +1,10 @@
-#include "Object.h"
+#include "SceneObject.h"
 #include "IMesh.h"
 #include "IConstantBuffer.h"
 #include "ObjectConstantBuffer.h"
 #include "Material.h"
 
-Core::Object::Object()
+SceneObject::SceneObject()
 	: m_mesh(nullptr)
 	, m_material(nullptr)
 	, m_objectConstantBuffer(nullptr)
@@ -12,7 +12,7 @@ Core::Object::Object()
 {
 }
 
-Core::Object::Object(SharedPtr<IMesh>& mesh, SharedPtr<Material>& material, SharedPtr<IConstantBuffer>& constantBuffer)
+SceneObject::SceneObject(SharedPtr<IMesh>& mesh, SharedPtr<Material>& material, SharedPtr<IConstantBuffer>& constantBuffer)
 	: m_mesh(mesh)
 	, m_material(material)
 	, m_objectConstantBuffer(constantBuffer)
@@ -20,12 +20,12 @@ Core::Object::Object(SharedPtr<IMesh>& mesh, SharedPtr<Material>& material, Shar
 {
 }
 
-Core::Object::~Object()
+SceneObject::~SceneObject()
 {
 	delete m_objectConstantBufferData;
 }
 
-void Core::Object::Render()
+void SceneObject::Render()
 {
 	m_objectConstantBufferData->m_model = MatrixTranspose(m_transform.GetMatrix());
 	m_objectConstantBufferData->m_modelInverseTranspose = MatrixInverse(MatrixTranspose(m_objectConstantBufferData->m_model));

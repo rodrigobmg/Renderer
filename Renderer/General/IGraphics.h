@@ -4,10 +4,7 @@ class IWindow;
 class IVertexArray;
 class IIndexArray;
 struct VertexFormat;
-namespace Core
-{
-	class Object;
-}
+class SceneObject;
 class IGraphics
 {
 public:
@@ -18,6 +15,6 @@ public:
 	virtual void Shutdown() = 0;
 	virtual SharedPtr<IVertexArray> CreateVertexArray(const vector<VertexFormat>& vertexData) const = 0;
 	virtual SharedPtr<IIndexArray> CreateIndexArray(const vector<uint16_t>& indexData) const = 0;
-	virtual SharedPtr<Core::Object> CreateObject() = 0;
-	virtual SharedPtr<Core::Object> CreateObject(const string& meshPath, const string& vertexShaderPath, const string& pixelShaderPath) = 0;
+	virtual SharedPtr<SceneObject> CreateObject() = 0;
+	virtual SharedPtr<SceneObject> CreateObject(const string& meshPath, const string& vertexShaderPath, const string& pixelShaderPath) = 0;
 };

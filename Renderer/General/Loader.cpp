@@ -1,7 +1,7 @@
 #include "Loader.h"
 #include <Externals/TinyGLTF/Include.h>
 #include <General/IGraphics.h>
-#pragma optimize("", off)
+
 bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& graphics)
 {
 	using namespace tinygltf;
