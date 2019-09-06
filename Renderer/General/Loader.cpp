@@ -1,6 +1,7 @@
 #include "Loader.h"
 #include <Externals/TinyGLTF/Include.h>
 #include <General/IGraphics.h>
+#include <General/VertexElement.h>
 
 bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& graphics)
 {
@@ -219,6 +220,53 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 		}
 
 		meshData.m_vertexData = graphics.CreateVertexArray(vertexData);
+
+		vector<SharedPtr<VertexElement>> vertexElements;
+		for (auto iter = attributes.begin(); iter != attributes.end(); iter++)
+		{
+			string name = iter->first;
+			int accessorIndex = iter->second;
+			const Accessor& accessor = model.accessors[accessorIndex];
+			VertexElementType type;
+			switch (accessor.type)
+			{
+			case TINYGLTF_TYPE_SCALAR:
+				type = VertexElementType::FLOAT1;
+				break;
+			case TINYGLTF_TYPE_VEC2:
+				type = VertexElementType::FLOAT2;
+				break;
+			case TINYGLTF_TYPE_VEC3:
+				type = VertexElementType::FLOAT3;
+				break;
+			case TINYGLTF_TYPE_VEC4:
+				type = VertexElementType::FLOAT4;
+				break;
+			}
+
+			size_t offset = accessor.byteOffset;
+			int bufferViewIndex = accessor.bufferView;
+			assert(accessor.count < 65535);
+			uint16_t count = static_cast<uint16_t>(accessor.count);
+
+			const BufferView bufferView = model.bufferViews[bufferViewIndex];
+			int bufferIndex = bufferView.buffer;
+			offset += bufferView.byteOffset;
+
+			const Buffer& buffer = model.buffers[bufferIndex];
+			const byte* bufferData = buffer.data.data();
+
+			size_t stride = VertexElement::GetVertexElementSize(type);
+			UniquePtr<byte> vertexElementDataPtr(new byte[stride * count]);
+			byte* vertexElementData = vertexElementDataPtr.get();
+			for (int i = 0; i < count; i++)
+			{
+				const byte* data = bufferData + offset + i * stride;
+				memcpy(vertexElementData, data, stride);
+				vertexElementData += stride;
+			}
+			vertexElements.push_back(SharedPtr<VertexElement>(new VertexElement(name, vertexElementData, count, type)));
+		}
 	}
 
 	return result;

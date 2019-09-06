@@ -9,6 +9,7 @@
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <map>
+#include <memory>
 
 #include <General/Math.h>
 #include <General/Logger.h>

@@ -75,6 +75,7 @@
     <ClCompile Include="General\SceneObject.cpp">
       <Filter>General</Filter>
     </ClCompile>
+    <ClCompile Include="General\VertexElement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -209,6 +210,9 @@
     </ClInclude>
     <ClInclude Include="General\SceneObject.h">
       <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="General\VertexElement.h">
+      <Filter>General\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
