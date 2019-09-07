@@ -21,10 +21,10 @@ cbuffer ObjectBufferData : register(b1)
 //InputTypes
 struct VertexInputType
 {
-	float4 position : POSITION;
 	float4 color : COLOR;
-	float4 normal : NORMAL;
-	float2 uv : TEXCOORD0;
+	float3 normal : NORMAL;
+	float3 position : POSITION;
+	float2 uv : TEXCOORD;
 };
 
 struct PixelInputType
@@ -39,13 +39,12 @@ PixelInputType main(VertexInputType input)
 {
 	PixelInputType output;
 	
-	input.position.w = 1.0f;
-	output.position = mul(input.position, worldMatrix);
+	output.position = mul(float4(input.position, 1.0), worldMatrix);
 	output.worldSpacePosition = output.position;
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
 
-	output.normal = mul(input.normal, normalMatrix);
+	output.normal = mul(float4(input.normal, 0), normalMatrix);
 
 	output.color = input.color;
 

@@ -76,7 +76,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 		}
 		else
 		{
-			printf("Missing Shader File");
+			DEBUG_LOG("Missing Shader File");
 		}
 		return false;
 	}
@@ -92,7 +92,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 
 	if (FAILED(result))
 	{
-		printf("Failed to create shader");
+		DEBUG_LOG("Failed to create shader");
 		return false;
 	}
 
@@ -100,10 +100,10 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 	{
 		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = 
 		{
-			{"POSITION",	0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	0,										D3D11_INPUT_PER_VERTEX_DATA,	0},
-			{"COLOR",		0,	DXGI_FORMAT_R32G32B32A32_FLOAT,	0,	offsetof(VertexFormat, m_color),		D3D11_INPUT_PER_VERTEX_DATA,	0},
-			{"NORMAL",		0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	offsetof(VertexFormat, m_normal),		D3D11_INPUT_PER_VERTEX_DATA,	0},
-			{"TEXCOORD",	0,	DXGI_FORMAT_R32G32_FLOAT,		0,	offsetof(VertexFormat, m_texcoord0),	D3D11_INPUT_PER_VERTEX_DATA,	0}
+			{"COLOR",		0,	DXGI_FORMAT_R32G32B32A32_FLOAT,	0,	0,	D3D11_INPUT_PER_VERTEX_DATA,	0},
+			{"NORMAL",		0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	16,	D3D11_INPUT_PER_VERTEX_DATA,	0},
+			{"POSITION",	0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	28,	D3D11_INPUT_PER_VERTEX_DATA,	0},
+			{"TEXCOORD",	0,	DXGI_FORMAT_R32G32_FLOAT,		0,	40,	D3D11_INPUT_PER_VERTEX_DATA,	0}
 		};
 
 		int numberOfElements = sizeof(inputElementDesc) / sizeof(inputElementDesc[0]);
@@ -112,7 +112,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 
 		if (FAILED(result))
 		{
-			OutputDebugString("Failed to create input layout");
+			DEBUG_LOG("Failed to create input layout");
 			return false;
 		}
 	}

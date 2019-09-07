@@ -293,7 +293,14 @@ bool DX11Graphics::Initialize(const IWindow* window, int screenWidth, int screen
 	{
 		ID3D11Device* device = nullptr;
 		ID3D11DeviceContext* deviceContext = nullptr;
-		result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain,
+
+		UINT flags = 0;
+#ifdef _DEBUG
+		flags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif // _DEBUG
+
+
+		result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, flags, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain,
 			&device, NULL, &deviceContext);
 		m_device.reset(device);
 		m_deviceContext.reset(deviceContext);
@@ -531,9 +538,9 @@ void DX11Graphics::Shutdown()
 	}
 }
 
-SharedPtr<IVertexArray> DX11Graphics::CreateVertexArray(const vector<VertexFormat>& vertexData) const
+SharedPtr<IVertexArray> DX11Graphics::CreateVertexArray(size_t vertexCount, const byte* vertexData, const vector<VertexElement>& vertexElements) const
 {
-	SharedPtr<IVertexArray> vertexArray(new VertexArray(vertexData.size(), vertexData.data()));
+	SharedPtr<IVertexArray> vertexArray(new VertexArray(vertexCount, vertexData, vertexElements));
 	return vertexArray;
 }
 

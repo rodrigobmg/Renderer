@@ -27,7 +27,7 @@ public:
 	virtual void Render() override;
 	virtual void Shutdown() override;
 
-	virtual SharedPtr<IVertexArray> CreateVertexArray(const vector<VertexFormat>& vertexData) const override;
+	virtual SharedPtr<IVertexArray> CreateVertexArray(size_t vertexCount, const byte* vertexData, const vector<VertexElement>& vertexElements) const override;
 	virtual SharedPtr<IIndexArray> CreateIndexArray(const vector<uint16_t>& indexData) const override;
 	virtual SharedPtr<SceneObject> CreateObject() override;
 	virtual SharedPtr<SceneObject> CreateObject(const string& meshPath, const string& vertexShaderPath, const string& pixelShaderPath) override;

@@ -1,15 +1,4 @@
 #pragma once
-#include <General/Vector2d.h>
-#include <General/Vector3d.h>
-#include <General/Vector4d.h>
-
-struct VertexFormat
-{
-	Vector3d	m_position;
-	Vector4d	m_color;
-	Vector3d	m_normal;
-	Vector2d	m_texcoord0;
-};
 
 enum class PrimitiveType
 {
@@ -25,5 +14,7 @@ class IVertexArray
 public:
 	virtual ~IVertexArray() {};
 	virtual size_t GetVertexCount() const = 0;
-	virtual const VertexFormat* GetVertexData() const = 0;
+	virtual const byte* GetVertexData() const = 0;
+	virtual size_t GetBufferSize() const = 0;
+	virtual size_t GetStride() const = 0;
 };

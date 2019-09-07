@@ -1,24 +1,6 @@
 #include "stdafx.h"
 #include "VertexElement.h"
 
-VertexElement::VertexElement(const string& name, const byte* data, uint16_t count, VertexElementType type)
-	:m_name(name)
-	,m_count(count)
-	,m_bufferSize(GetVertexElementSize(m_type)* count)
-	,m_type(type)
-{
-	m_data = new byte[m_bufferSize];
-	memcpy(m_data, data, m_bufferSize);
-}
-
-VertexElement::~VertexElement()
-{
-	if (m_data)
-	{
-		delete[] m_data;
-	}
-}
-
 size_t VertexElement::GetVertexElementSize(VertexElementType type)
 {
 	switch (type)

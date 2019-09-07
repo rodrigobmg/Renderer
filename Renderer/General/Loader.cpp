@@ -60,36 +60,6 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 
 		int indicesAccessor = primitive.indices;
 		std::map<string, int> attributes = primitive.attributes;
-		int positionAccessor = -1;
-		int colorAccessor = -1;
-		int normalAccessor = -1;
-		int uvAccessor = -1;
-		for (auto iter = attributes.begin(); iter != attributes.end(); iter++)
-		{
-			if (iter->first == "POSITION")
-			{
-				positionAccessor = iter->second;
-			}
-
-			if (iter->first == "COLOR_0")
-			{
-				colorAccessor = iter->second;
-			}
-
-			if (iter->first == "NORMAL")
-			{
-				normalAccessor = iter->second;
-			}
-
-			if (iter->first == "TEXCOORD_0")
-			{
-				uvAccessor = iter->second;
-			}
-		}
-		assert(positionAccessor > -1);
-		assert(colorAccessor > -1);
-		assert(normalAccessor > -1);
-		assert(uvAccessor > -1);
 
 		//Index
 		{
@@ -117,138 +87,52 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 			meshData.m_indexData = graphics.CreateIndexArray(indexData);
 		}
 
-		vector<VertexFormat> vertexData;
-		//Position
-		{
-			const Accessor& accessor = model.accessors[positionAccessor];
-			assert(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
-			assert(accessor.type == TINYGLTF_TYPE_VEC3);
-			size_t offset = accessor.byteOffset;
-			int bufferViewIndex = accessor.bufferView;
-			size_t count = accessor.count;
-			vertexData.resize(count);
-
-			const BufferView bufferView = model.bufferViews[bufferViewIndex];
-			int bufferIndex = bufferView.buffer;
-			offset += bufferView.byteOffset;
-
-			const Buffer& buffer = model.buffers[bufferIndex];
-			const unsigned char* data = buffer.data.data();
-
-			size_t stride = sizeof(float) * 3;
-			for (int i = 0; i < count; i++)
-			{
-				const float* vectorPtr = reinterpret_cast<const float*>(data + offset + i * stride);
-				assert(vectorPtr);
-				vertexData[i].m_position = vectorPtr;
-			}
-		}
-
-		//Color
-		{
-			const Accessor& accessor = model.accessors[colorAccessor];
-			assert(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
-			assert(accessor.type == TINYGLTF_TYPE_VEC4);
-			size_t offset = accessor.byteOffset;
-			int bufferViewIndex = accessor.bufferView;
-			size_t count = accessor.count;
-
-			const BufferView bufferView = model.bufferViews[bufferViewIndex];
-			int bufferIndex = bufferView.buffer;
-			offset += bufferView.byteOffset;
-
-			const Buffer& buffer = model.buffers[bufferIndex];
-			const unsigned char* data = buffer.data.data();
-
-			size_t stride = sizeof(float) * 4;
-			for (int i = 0; i < count; i++)
-			{
-				const float* vectorPtr = reinterpret_cast<const float*>(data + offset + i * stride);
-				assert(vectorPtr);
-				vertexData[i].m_color = vectorPtr;
-			}
-		}
-
-		//Normal
-		{
-			const Accessor& accessor = model.accessors[normalAccessor];
-			assert(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
-			assert(accessor.type == TINYGLTF_TYPE_VEC3);
-			size_t offset = accessor.byteOffset;
-			int bufferViewIndex = accessor.bufferView;
-			size_t count = accessor.count;
-
-			const BufferView bufferView = model.bufferViews[bufferViewIndex];
-			int bufferIndex = bufferView.buffer;
-			offset += bufferView.byteOffset;
-
-			const Buffer& buffer = model.buffers[bufferIndex];
-			const unsigned char* data = buffer.data.data();
-
-			size_t stride = sizeof(float) * 3;
-			for (int i = 0; i < count; i++)
-			{
-				const float* vectorPtr = reinterpret_cast<const float*>(data + offset + i * stride);
-				assert(vectorPtr);
-				vertexData[i].m_normal = vectorPtr;
-			}
-		}
-
-		//UV
-		{
-			const Accessor& accessor = model.accessors[uvAccessor];
-			assert(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
-			assert(accessor.type == TINYGLTF_TYPE_VEC2);
-			size_t offset = accessor.byteOffset;
-			int bufferViewIndex = accessor.bufferView;
-			size_t count = accessor.count;
-
-			const BufferView bufferView = model.bufferViews[bufferViewIndex];
-			int bufferIndex = bufferView.buffer;
-			offset += bufferView.byteOffset;
-
-			const Buffer& buffer = model.buffers[bufferIndex];
-			const unsigned char* data = buffer.data.data();
-
-			size_t stride = sizeof(float) * 2;
-			for (int i = 0; i < count; i++)
-			{
-				const float* vectorPtr = reinterpret_cast<const float*>(data + offset + i * stride);
-				assert(vectorPtr);
-				vertexData[i].m_texcoord0 = vectorPtr;
-			}
-		}
-
-		meshData.m_vertexData = graphics.CreateVertexArray(vertexData);
-
-		vector<SharedPtr<VertexElement>> vertexElements;
+		vector<VertexElement> vertexElements;
+		vector<SharedPtr<byte>> vertexElementDataPtrs;
+		size_t vertexCount = 0;
 		for (auto iter = attributes.begin(); iter != attributes.end(); iter++)
 		{
-			string name = iter->first;
+			VertexElement vertexElement;
+			vertexElement.m_name = iter->first;
 			int accessorIndex = iter->second;
 			const Accessor& accessor = model.accessors[accessorIndex];
-			VertexElementType type;
+			assert(accessor.count < 65535);
+			if (vertexCount == 0)
+			{
+				vertexCount = accessor.count;
+			}
+			else
+			{
+				assert(vertexCount == accessor.count);
+			}
+
 			switch (accessor.type)
 			{
 			case TINYGLTF_TYPE_SCALAR:
-				type = VertexElementType::FLOAT1;
+				vertexElement.m_type = VertexElementType::FLOAT1;
 				break;
 			case TINYGLTF_TYPE_VEC2:
-				type = VertexElementType::FLOAT2;
+				vertexElement.m_type = VertexElementType::FLOAT2;
 				break;
 			case TINYGLTF_TYPE_VEC3:
-				type = VertexElementType::FLOAT3;
+				vertexElement.m_type = VertexElementType::FLOAT3;
 				break;
 			case TINYGLTF_TYPE_VEC4:
-				type = VertexElementType::FLOAT4;
+				vertexElement.m_type = VertexElementType::FLOAT4;
+				break;
+			default:
+				assert("Invalid accessor type");
 				break;
 			}
+			vertexElement.m_offset = 0;
+			if (!vertexElements.empty())
+			{
+				vertexElement.m_offset = vertexElements.back().m_offset + static_cast<uint16_t>(VertexElement::GetVertexElementSize(vertexElements.back().m_type));
+			}
+			vertexElements.push_back(vertexElement);
 
 			size_t offset = accessor.byteOffset;
 			int bufferViewIndex = accessor.bufferView;
-			assert(accessor.count < 65535);
-			uint16_t count = static_cast<uint16_t>(accessor.count);
-
 			const BufferView bufferView = model.bufferViews[bufferViewIndex];
 			int bufferIndex = bufferView.buffer;
 			offset += bufferView.byteOffset;
@@ -256,17 +140,45 @@ bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& g
 			const Buffer& buffer = model.buffers[bufferIndex];
 			const byte* bufferData = buffer.data.data();
 
-			size_t stride = VertexElement::GetVertexElementSize(type);
-			UniquePtr<byte> vertexElementDataPtr(new byte[stride * count]);
+			size_t stride = VertexElement::GetVertexElementSize(vertexElement.m_type);
+			SharedPtr<byte> vertexElementDataPtr(new byte[stride * vertexCount]);
 			byte* vertexElementData = vertexElementDataPtr.get();
-			for (int i = 0; i < count; i++)
+
+			for (int i = 0; i < vertexCount; i++)
 			{
 				const byte* data = bufferData + offset + i * stride;
 				memcpy(vertexElementData, data, stride);
 				vertexElementData += stride;
 			}
-			vertexElements.push_back(SharedPtr<VertexElement>(new VertexElement(name, vertexElementData, count, type)));
+
+			vertexElementDataPtrs.push_back(vertexElementDataPtr);
 		}
+
+		assert(vertexElements.size() == vertexElementDataPtrs.size());
+
+		size_t stride = 0;
+		for (VertexElement& vertexElement : vertexElements)
+		{
+			stride += VertexElement::GetVertexElementSize(vertexElement.m_type);
+		}
+		size_t bufferSize = stride * vertexCount;
+		UniquePtr<byte> vertexDataPtr(new byte[bufferSize]);
+		byte* vertexData = vertexDataPtr.get();
+
+		//Interweave data
+		for (int i = 0; i < vertexCount; i++)
+		{
+			byte* destData = vertexData + stride * i;
+			for (int j = 0; j < vertexElements.size(); j++)
+			{
+				size_t offset = vertexElements[j].m_offset;
+				size_t elementSize = VertexElement::GetVertexElementSize(vertexElements[j].m_type);
+				const byte* srcData = vertexElementDataPtrs[j].get() + elementSize * i;
+				memcpy((destData + offset), srcData, elementSize);
+			}
+		}
+
+		meshData.m_vertexData = graphics.CreateVertexArray(vertexCount, vertexDataPtr.get(), vertexElements);
 	}
 
 	return result;

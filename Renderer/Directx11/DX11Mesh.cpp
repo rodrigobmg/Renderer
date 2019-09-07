@@ -61,8 +61,8 @@ bool DX11Mesh::Initialize(const string& fileName, const IGraphics& graphics)
 
 void DX11Mesh::Render()
 {
-	unsigned int stride = sizeof(VertexFormat);
-	unsigned int offset = 0;
+	UINT stride = static_cast<UINT>(m_vertices->GetStride());
+	UINT offset = 0;
 
 	if (m_deviceContext)
 	{
@@ -87,7 +87,7 @@ bool DX11Mesh::InitializeBuffers()
 
 	//Set up the description of the static vertex buffer
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(VertexFormat) * static_cast<UINT>(m_vertices->GetVertexCount());
+	vertexBufferDesc.ByteWidth = static_cast<UINT>(m_vertices->GetBufferSize());
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
