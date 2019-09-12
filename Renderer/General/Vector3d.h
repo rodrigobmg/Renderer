@@ -11,6 +11,7 @@ public:
 	Vector3d(const DirectX::XMFLOAT3& other);
 	Vector3d(const Vector4d& other);
 	Vector3d& operator=(const Vector3d& other);
+	Vector3d& operator*=(float rhs);
 	Vector3d(const float* data);
 	~Vector3d() {}
 

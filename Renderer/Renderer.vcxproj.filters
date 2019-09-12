@@ -123,9 +123,6 @@
     <ClInclude Include="General\ILight.h">
       <Filter>General</Filter>
     </ClInclude>
-    <ClInclude Include="Externals\TinyGLTF\Include.h">
-      <Filter>Externals\TinyGLTF</Filter>
-    </ClInclude>
     <ClInclude Include="General\IndexArray.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
@@ -232,12 +229,6 @@
     </Filter>
     <Filter Include="General\Graphics">
       <UniqueIdentifier>{d0d975ee-aa49-42cb-8919-8d84dadf72d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Externals">
-      <UniqueIdentifier>{530b2dd3-0b69-4a49-beef-2fa443eff514}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Externals\TinyGLTF">
-      <UniqueIdentifier>{bc9a8fe1-ecaa-4b0e-b39b-3deddf0a36b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="General\Math">
       <UniqueIdentifier>{e65dbc12-71ec-4514-aeb9-31939328bd74}</UniqueIdentifier>

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DX11Shader.h"
 #include "General/VertexArray.h"
 #include <d3dcompiler.h>
@@ -9,6 +10,8 @@ DX11Shader::DX11Shader(UniquePtr<ID3D11DeviceContext>& deviceContext, UniquePtr<
 	: m_deviceContext(deviceContext)
 	, m_device(device)
 	, m_vertexShader(nullptr)
+	, m_pixelShader(nullptr)
+	, m_layout(nullptr)
 	, m_type(type)
 {
 }
@@ -50,7 +53,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 		shaderTarget = "ps_5_0";
 		break;
 	default:
-		OutputDebugString("Invalid Shader Type");
+		DEBUG_LOG("Invalid Shader Type");
 		return false;
 	}
 

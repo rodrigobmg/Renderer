@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DX11ObjectConstantBuffer.h"
 
 DX11ObjectConstantBuffer::DX11ObjectConstantBuffer(UniquePtr<ID3D11Device>& device, UniquePtr<ID3D11DeviceContext>& deviceContext)

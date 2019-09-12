@@ -12,5 +12,5 @@ struct MeshData
 class IGraphics;
 namespace Loader
 {
-	bool LoadMesh(const string& path, MeshData& meshData, const IGraphics& graphics);
+	bool LoadModel(const string& path, MeshData& meshData, const IGraphics& graphics);
 }

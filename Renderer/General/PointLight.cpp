@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "PointLight.h"
 
 #include <General/Vector3d.h>

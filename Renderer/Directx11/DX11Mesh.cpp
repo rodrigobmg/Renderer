@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DX11Mesh.h"
 
 #include <General\Loader.h>
@@ -29,27 +30,24 @@ bool DX11Mesh::Initialize(const string& fileName, const IGraphics& graphics)
 {
 	//Todo: load mesh
 	MeshData meshData;
-	Loader::LoadMesh(fileName, meshData, graphics);
+	if (!Loader::LoadModel(fileName, meshData, graphics))
+	{
+		return false;
+	}
 	
 	m_vertices = meshData.m_vertexData;
 	m_indices = meshData.m_indexData;
 
 	switch (meshData.m_primitiveType)
 	{
-	case PrimitiveType::Points:
+	case PrimitiveType::Point:
 		m_topology = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
 		break;
 	case PrimitiveType::Line:
 		m_topology = D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
 		break;
-	case PrimitiveType::LineStrip:
-		m_topology = D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;
-		break;
-	case PrimitiveType::Triangles:
+	case PrimitiveType::Triangle:
 		m_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-		break;
-	case PrimitiveType::TriangleStrip:
-		m_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 		break;
 	default:
 		assert("Unsupported topology");

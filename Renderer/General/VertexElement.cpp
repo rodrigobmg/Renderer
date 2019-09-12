@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "VertexElement.h"
 
-size_t VertexElement::GetVertexElementSize(VertexElementType type)
+uint16_t VertexElement::GetVertexElementSize(VertexElementType type)
 {
 	switch (type)
 	{

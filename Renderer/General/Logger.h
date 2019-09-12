@@ -15,16 +15,11 @@ namespace
 		int size = _vscprintf(format, args);
 		std::string result(++size, 0);
 		vsnprintf_s((char*)result.data(), size, _TRUNCATE, format, args);
+		result[result.size() - 1] = '\n';
 		return result;
 #endif
 		va_end(args);
 	}
-
-	//static const std::string DEBUG_PREPEND("DEBUG::%s - %d::");
-	//std::string Log(const char* format, ...)
-	//{
-	//	Format(format, ...);
-	//}
 }
 
 #define DEBUG_LOG(fmt,...) OutputDebugString((Format((fmt),__VA_ARGS__)).c_str())

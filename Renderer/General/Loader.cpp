@@ -1,185 +1,152 @@
+#include "stdafx.h"
 #include "Loader.h"
-#include <Externals/TinyGLTF/Include.h>
+#include <Externals/assimp/include/assimp/Importer.hpp>
+#include <Externals/assimp/include/assimp/scene.h>
+#include <Externals/assimp/include/assimp/postprocess.h>
 #include <General/IGraphics.h>
 #include <General/VertexElement.h>
+#include <General/Vector4d.h>
+#include <General/Vector3d.h>
+#include <General/Vector2d.h>
 
-bool Loader::LoadMesh(const string& path, MeshData& meshData, const IGraphics& graphics)
+static const Vector4d kDefaultColor(1.0f);
+
+void GetMeshes(aiNode* node, const aiScene* scene, vector<aiMesh*>& o_meshes)
 {
-	using namespace tinygltf;
-
-	assert(!path.empty());
-	Object model;
-	TinyGLTF loader;
-	string err;
-	string warn;
-
-	bool result = loader.LoadBinaryFromFile(&model, &err, &warn, path);
-
-	if (!warn.empty()) {
-		printf("Warn: %s\n", warn.c_str());
+	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+		o_meshes.push_back(scene->mMeshes[node->mMeshes[i]]);
 	}
 
-	if (!err.empty()) {
-		printf("Error: %s\n", err.c_str());
+	for (unsigned int j = 0; j < node->mNumChildren; j++) {
+		GetMeshes(node->mChildren[j], scene, o_meshes);
 	}
+}
 
-	if (result)
+void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const IGraphics& graphics)
+{
+	size_t vertexCount = aiMesh->mNumVertices;
+	size_t indexCount = aiMesh->mNumFaces * aiMesh->mFaces[0].mNumIndices;
+	UniquePtr<uint16_t> indexDataPtr(new uint16_t[indexCount]);
+	uint16_t* indexData = indexDataPtr.get();
+
+	int numColorChannels = aiMesh->GetNumColorChannels();
+	int numUVChannels = aiMesh->GetNumUVChannels();
+	assert(numUVChannels > 0);
+
+	size_t totalNumVertexElements = (numColorChannels == 0 ? 1 : numColorChannels) + numUVChannels;
+	assert(aiMesh->HasNormals());
+	totalNumVertexElements++;
+	assert(aiMesh->HasPositions());
+	totalNumVertexElements++;
+	assert(totalNumVertexElements == 4);
+	vector<VertexElement> vertexElements(totalNumVertexElements);
+
+	vertexElements[0].m_name = "COLOR_0";
+	vertexElements[0].m_offset = 0;
+	vertexElements[0].m_type = VertexElementType::FLOAT4;
+
+	vertexElements[1].m_name = "NORMAL";
+	vertexElements[1].m_offset = vertexElements[0].m_offset + VertexElement::GetVertexElementSize(vertexElements[0].m_type);
+	vertexElements[1].m_type = VertexElementType::FLOAT3;
+
+	vertexElements[2].m_name = "POSITION";
+	vertexElements[2].m_offset = vertexElements[1].m_offset + VertexElement::GetVertexElementSize(vertexElements[1].m_type);
+	vertexElements[2].m_type = VertexElementType::FLOAT3;
+
+	vertexElements[3].m_name = "TEXCOORD_0";
+	vertexElements[3].m_offset = vertexElements[2].m_offset + VertexElement::GetVertexElementSize(vertexElements[2].m_type);
+	vertexElements[3].m_type = VertexElementType::FLOAT2;
+
+	size_t stride = 0;
+	for (int i = 0; i < vertexElements.size(); i++)
 	{
-		if (model.meshes.empty())
+		stride += VertexElement::GetVertexElementSize(vertexElements[i].m_type);
+	}
+
+	float x = std::numeric_limits<float>::min();
+	float y = std::numeric_limits<float>::min();
+	float z = std::numeric_limits<float>::min();
+
+	UniquePtr<byte> vertexDataPtr(new byte[vertexCount * stride]);
+	byte* verteData = vertexDataPtr.get();
+	for (size_t i = 0; i < vertexCount; i++)
+	{
+		//COLOR_0
 		{
-			return false;
-		}
-		const Mesh& mesh = model.meshes[0];
-		if (mesh.primitives.size() > 1)
-		{
-			printf("More than one primitive in %s", path.c_str());
-		}
-		const Primitive& primitive = mesh.primitives[0];
-
-		switch (primitive.mode)
-		{
-		case 0:
-			meshData.m_primitiveType = PrimitiveType::Points;
-			break;
-		case 1:
-			meshData.m_primitiveType = PrimitiveType::Line;
-			break;
-		case 3:
-			meshData.m_primitiveType = PrimitiveType::LineStrip;
-			break;
-		case 4:
-			meshData.m_primitiveType = PrimitiveType::Triangles;
-			break;
-		case 5:
-			meshData.m_primitiveType = PrimitiveType::TriangleStrip;
-			break;
-		default:
-			printf("Unsupported primitive type %d", primitive.mode);
-			return false;
-		}
-
-		int indicesAccessor = primitive.indices;
-		std::map<string, int> attributes = primitive.attributes;
-
-		//Index
-		{
-			const Accessor& accessor = model.accessors[indicesAccessor];
-			assert(accessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT);
-			size_t offset = accessor.byteOffset;
-			int bufferViewIndex = accessor.bufferView;
-			size_t count = accessor.count;
-
-			const BufferView bufferView = model.bufferViews[bufferViewIndex];
-			int bufferIndex = bufferView.buffer;
-			offset += bufferView.byteOffset;
-
-			const Buffer& buffer = model.buffers[bufferIndex];
-			const unsigned char* data = buffer.data.data();
-
-			size_t stride = sizeof(unsigned short);
-			vector<uint16_t> indexData;
-			for (int i = 0; i < count; i++)
+			if (numColorChannels > 0)
 			{
-				const unsigned short* index = reinterpret_cast<const unsigned short*>(data + offset + i * stride);
-				assert(index);
-				indexData.push_back(*index);
-			}
-			meshData.m_indexData = graphics.CreateIndexArray(indexData);
-		}
-
-		vector<VertexElement> vertexElements;
-		vector<SharedPtr<byte>> vertexElementDataPtrs;
-		size_t vertexCount = 0;
-		for (auto iter = attributes.begin(); iter != attributes.end(); iter++)
-		{
-			VertexElement vertexElement;
-			vertexElement.m_name = iter->first;
-			int accessorIndex = iter->second;
-			const Accessor& accessor = model.accessors[accessorIndex];
-			assert(accessor.count < 65535);
-			if (vertexCount == 0)
-			{
-				vertexCount = accessor.count;
+				memcpy((verteData + vertexElements[0].m_offset), &aiMesh->mColors[0][i], VertexElement::GetVertexElementSize(vertexElements[0].m_type));
 			}
 			else
 			{
-				assert(vertexCount == accessor.count);
+				memcpy((verteData + vertexElements[0].m_offset), &kDefaultColor, VertexElement::GetVertexElementSize(vertexElements[0].m_type));
 			}
-
-			switch (accessor.type)
-			{
-			case TINYGLTF_TYPE_SCALAR:
-				vertexElement.m_type = VertexElementType::FLOAT1;
-				break;
-			case TINYGLTF_TYPE_VEC2:
-				vertexElement.m_type = VertexElementType::FLOAT2;
-				break;
-			case TINYGLTF_TYPE_VEC3:
-				vertexElement.m_type = VertexElementType::FLOAT3;
-				break;
-			case TINYGLTF_TYPE_VEC4:
-				vertexElement.m_type = VertexElementType::FLOAT4;
-				break;
-			default:
-				assert("Invalid accessor type");
-				break;
-			}
-			vertexElement.m_offset = 0;
-			if (!vertexElements.empty())
-			{
-				vertexElement.m_offset = vertexElements.back().m_offset + static_cast<uint16_t>(VertexElement::GetVertexElementSize(vertexElements.back().m_type));
-			}
-			vertexElements.push_back(vertexElement);
-
-			size_t offset = accessor.byteOffset;
-			int bufferViewIndex = accessor.bufferView;
-			const BufferView bufferView = model.bufferViews[bufferViewIndex];
-			int bufferIndex = bufferView.buffer;
-			offset += bufferView.byteOffset;
-
-			const Buffer& buffer = model.buffers[bufferIndex];
-			const byte* bufferData = buffer.data.data();
-
-			size_t stride = VertexElement::GetVertexElementSize(vertexElement.m_type);
-			SharedPtr<byte> vertexElementDataPtr(new byte[stride * vertexCount]);
-			byte* vertexElementData = vertexElementDataPtr.get();
-
-			for (int i = 0; i < vertexCount; i++)
-			{
-				const byte* data = bufferData + offset + i * stride;
-				memcpy(vertexElementData, data, stride);
-				vertexElementData += stride;
-			}
-
-			vertexElementDataPtrs.push_back(vertexElementDataPtr);
 		}
 
-		assert(vertexElements.size() == vertexElementDataPtrs.size());
-
-		size_t stride = 0;
-		for (VertexElement& vertexElement : vertexElements)
+		//NORMAL
 		{
-			stride += VertexElement::GetVertexElementSize(vertexElement.m_type);
+			memcpy((verteData + vertexElements[1].m_offset), &aiMesh->mNormals[i], VertexElement::GetVertexElementSize(vertexElements[1].m_type));
 		}
-		size_t bufferSize = stride * vertexCount;
-		UniquePtr<byte> vertexDataPtr(new byte[bufferSize]);
-		byte* vertexData = vertexDataPtr.get();
 
-		//Interweave data
-		for (int i = 0; i < vertexCount; i++)
+		//POSITION
 		{
-			byte* destData = vertexData + stride * i;
-			for (int j = 0; j < vertexElements.size(); j++)
-			{
-				size_t offset = vertexElements[j].m_offset;
-				size_t elementSize = VertexElement::GetVertexElementSize(vertexElements[j].m_type);
-				const byte* srcData = vertexElementDataPtrs[j].get() + elementSize * i;
-				memcpy((destData + offset), srcData, elementSize);
-			}
+			x = std::max(x, aiMesh->mVertices[i].x);
+			y = std::max(x, aiMesh->mVertices[i].y);
+			z = std::max(x, aiMesh->mVertices[i].z);
+			memcpy((verteData + vertexElements[2].m_offset), &aiMesh->mVertices[i], VertexElement::GetVertexElementSize(vertexElements[2].m_type));
 		}
 
-		meshData.m_vertexData = graphics.CreateVertexArray(vertexCount, vertexDataPtr.get(), vertexElements);
+		//TEXCOORD_0
+		{
+			Vector2d UV(aiMesh->mTextureCoords[0][i].x, aiMesh->mTextureCoords[0][i].y);
+			memcpy((verteData + vertexElements[3].m_offset), &UV, VertexElement::GetVertexElementSize(vertexElements[3].m_type));
+		}
+
+		verteData += stride;
 	}
 
-	return result;
+	uint16_t maxVal = 0;
+	for (unsigned int i = 0; i < aiMesh->mNumFaces; i++) {
+		for (unsigned int j = 0; j < aiMesh->mFaces[i].mNumIndices; j++) {
+			indexData[j + (i * 3)] = aiMesh->mFaces[i].mIndices[j];
+			maxVal = std::max(maxVal, indexData[j + (i * 3)]);
+		}
+	}
+
+	switch (aiMesh->mPrimitiveTypes)
+	{
+	case aiPrimitiveType::aiPrimitiveType_LINE:
+		meshData.m_primitiveType = PrimitiveType::Line;
+		break;
+	case aiPrimitiveType::aiPrimitiveType_POINT:
+		meshData.m_primitiveType = PrimitiveType::Point;
+		break;
+	case aiPrimitiveType::aiPrimitiveType_TRIANGLE:
+		meshData.m_primitiveType = PrimitiveType::Triangle;
+		break;
+	default:
+		assert("Unknown primitive type");
+		break;
+	}
+
+	meshData.m_indexData = graphics.CreateIndexArray(indexDataPtr.get(), indexCount);
+	meshData.m_vertexData = graphics.CreateVertexArray(vertexCount, vertexDataPtr.get(), vertexElements);
+}
+
+bool Loader::LoadModel(const string& path, MeshData& meshData, const IGraphics& graphics)
+{
+	Assimp::Importer importer; 
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+		string error = importer.GetErrorString();
+		DEBUG_LOG("ERROR::ASSIMP:: %s", error);
+		return false;
+	}
+
+	vector<aiMesh*> aiMeshes;
+	GetMeshes(scene->mRootNode, scene, aiMeshes);
+
+	ExtractVertexData(aiMeshes[0], meshData, graphics);
+
+	return true;
 }

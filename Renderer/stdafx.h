@@ -1,4 +1,5 @@
 #pragma once
+#define NOMINMAX
 
 #include <string>
 #include <vector>
@@ -10,6 +11,7 @@
 #include <d3dcommon.h>
 #include <map>
 #include <memory>
+#include <climits>
 
 #include <General/Math.h>
 #include <General/Logger.h>

@@ -47,6 +47,14 @@ Vector3d & Vector3d::operator=(const Vector3d & other)
 	return *this;
 }
 
+Vector3d& Vector3d::operator*=(float rhs)
+{
+	m_vector.x *= rhs;
+	m_vector.y *= rhs;
+	m_vector.z *= rhs;
+	return *this;
+}
+
 Vector3d::Vector3d(const float * data)
 	:m_x(data[0])
 	,m_y(data[1])

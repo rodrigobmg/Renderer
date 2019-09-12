@@ -2,11 +2,9 @@
 
 enum class PrimitiveType
 {
-	Points = 0,
+	Point = 0,
 	Line,
-	LineStrip,
-	Triangles,
-	TriangleStrip
+	Triangle
 };
 
 class IVertexArray

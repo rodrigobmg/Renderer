@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "VertexArray.h"
 #include "VertexElement.h"
 

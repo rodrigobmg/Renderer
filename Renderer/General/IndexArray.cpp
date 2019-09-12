@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IndexArray.h"
 
 IndexArray::IndexArray(size_t indexCount, const uint16_t* indexData)

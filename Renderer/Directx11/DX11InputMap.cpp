@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DX11InputMap.h"
 
 #include <General/Input.h>

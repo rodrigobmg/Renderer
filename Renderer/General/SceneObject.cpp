@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "SceneObject.h"
 #include "IMesh.h"
 #include "IConstantBuffer.h"

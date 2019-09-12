@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DX11Graphics.h"
 
 #include "DX11Mesh.h"
@@ -401,7 +402,7 @@ bool DX11Graphics::Initialize(const IWindow* window, int screenWidth, int screen
 
 	// Set the initial position of the camera.
 	Transform transform;
-	transform.m_position = Vector3d(0.0f, 1.0f, -50.0f);
+	transform.m_position = Vector3d(0.0f, 10.0f, -80.0f);
 	m_camera->SetTransform(transform);
 
 	m_frameConstantBuffer.reset(new DX11FrameConstantBuffer(m_device, m_deviceContext));
@@ -413,7 +414,7 @@ bool DX11Graphics::Initialize(const IWindow* window, int screenWidth, int screen
 	//Create orthographic projection matrix
 	m_orthoMatrix = MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 
-	m_pointLight = new PointLight(Color(1.0f), Vector3d(0.0f, 5.0f, -50.0f));
+	m_pointLight = new PointLight(Color(1.0f), Vector3d(0.0f, 35.0f, -50.0f));
 
 	return true;
 }
@@ -544,9 +545,9 @@ SharedPtr<IVertexArray> DX11Graphics::CreateVertexArray(size_t vertexCount, cons
 	return vertexArray;
 }
 
-SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const vector<uint16_t>& indexData) const
+SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const uint16_t* indexData, size_t indexCount) const
 {
-	SharedPtr<IIndexArray> indexArray(new IndexArray(indexData.size(), indexData.data()));
+	SharedPtr<IIndexArray> indexArray(new IndexArray(indexCount, indexData));
 	return indexArray;
 }
 

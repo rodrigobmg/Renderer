@@ -11,7 +11,7 @@ enum class VertexElementType
 struct VertexElement
 {
 public:
-	static size_t GetVertexElementSize(VertexElementType type);
+	static uint16_t GetVertexElementSize(VertexElementType type);
 
 	string				m_name;
 	VertexElementType	m_type;
