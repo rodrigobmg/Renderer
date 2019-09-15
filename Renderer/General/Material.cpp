@@ -2,13 +2,7 @@
 #include "Material.h"
 #include "IShader.h"
 
-Material::Material()
-	: m_vertexShader(nullptr)
-	, m_pixelShader(nullptr)
-{
-}
-
-Material::Material(SharedPtr<IShader>& vertexShader, SharedPtr<IShader>& pixelShader)
+Material::Material(const ShaderPtr& vertexShader, const ShaderPtr& pixelShader)
 	: m_vertexShader(vertexShader)
 	, m_pixelShader(pixelShader)
 {
@@ -16,6 +10,8 @@ Material::Material(SharedPtr<IShader>& vertexShader, SharedPtr<IShader>& pixelSh
 
 Material::~Material()
 {
+	m_vertexShader.reset();
+	m_pixelShader.reset();
 }
 
 void Material::Render()

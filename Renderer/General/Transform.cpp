@@ -18,5 +18,5 @@ Transform & Transform::operator=(const Transform & other)
 
 const Matrix4d Transform::GetMatrix()
 {
-	return MatrixScale(m_scale) * MatrixRotationRollPitchYawDeg(m_rotation.m_x, m_rotation.m_y, m_rotation.m_z) * MatrixTranslation(m_position);
+	return MatrixScale(m_scale) * MatrixRotationRollPitchYawDeg(m_rotation.x, m_rotation.y, m_rotation.z) * MatrixTranslation(m_position);
 }

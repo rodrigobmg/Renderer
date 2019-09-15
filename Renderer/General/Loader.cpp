@@ -1,15 +1,38 @@
 #include "stdafx.h"
 #include "Loader.h"
-#include <Externals/assimp/include/assimp/Importer.hpp>
-#include <Externals/assimp/include/assimp/scene.h>
-#include <Externals/assimp/include/assimp/postprocess.h>
+
 #include <General/IGraphics.h>
 #include <General/VertexElement.h>
 #include <General/Vector4d.h>
 #include <General/Vector3d.h>
 #include <General/Vector2d.h>
+#include <General/Bitmap.h>
+#include <General/Color.h>
+#include <General/SceneObject.h>
+#include <General/Material.h>
+
+#include <Externals/Assimp/include/assimp/Importer.hpp>
+#include <Externals/Assimp/include/assimp/scene.h>
+#include <Externals/Assimp/include/assimp/postprocess.h>
+#include <Externals/STB_Image/Includes.h>
+
+#include <fstream>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 static const Vector4d kDefaultColor(1.0f);
+struct MeshData
+{
+	MeshData()
+		: m_vertexData(nullptr)
+		, m_indexData(nullptr)
+		, m_primitiveType(PrimitiveType::Point) {}
+
+	SharedPtr<IVertexArray>	m_vertexData;
+	SharedPtr<IIndexArray>	m_indexData;
+	PrimitiveType			m_primitiveType;
+};
 
 void GetMeshes(aiNode* node, const aiScene* scene, vector<aiMesh*>& o_meshes)
 {
@@ -22,10 +45,10 @@ void GetMeshes(aiNode* node, const aiScene* scene, vector<aiMesh*>& o_meshes)
 	}
 }
 
-void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const IGraphics& graphics)
+void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const GraphicsPtr& graphics)
 {
 	size_t vertexCount = aiMesh->mNumVertices;
-	size_t indexCount = aiMesh->mNumFaces * aiMesh->mFaces[0].mNumIndices;
+	size_t indexCount = static_cast<size_t>(aiMesh->mNumFaces) * static_cast<size_t>(aiMesh->mFaces[0].mNumIndices);
 	UniquePtr<uint16_t> indexDataPtr(new uint16_t[indexCount]);
 	uint16_t* indexData = indexDataPtr.get();
 
@@ -33,7 +56,7 @@ void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const IGraphics& grap
 	int numUVChannels = aiMesh->GetNumUVChannels();
 	assert(numUVChannels > 0);
 
-	size_t totalNumVertexElements = (numColorChannels == 0 ? 1 : numColorChannels) + numUVChannels;
+	size_t totalNumVertexElements = static_cast<size_t>((numColorChannels == 0 ? 1 : numColorChannels)) + static_cast<size_t>(numUVChannels);
 	assert(aiMesh->HasNormals());
 	totalNumVertexElements++;
 	assert(aiMesh->HasPositions());
@@ -129,24 +152,116 @@ void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const IGraphics& grap
 		break;
 	}
 
-	meshData.m_indexData = graphics.CreateIndexArray(indexDataPtr.get(), indexCount);
-	meshData.m_vertexData = graphics.CreateVertexArray(vertexCount, vertexDataPtr.get(), vertexElements);
+	meshData.m_indexData = graphics->CreateIndexArray(indexDataPtr.get(), indexCount);
+	meshData.m_vertexData = graphics->CreateVertexArray(vertexCount, vertexDataPtr.get(), vertexElements);
 }
 
-bool Loader::LoadModel(const string& path, MeshData& meshData, const IGraphics& graphics)
+bool GetTextureFromMaterial(aiMaterial* material, const aiTextureType textureType, const string& directory, Bitmap& bitmap) {
+
+	bool result = false;
+	aiString file;
+	material->GetTexture(textureType, 0, &file);
+	std::string filePath = std::string(file.C_Str());
+	filePath = filePath.substr(filePath.find_last_of("\\") + 1);
+	filePath = directory + filePath;
+
+	int width, height, channels;
+	void* data = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
+	if (data)
+	{
+		bitmap.Alloc(data, width, height, channels);
+		result = true;
+	}
+	stbi_image_free(data);
+
+	return result;
+}
+
+void ExtractMaterialData(const aiScene* scene, aiMesh* aiMesh, const std::string& directory)
 {
+	aiMaterial* aiMaterial = scene->mMaterials[aiMesh->mMaterialIndex];
+	unsigned int diffuseCount = aiMaterial->GetTextureCount(aiTextureType_DIFFUSE);
+	unsigned int specularCount = aiMaterial->GetTextureCount(aiTextureType_SPECULAR);
+	unsigned int normalCount = aiMaterial->GetTextureCount(aiTextureType_HEIGHT);
+
+	Bitmap diffuse;
+
+	if (diffuseCount > 0)
+	{
+		GetTextureFromMaterial(aiMaterial, aiTextureType_DIFFUSE, directory, diffuse);
+	}
+	else
+	{
+		aiColor3D aiDiffuse;
+		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse);
+		Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
+		diffuse.Alloc(reinterpret_cast<byte*>(&diffuseColor), 1, 1, 4);
+	}
+}
+
+SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const string& directory, const GraphicsPtr& graphics,
+	const ShaderPtr& vertexShader, const ShaderPtr& pixelShader)
+{
+	SceneObjectPtr sceneObject(new SceneObject());
+	vector<MeshPtr> meshes;
+	MaterialPtr material(new Material(vertexShader, pixelShader));
+	vector<MaterialPtr> materials;
+
+	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	{
+		MeshData meshData;
+		ExtractVertexData(scene->mMeshes[node->mMeshes[i]], meshData, graphics);
+		meshes.push_back(graphics->CreateMesh(meshData.m_vertexData, meshData.m_indexData, meshData.m_primitiveType));
+		materials.push_back(material);
+	}
+
+	if (!meshes.empty())
+	{
+		sceneObject->SetMeshData(meshes, materials, graphics->CreateObjectConstantBuffer());
+	}
+
+	aiVector3D position, scale, rotation;
+	node->mTransformation.Decompose(scale, rotation, position);
+	sceneObject->m_transform.m_position = Vector3d(position.x, position.y, position.z);
+	sceneObject->m_transform.m_scale = Vector3d(scale.x, scale.y, scale.z);
+	sceneObject->m_transform.m_rotation = Vector3d(rotation.x, rotation.y, rotation.z);
+
+	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	{
+		SceneObjectPtr child = CreateSceneObject(scene, node->mChildren[i], directory, graphics, vertexShader, pixelShader);
+		child->SetParent(sceneObject);
+		sceneObject->AddChild(child);
+	}
+
+	return sceneObject;
+}
+
+SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics)
+{
+	std::ifstream fileStream(path.c_str());
+	if (!fileStream.is_open())
+	{
+		DEBUG_LOG("Loader::LoadModel:: Cannot open file %s", path);
+		return nullptr;
+	}
+	string fileDataString((std::istreambuf_iterator<char>(fileStream)),
+		std::istreambuf_iterator<char>());
+
+	json objectDescription = json::parse(fileDataString);
+	string modelPath = objectDescription["model"];
+	string vertexShaderPath = objectDescription["vertex_shader"];
+	string pixelShaderPath = objectDescription["pixel_shader"];
+
+	ShaderPtr vertexShader = graphics->CreateShader(vertexShaderPath, ShaderType::VERTEX_SHADER);
+	ShaderPtr pixelShader = graphics->CreateShader(pixelShaderPath, ShaderType::PIXEL_SHADER);
+
 	Assimp::Importer importer; 
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		string error = importer.GetErrorString();
 		DEBUG_LOG("ERROR::ASSIMP:: %s", error);
 		return false;
 	}
-
-	vector<aiMesh*> aiMeshes;
-	GetMeshes(scene->mRootNode, scene, aiMeshes);
-
-	ExtractVertexData(aiMeshes[0], meshData, graphics);
-
-	return true;
+	string directory = path.substr(0, path.find_last_of('/') + 1);
+	return CreateSceneObject(scene, scene->mRootNode, directory, graphics, vertexShader, pixelShader);
 }

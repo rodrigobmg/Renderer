@@ -22,11 +22,11 @@ const Matrix4d& Camera::GetViewMatrix()
 	Vector3d lookAt(0.0f, 0.0f, 1.0f);
 
 	// Create the rotation matrix from the yaw, pitch, and roll values.
-	Matrix4d rotationMatrix = MatrixRotationRollPitchYawDeg(m_transform.m_rotation.m_x, m_transform.m_rotation.m_y, m_transform.m_rotation.m_z);
+	Matrix4d rotationMatrix = MatrixRotationRollPitchYawDeg(m_transform.m_rotation.x, m_transform.m_rotation.y, m_transform.m_rotation.z);
 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
-	lookAt = Vector4d(lookAt.m_x, lookAt.m_y, lookAt.m_z, 0.0f) * rotationMatrix;
-	up = Vector4d(up.m_x, up.m_y, up.m_z, 0.0f) * rotationMatrix;
+	lookAt = Vector4d(lookAt.x, lookAt.y, lookAt.z, 0.0f) * rotationMatrix;
+	up = Vector4d(up.x, up.y, up.z, 0.0f) * rotationMatrix;
 
 	// Translate the rotated camera position to the location of the viewer.
 	lookAt = m_transform.m_position + lookAt;

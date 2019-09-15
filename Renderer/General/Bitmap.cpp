@@ -4,9 +4,10 @@
 #include "Color.h"
 
 Bitmap::Bitmap()
-	: m_width(0)
+	: m_data(nullptr)
+	, m_width(0)
 	, m_height(0)
-	, m_data(nullptr)
+	, m_channels(0)
 {
 }
 
@@ -18,10 +19,13 @@ Bitmap::~Bitmap()
 	}
 }
 
-bool Bitmap::Alloc(byte * data, int width, int height)
+bool Bitmap::Alloc(void* data, uint8_t width, uint8_t height, uint8_t channels)
 {
-	memcpy(m_data, data, sizeof(Color) * width * height);
+	m_data = new byte[sizeof(float) * width * height * channels];
+	memcpy(m_data, data, sizeof(float) * width * height * channels);
+	assert(m_data);
 	m_width = width;
 	m_height = height;
+	m_channels = channels;
 	return true;
 }

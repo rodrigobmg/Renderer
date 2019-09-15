@@ -2,8 +2,6 @@
 
 #include"IApplication.h"
 
-class IWindow;
-class IGraphics;
 class Application : public IApplication
 {
 public:
@@ -15,7 +13,8 @@ public:
 	virtual bool IsReady() const override { return m_ready; }
 
 private:
-	IWindow*	m_window;
-	IGraphics*	m_graphics;
-	bool		m_ready;
+	WindowPtr		m_window;
+	GraphicsPtr		m_graphics;
+	SceneObjectPtr	m_object;
+	bool			m_ready;
 };

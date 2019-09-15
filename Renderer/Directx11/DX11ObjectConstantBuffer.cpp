@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DX11ObjectConstantBuffer.h"
 
-DX11ObjectConstantBuffer::DX11ObjectConstantBuffer(UniquePtr<ID3D11Device>& device, UniquePtr<ID3D11DeviceContext>& deviceContext)
+DX11ObjectConstantBuffer::DX11ObjectConstantBuffer(const UniquePtr<ID3D11Device>& device, const UniquePtr<ID3D11DeviceContext>& deviceContext)
 	: DX11ConstantBuffer(device, deviceContext, sizeof(ObjectConstantBufferData), 1)
 {
 }

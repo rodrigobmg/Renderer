@@ -11,10 +11,7 @@ struct ID3D11Texture2D;
 struct ID3D11DepthStencilState;
 struct ID3D11DepthStencilView;
 struct ID3D11RasterizerState;
-class ICamera;
-class IConstantBuffer;
-struct FrameConstantBufferData;
-class IPointLight;
+
 class DX11Graphics : public IGraphics
 {
 public:
@@ -23,14 +20,16 @@ public:
 	DX11Graphics& operator=(const DX11Graphics&) = delete;
 	~DX11Graphics();
 
-	virtual bool Initialize(const IWindow* window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear) override;
-	virtual void Render() override;
+	virtual bool Initialize(const WindowPtr& window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear) override;
+	virtual void StartRender() override;
+	virtual void EndRender() override;
 	virtual void Shutdown() override;
 
-	virtual SharedPtr<IVertexArray> CreateVertexArray(size_t vertexCount, const byte* vertexData, const vector<VertexElement>& vertexElements) const override;
-	virtual SharedPtr<IIndexArray> CreateIndexArray(const uint16_t* indexData, size_t indexCount) const override;
-	virtual SharedPtr<SceneObject> CreateObject() override;
-	virtual SharedPtr<SceneObject> CreateObject(const string& meshPath, const string& vertexShaderPath, const string& pixelShaderPath) override;
+	virtual VertexArrayPtr CreateVertexArray(size_t vertexCount, const byte* vertexData, const vector<VertexElement>& vertexElements) const override;
+	virtual IndexArrayPtr CreateIndexArray(const uint16_t* indexData, size_t indexCount) const override;
+	virtual ShaderPtr CreateShader(const string& path, ShaderType shaderType) const override;
+	virtual MeshPtr CreateMesh(const VertexArrayPtr& vertexData, const IndexArrayPtr& indexData, PrimitiveType primitive) const;
+	virtual ConstantBufferPtr CreateObjectConstantBuffer() const;
 
 private:
 	UniquePtr<ID3D11Device>			m_device;
@@ -44,7 +43,6 @@ private:
 	ICamera*						m_camera;
 	Matrix4d						m_projectionMatrix;
 	Matrix4d						m_orthoMatrix;
-	vector<SharedPtr<SceneObject>>	m_objects;
 	SharedPtr<IConstantBuffer>		m_frameConstantBuffer;
 	FrameConstantBufferData*		m_frameConstantBufferData;
 	IPointLight*					m_pointLight;

@@ -20,7 +20,7 @@ public:
 		DirectX::XMVECTOR m_vector;
 		struct
 		{
-			float m_x, m_y, m_z, m_w;
+			float x, y, z, w;
 		};
 	};
 };

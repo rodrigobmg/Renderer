@@ -139,7 +139,7 @@ bool GetGraphicsDeviceInfo(int screenWidth, int screenHeight, unsigned int& refr
 	return true;
 }
 
-void InitSwapChainDescription(DXGI_SWAP_CHAIN_DESC &swapChainDesc, int screenWidth, int screenHeight, bool vsyncEnabled, unsigned int refreshRateNumerator, unsigned int refreshRateDenominator, const IWindow * window, bool fullscreen)
+void InitSwapChainDescription(DXGI_SWAP_CHAIN_DESC &swapChainDesc, int screenWidth, int screenHeight, bool vsyncEnabled, unsigned int refreshRateNumerator, unsigned int refreshRateDenominator, const WindowPtr& window, bool fullscreen)
 {
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 
@@ -264,7 +264,7 @@ void InitRasterDescription(D3D11_RASTERIZER_DESC &rasterDesc)
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 }
 
-bool DX11Graphics::Initialize(const IWindow* window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear)
+bool DX11Graphics::Initialize(const WindowPtr& window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear)
 {
 	m_vsyncEnabled = vsync;
 	HRESULT result;
@@ -420,7 +420,7 @@ bool DX11Graphics::Initialize(const IWindow* window, int screenWidth, int screen
 }
 
 static const float kClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-void DX11Graphics::Render()
+void DX11Graphics::StartRender()
 {
 	//Clear back buffer
 	m_deviceContext->ClearRenderTargetView(m_renderTargetView, kClearColor);
@@ -434,15 +434,13 @@ void DX11Graphics::Render()
 	Color lightColor = m_pointLight->GetColor();
 	Vector3d lightPosition = m_pointLight->GetPosition();
 	m_frameConstantBufferData->m_pointLightData.m_color = lightColor;
-	m_frameConstantBufferData->m_pointLightData.m_position = Vector4d(lightPosition.m_x, lightPosition.m_y, lightPosition.m_z, 1.0f);
+	m_frameConstantBufferData->m_pointLightData.m_position = Vector4d(lightPosition.x, lightPosition.y, lightPosition.z, 1.0f);
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
+}
 
-	for (SharedPtr<SceneObject>& object : m_objects)
-	{
-		object->Render();
-	}
-
+void DX11Graphics::EndRender()
+{
 	// Present the back buffer to the screen since rendering is complete.
 	if (m_vsyncEnabled)
 	{
@@ -458,9 +456,6 @@ void DX11Graphics::Render()
 
 void DX11Graphics::Shutdown()
 {
-	// Release all the objects
-	m_objects.clear();
-
 	if (m_pointLight)
 	{
 		delete m_pointLight;
@@ -551,31 +546,27 @@ SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const uint16_t* indexData,
 	return indexArray;
 }
 
-SharedPtr<SceneObject> DX11Graphics::CreateObject()
+ShaderPtr DX11Graphics::CreateShader(const string& path, ShaderType shaderType) const
 {
-	SharedPtr<SceneObject> newObject(new SceneObject());
-	m_objects.push_back(newObject);
-	return newObject;
-}
-
-SharedPtr<SceneObject> DX11Graphics::CreateObject(const string & meshPath, const string & vertexShaderPath, const string & pixelShaderPath)
-{
-	SharedPtr<IMesh> mesh(new DX11Mesh(m_device, m_deviceContext));
-	if (mesh->Initialize(meshPath, *this))
+	ShaderPtr shader(new DX11Shader(m_deviceContext, m_device, shaderType));
+	if (shader->Initialize(path.c_str()))
 	{
-		SharedPtr<IShader> vertexShader(new DX11Shader(m_deviceContext, m_device, ShaderType::VERTEX_SHADER));
-		if (vertexShader->Initialize(vertexShaderPath.c_str()))
-		{
-			SharedPtr<IShader> pixelShader(new DX11Shader(m_deviceContext, m_device, ShaderType::PIXEL_SHADER));
-			if (pixelShader->Initialize(pixelShaderPath.c_str()))
-			{
-				SharedPtr<Material> material(new Material(vertexShader, pixelShader));
-				SharedPtr<IConstantBuffer> objectConstantBuffer(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
-				SharedPtr<SceneObject> newObject(new SceneObject(mesh, material, objectConstantBuffer));
-				m_objects.push_back(newObject);
-				return newObject;
-			}
-		}
+		return shader;
 	}
 	return nullptr;
+}
+
+MeshPtr DX11Graphics::CreateMesh(const VertexArrayPtr& vertexData, const IndexArrayPtr& indexData, PrimitiveType primitive) const
+{
+	MeshPtr mesh(new DX11Mesh(m_device, m_deviceContext, vertexData, indexData, primitive));
+	if (mesh->Initialize())
+	{
+		return mesh;
+	}
+	return nullptr;
+}
+
+ConstantBufferPtr DX11Graphics::CreateObjectConstantBuffer() const
+{
+	return ConstantBufferPtr(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
 }

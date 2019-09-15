@@ -23,10 +23,11 @@ public:
 		DirectX::XMFLOAT3 m_vector;
 		struct
 		{
-			float m_x, m_y, m_z;
+			float x, y, z;
 		};
 	};
 };
 
 class Matrix4d;
 Vector3d operator+(const Vector3d& v1, const Vector3d& v2);
+Vector3d operator*(const Vector3d& lhs, float rhs);

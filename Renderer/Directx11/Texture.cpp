@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Texture.h"
-#include "DirectXTex.h"
 
 Texture::Texture()
 	:m_texture(nullptr)
@@ -20,7 +19,7 @@ bool Texture::Initialize(ID3D11Device * device, WCHAR * fileName)
 	HRESULT result;
 
 	// Load the texture in.
-	using namespace DirectX;
+	/*using namespace DirectX;
 	TexMetadata info;
 	auto image = std::make_unique<ScratchImage>();
 	result = LoadFromDDSFile(fileName, DDS_FLAGS_NONE, &info, *image);
@@ -33,7 +32,7 @@ bool Texture::Initialize(ID3D11Device * device, WCHAR * fileName)
 	if (FAILED(result))
 	{
 		return false;
-	}
+	}*/
 
 	return true;
 }

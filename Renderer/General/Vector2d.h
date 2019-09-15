@@ -19,7 +19,7 @@ public:
 		DirectX::XMFLOAT2 m_vector;
 		struct
 		{
-			float m_x, m_y;
+			float x, y;
 		};
 	};
 };

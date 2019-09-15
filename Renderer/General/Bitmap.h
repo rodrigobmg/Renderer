@@ -7,14 +7,15 @@ public:
 	Bitmap(const Bitmap&) = delete;
 	~Bitmap();
 
-	bool Alloc(byte* data, int width, int height);
+	bool Alloc(void* data, uint8_t width, uint8_t height, uint8_t channels);
 
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
-	const byte* GetData() const { return m_data; }
+	const void* GetData() const { return m_data; }
 
 private:
-	int		m_width;
-	int		m_height;
-	byte*	m_data;
+	void*	m_data;
+	uint8_t	m_width;
+	uint8_t	m_height;
+	uint8_t	m_channels;
 };

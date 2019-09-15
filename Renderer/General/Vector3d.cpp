@@ -4,23 +4,23 @@
 #include "Vector4d.h"
 
 Vector3d::Vector3d()
-	:m_x(0.f)
-	,m_y(0.f)
-	,m_z(0.f)
+	:x(0.f)
+	,y(0.f)
+	,z(0.f)
 {
 }
 
 Vector3d::Vector3d(float x)
-	:m_x(x)
-	,m_y(x)
-	,m_z(x)
+	:x(x)
+	,y(x)
+	,z(x)
 {
 }
 
 Vector3d::Vector3d(float x, float y, float z)
-	:m_x(x)
-	,m_y(y)
-	,m_z(z)
+	:x(x)
+	,y(y)
+	,z(z)
 {
 }
 
@@ -35,9 +35,9 @@ Vector3d::Vector3d(const DirectX::XMFLOAT3 & other)
 }
 
 Vector3d::Vector3d(const Vector4d & other)
-	:m_x(other.m_x)
-	,m_y(other.m_y)
-	,m_z(other.m_z)
+	:x(other.x)
+	,y(other.y)
+	,z(other.z)
 {
 }
 
@@ -56,22 +56,27 @@ Vector3d& Vector3d::operator*=(float rhs)
 }
 
 Vector3d::Vector3d(const float * data)
-	:m_x(data[0])
-	,m_y(data[1])
-	,m_z(data[2])
+	:x(data[0])
+	,y(data[1])
+	,z(data[2])
 {
 }
 
 Vector3d::operator DirectX::XMVECTOR() const
 {
 	DirectX::XMVECTOR vector;
-	vector.m128_f32[0] = m_x;
-	vector.m128_f32[1] = m_y;
-	vector.m128_f32[2] = m_z;
+	vector.m128_f32[0] = x;
+	vector.m128_f32[1] = y;
+	vector.m128_f32[2] = z;
 	return vector;
 }
 
 Vector3d operator+(const Vector3d & v1, const Vector3d & v2)
 {
-	return Vector3d(v1.m_x + v2.m_x, v1.m_y + v2.m_y, v1.m_z + v2.m_z);
+	return Vector3d(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+}
+
+Vector3d operator*(const Vector3d& lhs, float rhs)
+{
+	return Vector3d(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 }

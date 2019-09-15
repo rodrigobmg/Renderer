@@ -6,6 +6,7 @@
 #include "Window.h"
 
 #include <Directx11/DX11Graphics.h>
+#include <General/Loader.h>
 
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
@@ -16,26 +17,29 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 	:m_ready(false)
 {
 	assert(!m_window);
-	m_window = new Window(hInstance, windowWidth, windowHeight, name);
-	m_graphics = new DX11Graphics();
+	m_window.reset(new Window(hInstance, windowWidth, windowHeight, name));
+	m_graphics.reset(new DX11Graphics());
 	m_ready = m_graphics->Initialize(m_window, windowWidth, windowHeight, kVsyncEnabled, kFullscreen, kScreenDepth, kScreenNear);
 
-	SharedPtr<SceneObject> object = m_graphics->CreateObject("Assets/Models/Cube/cube_obj.obj", "Assets/DirectX/Shaders/color.vs", "Assets/DirectX/Shaders/color.ps");
-	object->m_transform.m_scale *= 0.2f;
-	m_ready &= object != nullptr;
+	m_object = Loader::LoadModel("Assets/teapot.object", m_graphics);
+	if (!m_object)
+	{
+		m_ready = false;
+	}
+	if (m_object)
+	{
+		m_object->m_transform.m_scale *= 0.2f;
+	}
 	assert(m_window);
 }
 
 Application::~Application()
 {
-	if (m_window)
-	{
-		delete m_window;
-	}
+	//Explicitly release pointer so that all graphics resources are destroyed before graphics is shut down
+	m_object.reset();
 	if (m_graphics)
 	{
 		m_graphics->Shutdown();
-		delete m_graphics;
 	}
 }
 
@@ -55,7 +59,9 @@ void Application::Render()
 {
 	if (m_graphics)
 	{
-		m_graphics->Render();
+		m_graphics->StartRender();
+		m_object->Render();
+		m_graphics->EndRender();
 	}
 }
 

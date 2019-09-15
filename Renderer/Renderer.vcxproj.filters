@@ -215,9 +215,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="General">
       <UniqueIdentifier>{978259f6-e517-4aec-992a-9e8fee8b16ea}</UniqueIdentifier>
     </Filter>
@@ -239,5 +236,8 @@
     <Filter Include="Directx11\Application">
       <UniqueIdentifier>{2c90b5ab-2a4e-4fd1-8e35-f9ca83cb8bee}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

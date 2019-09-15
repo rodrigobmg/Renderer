@@ -3,12 +3,29 @@
 
 #include <General\Loader.h>
 
-DX11Mesh::DX11Mesh(UniquePtr<ID3D11Device>& device, UniquePtr<ID3D11DeviceContext>& deviceContext)
+DX11Mesh::DX11Mesh(const UniquePtr<ID3D11Device>& device, const UniquePtr<ID3D11DeviceContext>& deviceContext, const VertexArrayPtr& vertexArray, const IndexArrayPtr& indexArray, PrimitiveType type)
 	: m_device(device)
 	, m_deviceContext(deviceContext)
+	, m_vertices(vertexArray)
+	, m_indices(indexArray)
 	, m_vertexBuffer(nullptr)
 	, m_indexBuffer(nullptr)
 {
+	switch (type)
+	{
+	case PrimitiveType::Point:
+		m_topology = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
+		break;
+	case PrimitiveType::Line:
+		m_topology = D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
+		break;
+	case PrimitiveType::Triangle:
+		m_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+		break;
+	default:
+		assert("Unsupported topology");
+		break;
+	}
 }
 
 DX11Mesh::~DX11Mesh()
@@ -26,60 +43,8 @@ DX11Mesh::~DX11Mesh()
 	}
 }
 
-bool DX11Mesh::Initialize(const string& fileName, const IGraphics& graphics)
+bool DX11Mesh::Initialize()
 {
-	//Todo: load mesh
-	MeshData meshData;
-	if (!Loader::LoadModel(fileName, meshData, graphics))
-	{
-		return false;
-	}
-	
-	m_vertices = meshData.m_vertexData;
-	m_indices = meshData.m_indexData;
-
-	switch (meshData.m_primitiveType)
-	{
-	case PrimitiveType::Point:
-		m_topology = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
-		break;
-	case PrimitiveType::Line:
-		m_topology = D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
-		break;
-	case PrimitiveType::Triangle:
-		m_topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-		break;
-	default:
-		assert("Unsupported topology");
-		break;
-	}
-
-	return InitializeBuffers();
-}
-
-void DX11Mesh::Render()
-{
-	UINT stride = static_cast<UINT>(m_vertices->GetStride());
-	UINT offset = 0;
-
-	if (m_deviceContext)
-	{
-		//Set the vertex buffer to active in the input assembler so it can be rendered
-		m_deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-
-		//Set the index buffer to active in the input assembler so it can be rendered
-		m_deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
-
-		//Set the type of primitive that should be rendered
-		m_deviceContext->IASetPrimitiveTopology(m_topology);
-		assert(m_indices);
-		m_deviceContext->DrawIndexed(static_cast<UINT>(m_indices->GetIndexCount()), 0, 0);
-	}
-}
-
-bool DX11Mesh::InitializeBuffers()
-{
-
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 
@@ -122,4 +87,24 @@ bool DX11Mesh::InitializeBuffers()
 	}
 
 	return true;
+}
+
+void DX11Mesh::Render()
+{
+	UINT stride = static_cast<UINT>(m_vertices->GetStride());
+	UINT offset = 0;
+
+	if (m_deviceContext)
+	{
+		//Set the vertex buffer to active in the input assembler so it can be rendered
+		m_deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+
+		//Set the index buffer to active in the input assembler so it can be rendered
+		m_deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+		//Set the type of primitive that should be rendered
+		m_deviceContext->IASetPrimitiveTopology(m_topology);
+		assert(m_indices);
+		m_deviceContext->DrawIndexed(static_cast<UINT>(m_indices->GetIndexCount()), 0, 0);
+	}
 }

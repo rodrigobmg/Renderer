@@ -1,0 +1,5 @@
+{
+	"model": "Assets/Models/Cube/Cube_obj.obj",
+	"vertex_shader": "Assets/Shaders/color.vs",
+	"pixel_shader": "Assets/Shaders/color.ps"
+}

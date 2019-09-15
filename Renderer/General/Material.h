@@ -5,9 +5,8 @@ class IShader;
 class Material
 {
 public:
-	Material();
+	Material(const ShaderPtr& vertexShader, const ShaderPtr& pixelShader);
 	Material(const Material&) = delete;
-	Material(SharedPtr<IShader>& vertexShader, SharedPtr<IShader>& pixelShader);
 	~Material();
 
 	void SetVertexShader(SharedPtr<IShader>& shader) { m_vertexShader = shader; }
@@ -16,6 +15,6 @@ public:
 	void Render();
 
 private:
-	SharedPtr<IShader>	m_vertexShader;
-	SharedPtr<IShader>	m_pixelShader;
+	ShaderPtr	m_vertexShader;
+	ShaderPtr	m_pixelShader;
 };
