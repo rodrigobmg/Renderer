@@ -64,5 +64,4 @@ typedef SharedPtr<IGraphics> GraphicsPtr;
 typedef SharedPtr<Bitmap> BitmapPtr;
 
 #define ERROR_LOG(...) SPDLOG_ERROR(__VA_ARGS__)
-
 #define DEBUG_LOG(...) SPDLOG_DEBUG(__VA_ARGS__)

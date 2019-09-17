@@ -1,7 +1,17 @@
 #include "pch.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+
 int main(int argc, char *argv[])
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+#ifdef _DEBUG
+	//Setup logger
+	spdlog::set_default_logger(std::make_shared<spdlog::logger>("msvc_logger", std::make_shared<spdlog::sinks::msvc_sink_mt>()));
+#endif // _DEBUG
+
 	using namespace std;
 	namespace fs = experimental::filesystem::v1;
 	if (argc == 3)
@@ -15,7 +25,7 @@ int main(int argc, char *argv[])
 		}
 		catch (const exception& ex)
 		{
-			ERROR_LOG("Error processing files");
+			ERROR_LOG("Error processing files {}", ex.what());
 			return -1;
 		}
 	}
