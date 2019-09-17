@@ -33,7 +33,7 @@ private:
 		};
 	};
 
-	static Matrix4d s_identity;
+	static const Matrix4d kIdentity;
 };
 
 Matrix4d operator*(const Matrix4d& m1, const Matrix4d& m2);

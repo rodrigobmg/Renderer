@@ -53,7 +53,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 		shaderTarget = "ps_5_0";
 		break;
 	default:
-		DEBUG_LOG("Invalid Shader Type");
+		ERROR_LOG("Invalid Shader Type");
 		return false;
 	}
 
@@ -74,12 +74,12 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 		if (errorMessage)
 		{
 			const char* compileErrors = (char*)(errorMessage->GetBufferPointer());
-			DEBUG_LOG("Error compiling shader %s", shaderFilePath);
-			DEBUG_LOG("%s", compileErrors);
+			ERROR_LOG("Error compiling shader {}", shaderFilePath);
+			ERROR_LOG("{}", compileErrors);
 		}
 		else
 		{
-			DEBUG_LOG("Missing Shader File");
+			ERROR_LOG("Missing Shader File");
 		}
 		return false;
 	}
@@ -95,7 +95,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 
 	if (FAILED(result))
 	{
-		DEBUG_LOG("Failed to create shader");
+		ERROR_LOG("Failed to create shader");
 		return false;
 	}
 
@@ -115,7 +115,7 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 
 		if (FAILED(result))
 		{
-			DEBUG_LOG("Failed to create input layout");
+			ERROR_LOG("Failed to create input layout");
 			return false;
 		}
 	}

@@ -15,13 +15,13 @@ int main(int argc, char *argv[])
 		}
 		catch (const exception& ex)
 		{
-			cout << "Error processing files " << ex.what();
+			ERROR_LOG("Error processing files");
 			return -1;
 		}
 	}
 	else
 	{
-		cout << "Incorrect number of arguments";
+		ERROR_LOG("Incorrect number of arguments");
 	}
 	return -1;
 }

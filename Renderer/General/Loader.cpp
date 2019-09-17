@@ -48,6 +48,7 @@ void GetMeshes(aiNode* node, const aiScene* scene, vector<aiMesh*>& o_meshes)
 void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const GraphicsPtr& graphics)
 {
 	size_t vertexCount = aiMesh->mNumVertices;
+	assert(vertexCount < std::numeric_limits<uint16_t>::max());
 	size_t indexCount = static_cast<size_t>(aiMesh->mNumFaces) * static_cast<size_t>(aiMesh->mFaces[0].mNumIndices);
 	UniquePtr<uint16_t> indexDataPtr(new uint16_t[indexCount]);
 	uint16_t* indexData = indexDataPtr.get();
@@ -156,7 +157,7 @@ void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const GraphicsPtr& gr
 	meshData.m_vertexData = graphics->CreateVertexArray(vertexCount, vertexDataPtr.get(), vertexElements);
 }
 
-bool GetTextureFromMaterial(aiMaterial* material, const aiTextureType textureType, const string& directory, Bitmap& bitmap) {
+bool GetTextureFromMaterial(aiMaterial* material, const aiTextureType textureType, const string& directory, const BitmapPtr& bitmap) {
 
 	bool result = false;
 	aiString file;
@@ -169,7 +170,7 @@ bool GetTextureFromMaterial(aiMaterial* material, const aiTextureType textureTyp
 	void* data = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
 	if (data)
 	{
-		bitmap.Alloc(data, width, height, channels);
+		bitmap->Alloc(data, width, height, channels);
 		result = true;
 	}
 	stbi_image_free(data);
@@ -184,7 +185,7 @@ void ExtractMaterialData(const aiScene* scene, aiMesh* aiMesh, const std::string
 	unsigned int specularCount = aiMaterial->GetTextureCount(aiTextureType_SPECULAR);
 	unsigned int normalCount = aiMaterial->GetTextureCount(aiTextureType_HEIGHT);
 
-	Bitmap diffuse;
+	BitmapPtr diffuse(new Bitmap());
 
 	if (diffuseCount > 0)
 	{
@@ -195,7 +196,7 @@ void ExtractMaterialData(const aiScene* scene, aiMesh* aiMesh, const std::string
 		aiColor3D aiDiffuse;
 		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse);
 		Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
-		diffuse.Alloc(reinterpret_cast<byte*>(&diffuseColor), 1, 1, 4);
+		diffuse->Alloc(reinterpret_cast<byte*>(&diffuseColor), 1, 1, 4);
 	}
 }
 
@@ -241,7 +242,7 @@ SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics
 	std::ifstream fileStream(path.c_str());
 	if (!fileStream.is_open())
 	{
-		DEBUG_LOG("Loader::LoadModel:: Cannot open file %s", path);
+		ERROR_LOG("Loader::LoadModel:: Cannot open file {}", path);
 		return nullptr;
 	}
 	string fileDataString((std::istreambuf_iterator<char>(fileStream)),
@@ -259,7 +260,7 @@ SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics
 	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		string error = importer.GetErrorString();
-		DEBUG_LOG("ERROR::ASSIMP:: %s", error);
+		ERROR_LOG("ERROR::ASSIMP:: {}", error);
 		return false;
 	}
 	string directory = path.substr(0, path.find_last_of('/') + 1);

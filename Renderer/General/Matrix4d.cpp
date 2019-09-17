@@ -3,7 +3,7 @@
 
 #include "Vector3d.h"
 
-Matrix4d Matrix4d::s_identity(
+const Matrix4d Matrix4d::kIdentity(
 	1.0f, 0.0f, 0.0f, 0.0f,
 	0.0f, 1.0f, 0.0f, 0.0f,
 	0.0f, 0.0f, 1.0f, 0.0f,
@@ -49,7 +49,7 @@ Matrix4d & Matrix4d::operator=(const Matrix4d & other)
 
 const Matrix4d& Matrix4d::Identity()
 {
-	return s_identity;
+	return kIdentity;
 }
 
 Matrix4d operator*(const Matrix4d & m1, const Matrix4d & m2)

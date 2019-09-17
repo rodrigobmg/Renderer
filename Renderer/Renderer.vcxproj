@@ -112,7 +112,7 @@
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(ProjectDir)Externals\GLFW\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)Externals\GLFW\glfw3.lib;%(AdditionalDependencies);spdlog/spdlog.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>MSVCRT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -142,12 +142,12 @@
       <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;Assimp/assimp-vc140-mt.lib;spdlog/spdlog.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>MSVCRT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)Externals\Assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Externals;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -184,7 +184,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(ProjectDir)Externals\GLFW\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)Externals\GLFW\glfw3.lib;%(AdditionalDependencies);spdlog/spdlog.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -218,12 +218,12 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;Assimp/assimp-vc140-mt.lib;spdlog/spdlog.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)Externals\Assimp\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Externals;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -265,6 +265,7 @@
     <ClCompile Include="Directx11\DX11ObjectConstantBuffer.cpp" />
     <ClCompile Include="Directx11\DX11Shader.cpp" />
     <ClCompile Include="General\Matrix4d.cpp" />
+    <ClCompile Include="General\Texture.cpp" />
     <ClCompile Include="General\Transform.cpp" />
     <ClCompile Include="General\Vector2d.cpp" />
     <ClCompile Include="General\Vector3d.cpp" />
@@ -274,7 +275,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Directx11\Texture.cpp" />
     <ClCompile Include="General\Application.cpp" />
     <ClCompile Include="General\IndexArray.cpp" />
     <ClCompile Include="General\Input.cpp" />
@@ -312,9 +312,10 @@
     <ClInclude Include="Directx11\DX11FrameConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11ObjectConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11Shader.h" />
-    <ClInclude Include="General\Logger.h" />
+    <ClInclude Include="General\ITexture.h" />
     <ClInclude Include="General\Color.h" />
     <ClInclude Include="General\Matrix4d.h" />
+    <ClInclude Include="General\Texture.h" />
     <ClInclude Include="General\Transform.h" />
     <ClInclude Include="General\Vector2d.h" />
     <ClInclude Include="General\Vector3d.h" />
@@ -333,7 +334,6 @@
     <ClInclude Include="General\SceneObject.h" />
     <ClInclude Include="General\ObjectConstantBuffer.h" />
     <ClInclude Include="General\FrameConstantBuffer.h" />
-    <ClInclude Include="Directx11\Texture.h" />
     <ClInclude Include="General\Application.h" />
     <ClInclude Include="General\ApplicationMgr.h" />
     <ClInclude Include="General\IConstantBuffer.h" />

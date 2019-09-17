@@ -27,9 +27,6 @@
     <ClCompile Include="General\PointLight.cpp">
       <Filter>General</Filter>
     </ClCompile>
-    <ClCompile Include="Directx11\Texture.cpp">
-      <Filter>General\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="General\Transform.cpp">
       <Filter>General\Math</Filter>
     </ClCompile>
@@ -76,6 +73,9 @@
       <Filter>General</Filter>
     </ClCompile>
     <ClCompile Include="General\VertexElement.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Texture.cpp">
       <Filter>General\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,9 +147,6 @@
     <ClInclude Include="General\Loader.h">
       <Filter>General</Filter>
     </ClInclude>
-    <ClInclude Include="General\Logger.h">
-      <Filter>General</Filter>
-    </ClInclude>
     <ClInclude Include="General\Math.h">
       <Filter>General\Math</Filter>
     </ClInclude>
@@ -161,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="General\PointLight.h">
       <Filter>General</Filter>
-    </ClInclude>
-    <ClInclude Include="Directx11\Texture.h">
-      <Filter>General\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="General\Transform.h">
       <Filter>General\Math</Filter>
@@ -211,6 +205,12 @@
       <Filter>General</Filter>
     </ClInclude>
     <ClInclude Include="General\VertexElement.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\ITexture.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Texture.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
