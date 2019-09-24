@@ -185,21 +185,18 @@ void ExtractMaterialData(const GraphicsPtr& graphics, const aiScene* scene, cons
 
 	BitmapPtr diffuse(new Bitmap());
 
+	aiColor3D aiDiffuse;
+	aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse);
+	Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
+	diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4);
+
 	if (diffuseCount > 0)
 	{
-		if (GetBitmapFromMaterial(aiMaterial, aiTextureType_DIFFUSE, directory, diffuse))
-		{
-			TexturePtr diffuseTexture = graphics->CreateTexture(diffuse);
-			material->SetDiffuseTexture(diffuseTexture);
-		}
+		GetBitmapFromMaterial(aiMaterial, aiTextureType_DIFFUSE, directory, diffuse);
 	}
-	else
-	{
-		aiColor3D aiDiffuse;
-		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse);
-		Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
-		diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4);
-	}
+
+	TexturePtr diffuseTexture = graphics->CreateTexture(diffuse);
+	material->SetDiffuseTexture(diffuseTexture);
 }
 
 SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const string& directory, const GraphicsPtr& graphics,

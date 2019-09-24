@@ -21,6 +21,11 @@ Bitmap::~Bitmap()
 
 bool Bitmap::Alloc(const float* data, uint16_t width, uint16_t height, uint8_t channels)
 {
+	if (m_data)
+	{
+		delete[] m_data;
+	}
+
 	size_t size = sizeof(float) * width * height * channels;
 	m_data = new byte[size];
 	memcpy(m_data, data, size);
