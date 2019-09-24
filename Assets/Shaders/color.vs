@@ -33,6 +33,7 @@ struct PixelInputType
 	float4 color : COLOR;
 	float4 normal : NORMAL;
 	float4 worldSpacePosition : POSITION0;
+	float2 uv : TEXCOORD;
 };
 
 PixelInputType main(VertexInputType input)
@@ -47,6 +48,8 @@ PixelInputType main(VertexInputType input)
 	output.normal = mul(float4(input.normal, 0), normalMatrix);
 
 	output.color = input.color;
+	
+	output.uv = input.uv;
 
 	return output;
 }

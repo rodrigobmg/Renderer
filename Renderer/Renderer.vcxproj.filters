@@ -75,8 +75,11 @@
     <ClCompile Include="General\VertexElement.cpp">
       <Filter>General\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="General\Texture.cpp">
-      <Filter>General\Graphics</Filter>
+    <ClCompile Include="Directx11\DX11Texture.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\DX11SamplerState.cpp">
+      <Filter>Directx11\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -210,8 +213,17 @@
     <ClInclude Include="General\ITexture.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="General\Texture.h">
+    <ClInclude Include="Directx11\DX11Texture.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\DX11Includes.h">
+      <Filter>Directx11</Filter>
+    </ClInclude>
+    <ClInclude Include="General\ISamplerState.h">
       <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\DX11SamplerState.h">
+      <Filter>Directx11\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -236,8 +248,17 @@
     <Filter Include="Directx11\Application">
       <UniqueIdentifier>{2c90b5ab-2a4e-4fd1-8e35-f9ca83cb8bee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Directx11\Graphics\Shaders">
+      <UniqueIdentifier>{83212378-7f81-4279-ac21-b9e0b61e9614}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\Assets\Shaders\color.ps">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </None>
+    <None Include="..\Assets\Shaders\color.vs">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

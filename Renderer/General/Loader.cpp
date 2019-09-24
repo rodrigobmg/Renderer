@@ -21,7 +21,7 @@
 
 using json = nlohmann::json;
 
-static const Vector4d kDefaultColor(1.0f);
+static const Vector4d kDefaultColor(0.0f);
 struct MeshData
 {
 	MeshData()
@@ -34,18 +34,7 @@ struct MeshData
 	PrimitiveType			m_primitiveType;
 };
 
-void GetMeshes(aiNode* node, const aiScene* scene, vector<aiMesh*>& o_meshes)
-{
-	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
-		o_meshes.push_back(scene->mMeshes[node->mMeshes[i]]);
-	}
-
-	for (unsigned int j = 0; j < node->mNumChildren; j++) {
-		GetMeshes(node->mChildren[j], scene, o_meshes);
-	}
-}
-
-void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const GraphicsPtr& graphics)
+void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const GraphicsPtr& graphics)
 {
 	size_t vertexCount = aiMesh->mNumVertices;
 	assert(vertexCount < std::numeric_limits<uint16_t>::max());
@@ -65,7 +54,7 @@ void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const GraphicsPtr& gr
 	assert(totalNumVertexElements == 4);
 	vector<VertexElement> vertexElements(totalNumVertexElements);
 
-	vertexElements[0].m_name = "COLOR_0";
+	vertexElements[0].m_name = "COLOR";
 	vertexElements[0].m_offset = 0;
 	vertexElements[0].m_type = VertexElementType::FLOAT4;
 
@@ -77,7 +66,7 @@ void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const GraphicsPtr& gr
 	vertexElements[2].m_offset = vertexElements[1].m_offset + VertexElement::GetVertexElementSize(vertexElements[1].m_type);
 	vertexElements[2].m_type = VertexElementType::FLOAT3;
 
-	vertexElements[3].m_name = "TEXCOORD_0";
+	vertexElements[3].m_name = "TEXCOORD";
 	vertexElements[3].m_offset = vertexElements[2].m_offset + VertexElement::GetVertexElementSize(vertexElements[2].m_type);
 	vertexElements[3].m_type = VertexElementType::FLOAT2;
 
@@ -157,7 +146,8 @@ void ExtractVertexData(aiMesh* aiMesh, MeshData& meshData, const GraphicsPtr& gr
 	meshData.m_vertexData = graphics->CreateVertexArray(vertexCount, vertexDataPtr.get(), vertexElements);
 }
 
-bool GetTextureFromMaterial(aiMaterial* material, const aiTextureType textureType, const string& directory, const BitmapPtr& bitmap) {
+static const int kRequiredNumberOfComponents = 4;
+bool GetBitmapFromMaterial(const aiMaterial* material, const aiTextureType textureType, const string& directory, const BitmapPtr& bitmap) {
 
 	bool result = false;
 	aiString file;
@@ -167,18 +157,26 @@ bool GetTextureFromMaterial(aiMaterial* material, const aiTextureType textureTyp
 	filePath = directory + filePath;
 
 	int width, height, channels;
-	void* data = stbi_load(filePath.c_str(), &width, &height, &channels, 0);
+	float* data = stbi_loadf(filePath.c_str(), &width, &height, &channels, kRequiredNumberOfComponents);
 	if (data)
 	{
-		bitmap->Alloc(data, width, height, channels);
-		result = true;
+		result = bitmap->Alloc(data, width, height, kRequiredNumberOfComponents);
+		if (!result)
+		{
+			ERROR_LOG("Failed to create bitmap: %s", filePath);
+		}
+	}
+	else
+	{
+		ERROR_LOG("Failed to load texture: %s", filePath);
+		return false;
 	}
 	stbi_image_free(data);
 
 	return result;
 }
 
-void ExtractMaterialData(const aiScene* scene, aiMesh* aiMesh, const std::string& directory)
+void ExtractMaterialData(const GraphicsPtr& graphics, const aiScene* scene, const aiMesh* aiMesh, const std::string& directory, MaterialPtr& material)
 {
 	aiMaterial* aiMaterial = scene->mMaterials[aiMesh->mMaterialIndex];
 	unsigned int diffuseCount = aiMaterial->GetTextureCount(aiTextureType_DIFFUSE);
@@ -189,14 +187,18 @@ void ExtractMaterialData(const aiScene* scene, aiMesh* aiMesh, const std::string
 
 	if (diffuseCount > 0)
 	{
-		GetTextureFromMaterial(aiMaterial, aiTextureType_DIFFUSE, directory, diffuse);
+		if (GetBitmapFromMaterial(aiMaterial, aiTextureType_DIFFUSE, directory, diffuse))
+		{
+			TexturePtr diffuseTexture = graphics->CreateTexture(diffuse);
+			material->SetDiffuseTexture(diffuseTexture);
+		}
 	}
 	else
 	{
 		aiColor3D aiDiffuse;
 		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse);
 		Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
-		diffuse->Alloc(reinterpret_cast<byte*>(&diffuseColor), 1, 1, 4);
+		diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4);
 	}
 }
 
@@ -205,13 +207,23 @@ SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const
 {
 	SceneObjectPtr sceneObject(new SceneObject());
 	vector<MeshPtr> meshes;
-	MaterialPtr material(new Material(vertexShader, pixelShader));
+	MaterialPtr defaultMaterial(new Material(vertexShader, pixelShader));
 	vector<MaterialPtr> materials;
 
-	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	for (unsigned int meshIndex = 0; meshIndex < node->mNumMeshes; meshIndex++)
 	{
 		MeshData meshData;
-		ExtractVertexData(scene->mMeshes[node->mMeshes[i]], meshData, graphics);
+		const aiMesh* mesh = scene->mMeshes[node->mMeshes[meshIndex]];
+		ExtractVertexData(mesh, meshData, graphics);
+
+		MaterialPtr material = defaultMaterial;
+		if (scene->HasMaterials())
+		{
+			ExtractMaterialData(graphics, scene, mesh, directory, material);
+			SamplerStatePtr samplerState = graphics->CreateSamplerState();
+			material->SetSamplerState(samplerState);
+		}
+
 		meshes.push_back(graphics->CreateMesh(meshData.m_vertexData, meshData.m_indexData, meshData.m_primitiveType));
 		materials.push_back(material);
 	}
@@ -263,6 +275,6 @@ SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics
 		ERROR_LOG("ERROR::ASSIMP:: {}", error);
 		return false;
 	}
-	string directory = path.substr(0, path.find_last_of('/') + 1);
+	string directory = modelPath.substr(0, modelPath.find_last_of('/') + 1);
 	return CreateSceneObject(scene, scene->mRootNode, directory, graphics, vertexShader, pixelShader);
 }

@@ -19,10 +19,11 @@ Bitmap::~Bitmap()
 	}
 }
 
-bool Bitmap::Alloc(void* data, uint8_t width, uint8_t height, uint8_t channels)
+bool Bitmap::Alloc(const float* data, uint16_t width, uint16_t height, uint8_t channels)
 {
-	m_data = new byte[sizeof(float) * width * height * channels];
-	memcpy(m_data, data, sizeof(float) * width * height * channels);
+	size_t size = sizeof(float) * width * height * channels;
+	m_data = new byte[size];
+	memcpy(m_data, data, size);
 	assert(m_data);
 	m_width = width;
 	m_height = height;

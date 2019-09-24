@@ -5,6 +5,8 @@
 #include "DX11FrameConstantBuffer.h"
 #include "DX11Shader.h"
 #include "DX11ObjectConstantBuffer.h"
+#include "DX11Texture.h"
+#include "DX11SamplerState.h"
 
 #include <General/IWindow.h>
 #include <General/VertexArray.h>
@@ -548,7 +550,7 @@ SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const uint16_t* indexData,
 
 ShaderPtr DX11Graphics::CreateShader(const string& path, ShaderType shaderType) const
 {
-	ShaderPtr shader(new DX11Shader(m_deviceContext, m_device, shaderType));
+	ShaderPtr shader(new DX11Shader(m_device, m_deviceContext, shaderType));
 	if (shader->Initialize(path.c_str()))
 	{
 		return shader;
@@ -569,4 +571,24 @@ MeshPtr DX11Graphics::CreateMesh(const VertexArrayPtr& vertexData, const IndexAr
 ConstantBufferPtr DX11Graphics::CreateObjectConstantBuffer() const
 {
 	return ConstantBufferPtr(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
+}
+
+TexturePtr DX11Graphics::CreateTexture(const BitmapPtr& bitmap) const
+{
+	TexturePtr texture(new DX11Texture(m_device, m_deviceContext));
+	if (texture->Initialize(bitmap))
+	{
+		return texture;
+	}
+	return nullptr;
+}
+
+SamplerStatePtr DX11Graphics::CreateSamplerState() const
+{
+	SamplerStatePtr samplerState(new DX11SamplerState(m_device, m_deviceContext));
+	if (samplerState->Initialize())
+	{
+		return samplerState;
+	}
+	return nullptr;
 }

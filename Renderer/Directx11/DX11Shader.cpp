@@ -6,9 +6,9 @@
 static const char* kMainMethod = "main";
 static const int kWCHARLength = 4096;
 
-DX11Shader::DX11Shader(const UniquePtr<ID3D11DeviceContext>& deviceContext, const UniquePtr<ID3D11Device>& device, ShaderType type)
-	: m_deviceContext(deviceContext)
-	, m_device(device)
+DX11Shader::DX11Shader(const UniquePtr<ID3D11Device>& device, const UniquePtr<ID3D11DeviceContext>& deviceContext, ShaderType type)
+	: m_device(device)
+	, m_deviceContext(deviceContext)
 	, m_vertexShader(nullptr)
 	, m_pixelShader(nullptr)
 	, m_layout(nullptr)

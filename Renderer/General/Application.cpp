@@ -21,7 +21,7 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 	m_graphics.reset(new DX11Graphics());
 	m_ready = m_graphics->Initialize(m_window, windowWidth, windowHeight, kVsyncEnabled, kFullscreen, kScreenDepth, kScreenNear);
 
-	m_object = Loader::LoadModel("Assets/teapot.object", m_graphics);
+	m_object = Loader::LoadModel("Assets/cube.object", m_graphics);
 	if (!m_object)
 	{
 		m_ready = false;

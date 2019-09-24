@@ -3,15 +3,6 @@
 #include <General/IGraphics.h>
 #include <General/Matrix4d.h>
 
-struct IDXGISwapChain;
-struct ID3D11Device;
-struct ID3D11DeviceContext;
-struct ID3D11RenderTargetView;
-struct ID3D11Texture2D;
-struct ID3D11DepthStencilState;
-struct ID3D11DepthStencilView;
-struct ID3D11RasterizerState;
-
 class DX11Graphics : public IGraphics
 {
 public:
@@ -30,6 +21,8 @@ public:
 	virtual ShaderPtr CreateShader(const string& path, ShaderType shaderType) const override;
 	virtual MeshPtr CreateMesh(const VertexArrayPtr& vertexData, const IndexArrayPtr& indexData, PrimitiveType primitive) const;
 	virtual ConstantBufferPtr CreateObjectConstantBuffer() const;
+	virtual TexturePtr CreateTexture(const BitmapPtr& bitmap) const;
+	virtual SamplerStatePtr CreateSamplerState() const;
 
 private:
 	UniquePtr<ID3D11Device>			m_device;

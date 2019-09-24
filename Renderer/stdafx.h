@@ -8,11 +8,8 @@
 #include <string>
 #include <vector>
 #include <cstdint>
-#include <d3d11.h>
 #include <cassert>
 #include <stdlib.h>
-#include <dxgi.h>
-#include <d3dcommon.h>
 #include <map>
 #include <memory>
 #include <climits>
@@ -46,6 +43,8 @@ class IPointLight;
 class IGraphics;
 class Vector3d;
 class Bitmap;
+class ITexture;
+class ISamplerState;
 
 struct ObjectConstantBufferData;
 struct VertexElement;
@@ -62,6 +61,10 @@ typedef SharedPtr<IIndexArray> IndexArrayPtr;
 typedef SharedPtr<IWindow> WindowPtr;
 typedef SharedPtr<IGraphics> GraphicsPtr;
 typedef SharedPtr<Bitmap> BitmapPtr;
+typedef SharedPtr<ITexture> TexturePtr;
+typedef SharedPtr<ISamplerState> SamplerStatePtr;
+
+#include <Directx11/DX11Includes.h>
 
 #define ERROR_LOG(...) SPDLOG_ERROR(__VA_ARGS__)
 #define DEBUG_LOG(...) SPDLOG_DEBUG(__VA_ARGS__)
