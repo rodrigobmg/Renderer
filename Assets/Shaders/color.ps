@@ -22,10 +22,16 @@ struct PixelInputType
 	float2 uv : TEXCOORD;
 };
 
+static const float ambientStrength = 0.1;
+
 float4 main(PixelInputType input) : SV_TARGET
 {
 	float4 pixelToLight = normalize(pointLight.position - input.worldSpacePosition);
 	float intensity = clamp(dot(normalize(input.normal), pixelToLight),0,1);
 	float4 textureColor = shaderTexture.Sample(sampleType, input.uv);
-	return textureColor * intensity;
+
+	float3 ambient = pointLight.color.xyz * ambientStrength;
+	float3 diffuse = textureColor.xyz * intensity;
+
+	return float4(ambient + diffuse, 1.0);
 }
