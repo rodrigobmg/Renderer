@@ -17,7 +17,6 @@ cbuffer FrameBufferData : register(b0)
 struct PixelInputType
 {
 	float4 position : SV_POSITION;
-	float4 color : COLOR;
 	float4 normal : NORMAL;
 	float4 worldSpacePosition : POSITION0;
 	float2 uv : TEXCOORD;
@@ -28,5 +27,5 @@ float4 main(PixelInputType input) : SV_TARGET
 	float4 pixelToLight = normalize(pointLight.position - input.worldSpacePosition);
 	float intensity = clamp(dot(normalize(input.normal), pixelToLight),0,1);
 	float4 textureColor = shaderTexture.Sample(sampleType, input.uv);
-	return (input.color + textureColor) * intensity;
+	return textureColor * intensity;
 }

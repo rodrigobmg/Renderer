@@ -42,33 +42,28 @@ void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const GraphicsP
 	UniquePtr<uint16_t> indexDataPtr(new uint16_t[indexCount]);
 	uint16_t* indexData = indexDataPtr.get();
 
-	int numColorChannels = aiMesh->GetNumColorChannels();
 	int numUVChannels = aiMesh->GetNumUVChannels();
 	assert(numUVChannels > 0);
 
-	size_t totalNumVertexElements = static_cast<size_t>((numColorChannels == 0 ? 1 : numColorChannels)) + static_cast<size_t>(numUVChannels);
+	size_t totalNumVertexElements = static_cast<size_t>(numUVChannels);
 	assert(aiMesh->HasNormals());
 	totalNumVertexElements++;
 	assert(aiMesh->HasPositions());
 	totalNumVertexElements++;
-	assert(totalNumVertexElements == 4);
+	assert(totalNumVertexElements == 3);
 	vector<VertexElement> vertexElements(totalNumVertexElements);
 
-	vertexElements[0].m_name = "COLOR";
+	vertexElements[0].m_name = "POSITION";
 	vertexElements[0].m_offset = 0;
-	vertexElements[0].m_type = VertexElementType::FLOAT4;
+	vertexElements[0].m_type = VertexElementType::FLOAT3;
 
 	vertexElements[1].m_name = "NORMAL";
 	vertexElements[1].m_offset = vertexElements[0].m_offset + VertexElement::GetVertexElementSize(vertexElements[0].m_type);
 	vertexElements[1].m_type = VertexElementType::FLOAT3;
 
-	vertexElements[2].m_name = "POSITION";
+	vertexElements[2].m_name = "TEXCOORD";
 	vertexElements[2].m_offset = vertexElements[1].m_offset + VertexElement::GetVertexElementSize(vertexElements[1].m_type);
-	vertexElements[2].m_type = VertexElementType::FLOAT3;
-
-	vertexElements[3].m_name = "TEXCOORD";
-	vertexElements[3].m_offset = vertexElements[2].m_offset + VertexElement::GetVertexElementSize(vertexElements[2].m_type);
-	vertexElements[3].m_type = VertexElementType::FLOAT2;
+	vertexElements[2].m_type = VertexElementType::FLOAT2;
 
 	size_t stride = 0;
 	for (int i = 0; i < vertexElements.size(); i++)
@@ -76,24 +71,13 @@ void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const GraphicsP
 		stride += VertexElement::GetVertexElementSize(vertexElements[i].m_type);
 	}
 
-	float x = std::numeric_limits<float>::min();
-	float y = std::numeric_limits<float>::min();
-	float z = std::numeric_limits<float>::min();
-
 	UniquePtr<byte> vertexDataPtr(new byte[vertexCount * stride]);
 	byte* verteData = vertexDataPtr.get();
 	for (size_t i = 0; i < vertexCount; i++)
 	{
-		//COLOR_0
-		{
-			if (numColorChannels > 0)
-			{
-				memcpy((verteData + vertexElements[0].m_offset), &aiMesh->mColors[0][i], VertexElement::GetVertexElementSize(vertexElements[0].m_type));
-			}
-			else
-			{
-				memcpy((verteData + vertexElements[0].m_offset), &kDefaultColor, VertexElement::GetVertexElementSize(vertexElements[0].m_type));
-			}
+		//POSITION
+		{ 
+			memcpy((verteData + vertexElements[0].m_offset), &aiMesh->mVertices[i], VertexElement::GetVertexElementSize(vertexElements[0].m_type));
 		}
 
 		//NORMAL
@@ -101,28 +85,18 @@ void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const GraphicsP
 			memcpy((verteData + vertexElements[1].m_offset), &aiMesh->mNormals[i], VertexElement::GetVertexElementSize(vertexElements[1].m_type));
 		}
 
-		//POSITION
-		{
-			x = std::max(x, aiMesh->mVertices[i].x);
-			y = std::max(x, aiMesh->mVertices[i].y);
-			z = std::max(x, aiMesh->mVertices[i].z);
-			memcpy((verteData + vertexElements[2].m_offset), &aiMesh->mVertices[i], VertexElement::GetVertexElementSize(vertexElements[2].m_type));
-		}
-
 		//TEXCOORD_0
 		{
 			Vector2d UV(aiMesh->mTextureCoords[0][i].x, aiMesh->mTextureCoords[0][i].y);
-			memcpy((verteData + vertexElements[3].m_offset), &UV, VertexElement::GetVertexElementSize(vertexElements[3].m_type));
+			memcpy((verteData + vertexElements[2].m_offset), &UV, VertexElement::GetVertexElementSize(vertexElements[2].m_type));
 		}
 
 		verteData += stride;
 	}
 
-	uint16_t maxVal = 0;
 	for (unsigned int i = 0; i < aiMesh->mNumFaces; i++) {
 		for (unsigned int j = 0; j < aiMesh->mFaces[i].mNumIndices; j++) {
 			indexData[j + (i * 3)] = aiMesh->mFaces[i].mIndices[j];
-			maxVal = std::max(maxVal, indexData[j + (i * 3)]);
 		}
 	}
 
