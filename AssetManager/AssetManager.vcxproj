@@ -106,6 +106,7 @@
     <CustomBuildStep>
       <Command>$(OutDir)$(ProjectName).exe $(SolutionDir)Assets $(OutDir)Assets</Command>
       <Outputs>ALWAYS_RUN</Outputs>
+      <Message>Copying Assets</Message>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -20,6 +20,10 @@ int main(int argc, char *argv[])
 		fs::path outputPath(argv[2]);
 		try
 		{
+			if (fs::exists(outputPath))
+			{
+				fs::remove_all(outputPath);
+			}
 			fs::copy(inputPath, outputPath, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
 			return 0;
 		}
