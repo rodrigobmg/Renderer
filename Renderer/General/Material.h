@@ -11,15 +11,17 @@ public:
 
 	void SetVertexShader(const ShaderPtr& shader) { m_vertexShader = shader; }
 	void SetPixelShader(const ShaderPtr& shader) { m_pixelShader = shader; }
-	void SetDiffuseTexture(const TexturePtr& texture) { m_diffuseTexture = texture; }
+	void SetDiffuseTexture(const TexturePtr& texture) { m_diffuse = texture; }
 	void SetSamplerState(const SamplerStatePtr& samplerState) { m_samplerState = samplerState; }
+	void SetSpecularTexture(const TexturePtr& texture) { m_specular = texture; }
 
 	void Render();
 
 private:
 	ShaderPtr		m_vertexShader;
 	ShaderPtr		m_pixelShader;
-	TexturePtr		m_diffuseTexture;
+	TexturePtr		m_diffuse;
+	TexturePtr		m_specular;
 	SamplerStatePtr	m_samplerState;
 
 };

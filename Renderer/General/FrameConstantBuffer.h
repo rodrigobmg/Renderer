@@ -1,6 +1,7 @@
 #pragma once
 #include <General/Matrix4d.h>
 #include <General/Vector4d.h>
+#include <General/Vector3d.h>
 
 struct PointLightData
 {
@@ -13,4 +14,5 @@ struct FrameConstantBufferData
 	Matrix4d		m_view;
 	Matrix4d		m_projection;
 	PointLightData	m_pointLightData;
+	Vector4d		m_cameraPosition;
 };

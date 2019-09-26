@@ -19,17 +19,19 @@
 //Reference:http://www.rastertek.com/
 
 DX11Graphics::DX11Graphics()
-	:m_device(nullptr)
-	,m_deviceContext(nullptr)
-	,m_swapChain(nullptr)
-	,m_renderTargetView(nullptr)
-	,m_depthStencilBuffer(nullptr)
-	,m_depthStencilState(nullptr)
-	,m_depthStencilView(nullptr)
-	,m_rasterState(nullptr)
-	,m_camera(nullptr)
-	,m_vsyncEnabled(false)
-	,m_graphicsDeviceMemory(0)
+	: m_device(nullptr)
+	, m_deviceContext(nullptr)
+	, m_swapChain(nullptr)
+	, m_renderTargetView(nullptr)
+	, m_depthStencilBuffer(nullptr)
+	, m_depthStencilState(nullptr)
+	, m_depthStencilView(nullptr)
+	, m_rasterState(nullptr)
+	, m_camera(nullptr)
+	, m_frameConstantBufferData(nullptr)
+	, m_pointLight(nullptr)
+	, m_vsyncEnabled(false)
+	, m_graphicsDeviceMemory(0)
 {
 }
 
@@ -437,6 +439,7 @@ void DX11Graphics::StartRender()
 	Vector3d lightPosition = m_pointLight->GetPosition();
 	m_frameConstantBufferData->m_pointLightData.m_color = lightColor;
 	m_frameConstantBufferData->m_pointLightData.m_position = Vector4d(lightPosition.x, lightPosition.y, lightPosition.z, 1.0f);
+	m_frameConstantBufferData->m_cameraPosition = m_camera->GetTransform().m_position;
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
 }

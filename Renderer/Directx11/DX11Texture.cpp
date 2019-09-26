@@ -100,7 +100,7 @@ bool DX11Texture::Initialize(const BitmapPtr& bitmap)
 	return true;
 }
 
-void DX11Texture::Bind()
+void DX11Texture::Bind(unsigned int slot)
 {
-	m_deviceContext->PSSetShaderResources(0, 1, &m_shaderResourceView);
+	m_deviceContext->PSSetShaderResources(slot, 1, &m_shaderResourceView);
 }

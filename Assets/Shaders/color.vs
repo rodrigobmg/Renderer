@@ -10,6 +10,7 @@ cbuffer FrameBufferData : register(b0)
 	matrix viewMatrix;
 	matrix projectionMatrix;
 	PointLightData pointLight;
+	float3 cameraPos;
 };
 
 cbuffer ObjectBufferData : register(b1)

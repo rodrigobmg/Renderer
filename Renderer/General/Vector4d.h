@@ -8,9 +8,11 @@ public:
 	Vector4d(float x);
 	Vector4d(float x, float y, float z, float w);
 	Vector4d(const Vector4d& other);
+	Vector4d(const Vector3d& other, float w = 0);
 	Vector4d(const DirectX::XMVECTOR& other);
 	Vector4d(const float* data);
 	Vector4d& operator=(const Vector4d& other);
+	Vector4d& operator=(const Vector3d& other);
 	~Vector4d() {}
 
 	operator DirectX::XMVECTOR() const { return m_vector; }

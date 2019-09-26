@@ -1,4 +1,5 @@
-Texture2D shaderTexture : register(t0);
+Texture2D diffuseTexture : register(t0);
+Texture2D specularTexture : register(t1);
 SamplerState sampleType : register(s0);
 
 struct PointLightData
@@ -12,6 +13,7 @@ cbuffer FrameBufferData : register(b0)
 	matrix viewMatrix;
 	matrix projectionMatrix;
 	PointLightData pointLight;
+	float4 cameraPos;
 };
 
 struct PixelInputType
@@ -28,10 +30,18 @@ float4 main(PixelInputType input) : SV_TARGET
 {
 	float4 pixelToLight = normalize(pointLight.position - input.worldSpacePosition);
 	float intensity = clamp(dot(normalize(input.normal), pixelToLight),0,1);
-	float4 textureColor = shaderTexture.Sample(sampleType, input.uv);
+	float4 textureColor = diffuseTexture.Sample(sampleType, input.uv);
 
 	float3 ambient = pointLight.color.xyz * ambientStrength;
 	float3 diffuse = textureColor.xyz * intensity;
 
-	return float4(ambient + diffuse, 1.0);
+	float specularStrength = specularTexture.Sample(sampleType, input.uv).x;
+	float4 pixelToCamera = normalize(cameraPos - input.worldSpacePosition);
+	float4 reflectDir = reflect(-pixelToLight, input.normal);
+	float a = dot(pixelToCamera, reflectDir);
+	a = max(a, 0.0);
+	float spec = pow(a, 16);
+	float3 specular = specularStrength * spec * pointLight.color.xyz;
+
+	return float4(ambient + diffuse + specular, 1.0);
 }

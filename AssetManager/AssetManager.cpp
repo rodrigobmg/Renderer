@@ -13,18 +13,18 @@ int main(int argc, char *argv[])
 #endif // _DEBUG
 
 	using namespace std;
-	namespace fs = experimental::filesystem::v1;
+	using namespace filesystem;
 	if (argc == 3)
 	{
-		fs::path inputPath(argv[1]);
-		fs::path outputPath(argv[2]);
+		path inputPath(argv[1]);
+		path outputPath(argv[2]);
 		try
 		{
-			if (fs::exists(outputPath))
+			if (exists(outputPath))
 			{
-				fs::remove_all(outputPath);
+				remove_all(outputPath);
 			}
-			fs::copy(inputPath, outputPath, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
+			copy(inputPath, outputPath, copy_options::recursive | copy_options::overwrite_existing);
 			return 0;
 		}
 		catch (const exception& ex)

@@ -21,15 +21,23 @@ Vector4d::Vector4d(float x)
 }
 
 Vector4d::Vector4d(float x, float y, float z, float w)
-	:x(x)
-	,y(y)
-	,z(z)
-	,w(w)
+	: x(x)
+	, y(y)
+	, z(z)
+	, w(w)
 {
 }
 
 Vector4d::Vector4d(const Vector4d & other)
 	:m_vector(other.m_vector)
+{
+}
+
+Vector4d::Vector4d(const Vector3d& other, float w)
+	: x(other.x)
+	, y(other.y)
+	, z(other.z)
+	, w(w)
 {
 }
 
@@ -49,6 +57,15 @@ Vector4d::Vector4d(const float * data)
 Vector4d & Vector4d::operator=(const Vector4d & other)
 {
 	m_vector = other.m_vector;
+	return *this;
+}
+
+Vector4d& Vector4d::operator=(const Vector3d& other)
+{
+	x = other.x;
+	y = other.y;
+	z = other.z;
+	w = 1.0;
 	return *this;
 }
 

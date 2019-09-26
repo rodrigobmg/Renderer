@@ -158,19 +158,38 @@ void ExtractMaterialData(const GraphicsPtr& graphics, const aiScene* scene, cons
 	unsigned int normalCount = aiMaterial->GetTextureCount(aiTextureType_HEIGHT);
 
 	BitmapPtr diffuse(new Bitmap());
+	BitmapPtr specular(new Bitmap());
 
-	aiColor3D aiDiffuse;
-	aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse);
-	Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
-	diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4);
+	//Default diffuse
+	{
+		aiColor3D aiDiffuse;
+		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse);
+		Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
+		diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4);
+	}
+
+	//Default specular
+	{
+		aiColor3D aiSpecular;
+		aiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, aiSpecular);
+		Color specularColor(aiSpecular.r, aiSpecular.g, aiSpecular.b, 1.0f);
+		specular->Alloc(reinterpret_cast<float*>(&specularColor), 1, 1, 4);
+	}
 
 	if (diffuseCount > 0)
 	{
 		GetBitmapFromMaterial(aiMaterial, aiTextureType_DIFFUSE, directory, diffuse);
 	}
 
+	if (specularCount > 0)
+	{
+		GetBitmapFromMaterial(aiMaterial, aiTextureType_SPECULAR, directory, specular);
+	}
+
 	TexturePtr diffuseTexture = graphics->CreateTexture(diffuse);
+	TexturePtr specularTexture = graphics->CreateTexture(specular);
 	material->SetDiffuseTexture(diffuseTexture);
+	material->SetSpecularTexture(specularTexture);
 }
 
 SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const string& directory, const GraphicsPtr& graphics,

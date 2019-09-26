@@ -18,9 +18,14 @@ Material::~Material()
 
 void Material::Render()
 {
-	if (m_diffuseTexture)
+	if (m_diffuse)
 	{
-		m_diffuseTexture->Bind();
+		m_diffuse->Bind(0);
+	}
+
+	if (m_specular)
+	{
+		m_specular->Bind(1);
 	}
 
 	if (m_vertexShader)
