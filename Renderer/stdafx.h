@@ -49,6 +49,7 @@ class ISamplerState;
 struct ObjectConstantBufferData;
 struct VertexElement;
 struct FrameConstantBufferData;
+struct MaterialConstantBufferData;
 
 typedef SharedPtr<SceneObject> SceneObjectPtr;
 typedef WeakPtr<SceneObject> SceneObjectWeakPtr;

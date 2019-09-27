@@ -19,10 +19,11 @@ public:
 	virtual VertexArrayPtr CreateVertexArray(size_t vertexCount, const byte* vertexData, const vector<VertexElement>& vertexElements) const override;
 	virtual IndexArrayPtr CreateIndexArray(const uint16_t* indexData, size_t indexCount) const override;
 	virtual ShaderPtr CreateShader(const string& path, ShaderType shaderType) const override;
-	virtual MeshPtr CreateMesh(const VertexArrayPtr& vertexData, const IndexArrayPtr& indexData, PrimitiveType primitive) const;
-	virtual ConstantBufferPtr CreateObjectConstantBuffer() const;
-	virtual TexturePtr CreateTexture(const BitmapPtr& bitmap) const;
-	virtual SamplerStatePtr CreateSamplerState() const;
+	virtual MeshPtr CreateMesh(const VertexArrayPtr& vertexData, const IndexArrayPtr& indexData, PrimitiveType primitive) const override;
+	virtual ConstantBufferPtr CreateObjectConstantBuffer() const override;
+	virtual TexturePtr CreateTexture(const BitmapPtr& bitmap) const override;
+	virtual SamplerStatePtr CreateSamplerState() const override;
+	virtual ConstantBufferPtr CreateMaterialConstantBuffer() const override;
 
 private:
 	UniquePtr<ID3D11Device>			m_device;

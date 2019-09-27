@@ -125,28 +125,29 @@ bool GetBitmapFromMaterial(const aiMaterial* material, const aiTextureType textu
 
 	bool result = false;
 	aiString file;
-	material->GetTexture(textureType, 0, &file);
-	std::string filePath = std::string(file.C_Str());
-	filePath = filePath.substr(filePath.find_last_of("\\") + 1);
-	filePath = directory + filePath;
-
-	int width, height, channels;
-	float* data = stbi_loadf(filePath.c_str(), &width, &height, &channels, kRequiredNumberOfComponents);
-	if (data)
+	if (material->GetTexture(textureType, 0, &file) == aiReturn_SUCCESS)
 	{
-		result = bitmap->Alloc(data, width, height, kRequiredNumberOfComponents);
-		if (!result)
+		std::string filePath = std::string(file.C_Str());
+		filePath = filePath.substr(filePath.find_last_of("\\") + 1);
+		filePath = directory + filePath;
+
+		int width, height, channels;
+		float* data = stbi_loadf(filePath.c_str(), &width, &height, &channels, kRequiredNumberOfComponents);
+		if (data)
 		{
-			ERROR_LOG("Failed to create bitmap: %s", filePath);
+			result = bitmap->Alloc(data, width, height, kRequiredNumberOfComponents);
+			if (!result)
+			{
+				ERROR_LOG("Failed to create bitmap: %s", filePath);
+			}
 		}
+		else
+		{
+			ERROR_LOG("Failed to load texture: %s", filePath);
+			return false;
+		}
+		stbi_image_free(data);
 	}
-	else
-	{
-		ERROR_LOG("Failed to load texture: %s", filePath);
-		return false;
-	}
-	stbi_image_free(data);
-
 	return result;
 }
 
@@ -163,17 +164,21 @@ void ExtractMaterialData(const GraphicsPtr& graphics, const aiScene* scene, cons
 	//Default diffuse
 	{
 		aiColor3D aiDiffuse;
-		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse);
-		Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
-		diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4);
+		if (aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse) == aiReturn_SUCCESS)
+		{
+			Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
+			diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4);
+		}
 	}
 
 	//Default specular
 	{
 		aiColor3D aiSpecular;
-		aiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, aiSpecular);
-		Color specularColor(aiSpecular.r, aiSpecular.g, aiSpecular.b, 1.0f);
-		specular->Alloc(reinterpret_cast<float*>(&specularColor), 1, 1, 4);
+		if (aiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, aiSpecular) == aiReturn_SUCCESS)
+		{
+			Color specularColor(aiSpecular.r, aiSpecular.g, aiSpecular.b, 1.0f);
+			specular->Alloc(reinterpret_cast<float*>(&specularColor), 1, 1, 4);
+		}
 	}
 
 	if (diffuseCount > 0)
@@ -190,6 +195,14 @@ void ExtractMaterialData(const GraphicsPtr& graphics, const aiScene* scene, cons
 	TexturePtr specularTexture = graphics->CreateTexture(specular);
 	material->SetDiffuseTexture(diffuseTexture);
 	material->SetSpecularTexture(specularTexture);
+
+	float shininess = 0.0f;
+	aiMaterial->Get(AI_MATKEY_SHININESS, shininess);
+	material->SetShininess(shininess);
+
+	float shininessStrength = 1.0f;
+	aiMaterial->Get(AI_MATKEY_SHININESS_STRENGTH, shininessStrength);
+	material->SetShininessStrength(shininessStrength);
 }
 
 SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const string& directory, const GraphicsPtr& graphics,
@@ -197,7 +210,7 @@ SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const
 {
 	SceneObjectPtr sceneObject(new SceneObject());
 	vector<MeshPtr> meshes;
-	MaterialPtr defaultMaterial(new Material(vertexShader, pixelShader));
+	MaterialPtr defaultMaterial(new Material(vertexShader, pixelShader, graphics->CreateMaterialConstantBuffer()));
 	vector<MaterialPtr> materials;
 
 	for (unsigned int meshIndex = 0; meshIndex < node->mNumMeshes; meshIndex++)
@@ -209,6 +222,7 @@ SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const
 		MaterialPtr material = defaultMaterial;
 		if (scene->HasMaterials())
 		{
+			material.reset(new Material(vertexShader, pixelShader, graphics->CreateMaterialConstantBuffer()));
 			ExtractMaterialData(graphics, scene, mesh, directory, material);
 			SamplerStatePtr samplerState = graphics->CreateSamplerState();
 			material->SetSamplerState(samplerState);
@@ -244,7 +258,7 @@ SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics
 	std::ifstream fileStream(path.c_str());
 	if (!fileStream.is_open())
 	{
-		ERROR_LOG("Loader::LoadModel:: Cannot open file {}", path);
+		ERROR_LOG("Loader::LoadModel:: Cannot open file %s", path);
 		return nullptr;
 	}
 	string fileDataString((std::istreambuf_iterator<char>(fileStream)),
@@ -262,7 +276,7 @@ SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics
 	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		string error = importer.GetErrorString();
-		ERROR_LOG("ERROR::ASSIMP:: {}", error);
+		ERROR_LOG("ERROR::ASSIMP:: %s", error);
 		return false;
 	}
 	string directory = modelPath.substr(0, modelPath.find_last_of('/') + 1);

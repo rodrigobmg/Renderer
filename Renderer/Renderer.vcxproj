@@ -144,6 +144,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Directx11\DX11MaterialConstantBuffer.cpp" />
     <ClCompile Include="Directx11\DX11SamplerState.cpp" />
     <ClCompile Include="Directx11\DX11Texture.cpp" />
     <ClCompile Include="General\Bitmap.cpp" />
@@ -178,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Directx11\DX11Includes.h" />
+    <ClInclude Include="Directx11\DX11MaterialConstantBuffer.h" />
     <ClInclude Include="Directx11\DX11SamplerState.h" />
     <ClInclude Include="Directx11\DX11Texture.h" />
     <ClInclude Include="General\Bitmap.h" />
@@ -191,6 +193,7 @@
     <ClInclude Include="General\ISamplerState.h" />
     <ClInclude Include="General\ITexture.h" />
     <ClInclude Include="General\Color.h" />
+    <ClInclude Include="General\MaterialConstantBuffer.h" />
     <ClInclude Include="General\Matrix4d.h" />
     <ClInclude Include="General\Transform.h" />
     <ClInclude Include="General\Vector2d.h" />

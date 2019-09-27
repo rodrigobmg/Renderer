@@ -81,6 +81,9 @@
     <ClCompile Include="Directx11\DX11SamplerState.cpp">
       <Filter>Directx11\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Directx11\DX11MaterialConstantBuffer.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -223,6 +226,12 @@
       <Filter>General\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Directx11\DX11SamplerState.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\MaterialConstantBuffer.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\DX11MaterialConstantBuffer.h">
       <Filter>Directx11\Graphics</Filter>
     </ClInclude>
   </ItemGroup>

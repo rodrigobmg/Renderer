@@ -1,0 +1,5 @@
+{
+	"model": "Assets/Models/nanosuit/nanosuit.blend",
+	"vertex_shader": "Assets/Shaders/color.vs",
+	"pixel_shader": "Assets/Shaders/color.ps"
+}

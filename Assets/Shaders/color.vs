@@ -44,7 +44,7 @@ PixelInputType main(VertexInputType input)
 	output.position = mul(output.position, viewMatrix);
 	output.position = mul(output.position, projectionMatrix);
 
-	output.normal = mul(float4(input.normal, 0), normalMatrix);
+	output.normal = normalize(mul(float4(input.normal, 0), normalMatrix));
 
 	output.uv = input.uv;
 

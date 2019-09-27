@@ -17,6 +17,7 @@ public:
 	virtual ShaderPtr CreateShader(const string& path, ShaderType shaderType) const = 0;
 	virtual MeshPtr CreateMesh(const VertexArrayPtr& vertexData, const IndexArrayPtr& indexData, PrimitiveType primitive) const = 0;
 	virtual ConstantBufferPtr CreateObjectConstantBuffer() const = 0;
+	virtual ConstantBufferPtr CreateMaterialConstantBuffer() const = 0;
 	virtual TexturePtr CreateTexture(const BitmapPtr& bitmap) const = 0;
 	virtual SamplerStatePtr CreateSamplerState() const = 0;
 };

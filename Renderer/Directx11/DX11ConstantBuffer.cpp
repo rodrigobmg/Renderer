@@ -5,6 +5,7 @@
 DX11ConstantBuffer::DX11ConstantBuffer(const DevicePtr& device, const DeviceContextPtr& deviceContext, size_t constantBufferSize, int bufferNumber)
 	: m_device(device)
 	, m_deviceContext(deviceContext)
+	, m_bufferSize(constantBufferSize)
 	, m_bufferNumber(bufferNumber)
 {
 	D3D11_BUFFER_DESC bufferDesc;
@@ -27,4 +28,24 @@ DX11ConstantBuffer::~DX11ConstantBuffer()
 		m_buffer->Release();
 		m_buffer = nullptr;
 	}
+}
+
+bool DX11ConstantBuffer::UpdaBufferData(const void* sourceData)
+{
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+	// Lock the constant buffer so it can be written to.
+	HRESULT result = m_deviceContext->Map(m_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	//Copy the data
+	memcpy(mappedResource.pData, sourceData, m_bufferSize);
+
+	// Unlock the constant buffer.
+	m_deviceContext->Unmap(m_buffer, 0);
+
+	return true;
 }

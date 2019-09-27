@@ -16,6 +16,11 @@ cbuffer FrameBufferData : register(b0)
 	float4 cameraPos;
 };
 
+cbuffer MaterialBufferData : register(b2)
+{
+	float4 materialData;
+};
+
 struct PixelInputType
 {
 	float4 position : SV_POSITION;
@@ -38,10 +43,8 @@ float4 main(PixelInputType input) : SV_TARGET
 	float specularStrength = specularTexture.Sample(sampleType, input.uv).x;
 	float4 pixelToCamera = normalize(cameraPos - input.worldSpacePosition);
 	float4 reflectDir = reflect(-pixelToLight, input.normal);
-	float a = dot(pixelToCamera, reflectDir);
-	a = max(a, 0.0);
-	float spec = pow(a, 16);
-	float3 specular = specularStrength * spec * pointLight.color.xyz;
+	float spec = pow(max(dot(pixelToCamera, reflectDir), 0.0), materialData.x);
+	float3 specular = specularStrength * spec * pointLight.color.xyz * materialData.y;
 
 	return float4(ambient + diffuse + specular, 1.0);
 }

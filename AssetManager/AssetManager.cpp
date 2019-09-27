@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 		}
 		catch (const exception& ex)
 		{
-			ERROR_LOG("Error processing files {}", ex.what());
+			ERROR_LOG("Error processing files %s", ex.what());
 			return -1;
 		}
 	}

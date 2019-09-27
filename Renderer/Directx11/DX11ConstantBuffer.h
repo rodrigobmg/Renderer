@@ -12,8 +12,11 @@ public:
 	~DX11ConstantBuffer();
 
 protected:
+	bool UpdaBufferData(const void* sourceData);
+
 	const DevicePtr&		m_device;
 	const DeviceContextPtr&	m_deviceContext;
 	ID3D11Buffer*			m_buffer;
+	size_t					m_bufferSize;
 	int						m_bufferNumber;
 };

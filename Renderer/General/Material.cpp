@@ -3,10 +3,17 @@
 #include "IShader.h"
 #include "ITexture.h"
 #include "ISamplerState.h"
+#include "IConstantBuffer.h"
+#include "MaterialConstantBuffer.h"
 
-Material::Material(const ShaderPtr& vertexShader, const ShaderPtr& pixelShader)
+Material::Material(const ShaderPtr& vertexShader, const ShaderPtr& pixelShader, const ConstantBufferPtr& constantBuffer)
 	: m_vertexShader(vertexShader)
 	, m_pixelShader(pixelShader)
+	, m_diffuse(nullptr)
+	, m_specular(nullptr)
+	, m_samplerState(nullptr)
+	, m_materialConstantBuffer(constantBuffer)
+	, m_materialConstantBufferData(new MaterialConstantBufferData())
 {
 }
 
@@ -14,10 +21,30 @@ Material::~Material()
 {
 	m_vertexShader.reset();
 	m_pixelShader.reset();
+
+	if (m_materialConstantBufferData)
+	{
+		delete m_materialConstantBufferData;
+	}
+}
+
+void Material::SetShininess(float shininess)
+{
+	m_materialConstantBufferData->m_materialData.x = shininess;
+}
+
+void Material::SetShininessStrength(float shininessStrength)
+{
+	m_materialConstantBufferData->m_materialData.y = shininessStrength;
 }
 
 void Material::Render()
 {
+	if (m_materialConstantBuffer && m_materialConstantBufferData)
+	{
+		m_materialConstantBuffer->SetData(m_materialConstantBufferData);
+	}
+
 	if (m_diffuse)
 	{
 		m_diffuse->Bind(0);

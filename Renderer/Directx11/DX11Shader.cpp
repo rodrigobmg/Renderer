@@ -74,8 +74,8 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 		if (errorMessage)
 		{
 			const char* compileErrors = (char*)(errorMessage->GetBufferPointer());
-			ERROR_LOG("Error compiling shader {}", shaderFilePath);
-			ERROR_LOG("{}", compileErrors);
+			ERROR_LOG("Error compiling shader %s", shaderFilePath);
+			ERROR_LOG("Compiler Errors: %s", compileErrors);
 		}
 		else
 		{

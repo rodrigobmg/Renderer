@@ -7,6 +7,7 @@
 #include "DX11ObjectConstantBuffer.h"
 #include "DX11Texture.h"
 #include "DX11SamplerState.h"
+#include "DX11MaterialConstantBuffer.h"
 
 #include <General/IWindow.h>
 #include <General/VertexArray.h>
@@ -32,6 +33,7 @@ DX11Graphics::DX11Graphics()
 	, m_pointLight(nullptr)
 	, m_vsyncEnabled(false)
 	, m_graphicsDeviceMemory(0)
+	, m_graphicsDeviceDescription{0}
 {
 }
 
@@ -594,4 +596,9 @@ SamplerStatePtr DX11Graphics::CreateSamplerState() const
 		return samplerState;
 	}
 	return nullptr;
+}
+
+ConstantBufferPtr DX11Graphics::CreateMaterialConstantBuffer() const
+{
+	return ConstantBufferPtr(new DX11MaterialConstantBuffer(m_device, m_deviceContext));
 }
