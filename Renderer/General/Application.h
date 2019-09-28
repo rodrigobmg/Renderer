@@ -16,5 +16,8 @@ private:
 	WindowPtr		m_window;
 	GraphicsPtr		m_graphics;
 	SceneObjectPtr	m_object;
+	int				m_mousePosX;
+	int				m_mousePosY;
+	bool			m_firstMouseMove;
 	bool			m_ready;
 };

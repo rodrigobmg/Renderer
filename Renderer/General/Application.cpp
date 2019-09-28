@@ -14,7 +14,10 @@ const float kScreenDepth = 1000.0f;
 const float kScreenNear = 0.1f;
 
 Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight, const char* name)
-	:m_ready(false)
+	: m_mousePosX(0)
+	, m_mousePosY(0)
+	, m_firstMouseMove(true)
+	, m_ready(false)
 {
 	assert(!m_window);
 	m_window.reset(new Window(hInstance, windowWidth, windowHeight, name));
@@ -51,7 +54,6 @@ void Application::Run()
 		m_window->ProcessInputs();
 		Update();
 		Render();
-		m_window->SwapBuffers();
 	}
 }
 
@@ -72,4 +74,37 @@ void Application::Update()
 	{
 		m_window->Close();
 	}
+
+	if (Input::GetKeyDown(Input::KEY_UP))
+	{
+		m_object->m_transform.m_rotation.x += 1.0f;
+	}
+	if (Input::GetKeyDown(Input::KEY_DOWN))
+	{
+		m_object->m_transform.m_rotation.x -= 1.0f;
+	}
+	if (Input::GetKeyDown(Input::KEY_LEFT))
+	{
+		m_object->m_transform.m_rotation.y += 1.0f;
+	}
+	if (Input::GetKeyDown(Input::KEY_RIGHT))
+	{
+		m_object->m_transform.m_rotation.y -= 1.0f;
+	}
+	if (Input::GetKeyDown(Input::KEY_R))
+	{
+		m_object->m_transform.m_rotation = Vector3d();
+	}
+
+	int x, y;
+	Input::GetMousePosition(x, y);
+
+
+	if (m_firstMouseMove)
+	{
+		m_firstMouseMove = false;
+	}
+
+	m_mousePosX = x;
+	m_mousePosY = y;
 }

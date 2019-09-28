@@ -138,12 +138,12 @@ bool GetBitmapFromMaterial(const aiMaterial* material, const aiTextureType textu
 			result = bitmap->Alloc(data, width, height, kRequiredNumberOfComponents);
 			if (!result)
 			{
-				ERROR_LOG("Failed to create bitmap: %s", filePath);
+				ERROR_LOG("Failed to create bitmap: {}", filePath);
 			}
 		}
 		else
 		{
-			ERROR_LOG("Failed to load texture: %s", filePath);
+			ERROR_LOG("Failed to load texture: {}", filePath);
 			return false;
 		}
 		stbi_image_free(data);
@@ -258,7 +258,7 @@ SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics
 	std::ifstream fileStream(path.c_str());
 	if (!fileStream.is_open())
 	{
-		ERROR_LOG("Loader::LoadModel:: Cannot open file %s", path);
+		ERROR_LOG("Loader::LoadModel:: Cannot open file {}", path);
 		return nullptr;
 	}
 	string fileDataString((std::istreambuf_iterator<char>(fileStream)),
@@ -276,7 +276,7 @@ SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics
 	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		string error = importer.GetErrorString();
-		ERROR_LOG("ERROR::ASSIMP:: %s", error);
+		ERROR_LOG("ERROR::ASSIMP:: {}", error);
 		return false;
 	}
 	string directory = modelPath.substr(0, modelPath.find_last_of('/') + 1);

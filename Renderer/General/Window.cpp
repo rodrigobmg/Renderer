@@ -1,19 +1,26 @@
 #include "stdafx.h"
 #include "Window.h"
 
+#include <windowsx.h>
+#include <WinUser.h>
 #include <General/Input.h>
 
+Window* Window::s_instance = nullptr;
+
 Window::Window(HINSTANCE hInstance, int windowWidth, int windowHeight, const char* name)
+	: m_applicationName(name)
+	, m_hinstance(hInstance)
+	, m_hwnd()
+	, m_msg()
+	, m_windowWidth(windowWidth)
+	, m_windowHeight(windowHeight)
 {
 	WNDCLASSEX wc;
 	int posX, posY;
 
 	// Get the instance of this application.
 	m_hinstance = hInstance;
-	printf("Error: %d", GetLastError());
-
-	// Give the application a name.
-	m_applicationName = name;
+	ERROR_LOG("Error: {}", GetLastError());
 
 	// Setup the windows class with default settings.
 	wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -49,6 +56,8 @@ Window::Window(HINSTANCE hInstance, int windowWidth, int windowHeight, const cha
 
 	// Hide the mouse cursor.
 	ShowCursor(false);
+
+	Window::s_instance = this;
 }
 
 Window::~Window()
@@ -81,13 +90,22 @@ void Window::ProcessInputs()
 	}
 }
 
-void Window::SwapBuffers()
-{
-}
-
 void Window::Close()
 {
+	ReleaseMouse();
 	DestroyWindow(m_hwnd);
+}
+
+void Window::CaptureMouse()
+{
+	
+	ReleaseMouse();
+	SetCapture(m_hwnd);
+}
+
+void Window::ReleaseMouse()
+{
+	ReleaseCapture();
 }
 
 LRESULT CALLBACK Window::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
@@ -100,26 +118,51 @@ LRESULT CALLBACK Window::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM w
 		PostQuitMessage(0);
 		return 0;
 	}
-
 	// Check if the window is being closed.
 	case WM_CLOSE:
 	{
 		PostQuitMessage(0);
 		return 0;
 	}
-
 	case WM_KEYDOWN :
 	{
 		Input::SetKeyDown(static_cast<unsigned int>(wparam));
 		return 0;
 	}
-
 	case WM_KEYUP:
 	{
 		Input::SetKeyUp(static_cast<unsigned int>(wparam));
 		return 0;
 	}
-
+	case WM_LBUTTONDOWN:
+	{
+		Window::s_instance->CaptureMouse();
+		Input::SetMouseButtonDown(true, Input::MouseButtonType::kLeft);
+		return 0;
+	}
+	case WM_LBUTTONUP:
+	{
+		Window::s_instance->ReleaseMouse();
+		Input::SetMouseButtonDown(false, Input::MouseButtonType::kLeft);
+		return 0;
+	}
+	case WM_RBUTTONDOWN:
+	{
+		Window::s_instance->CaptureMouse();
+		Input::SetMouseButtonDown(true, Input::MouseButtonType::kRight);
+		return 0;
+	}
+	case WM_RBUTTONUP:
+	{
+		Window::s_instance->ReleaseMouse();
+		Input::SetMouseButtonDown(false, Input::MouseButtonType::kRight);
+		return 0;
+	}
+	case WM_MOUSEMOVE:
+	{
+		Input::SetMousePosition(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+		return 0;
+	}
 	// All other messages pass to the message handler in the system class.
 	default:
 	{

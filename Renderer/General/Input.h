@@ -122,8 +122,21 @@ namespace Input
 		SIZE
 	};
 
+	enum class MouseButtonType
+	{
+		kNone,
+		kLeft,
+		kRight
+	};
+
 	bool GetKeyDown(unsigned int keyCode);
 	void SetKeyDown(unsigned int keyCode);
 	void SetKeyUp(unsigned int keyCode);
+
+	void SetMouseButtonDown(bool isDown, MouseButtonType buttonType);
+	bool GetMouseButtonDown(MouseButtonType button);
+	void SetMousePosition(int x, int y);
+	void GetMousePosition(int& x, int& y);
+
 	void Shutdown();
 };

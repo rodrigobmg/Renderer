@@ -5,8 +5,22 @@
 
 #include <Directx11/DX11InputMap.h>
 
+
+//Global variables
 bool k_keyStates[Input::Keys::SIZE];
 IInputMap* k_inputMap = nullptr;
+struct MouseButtonState
+{
+	bool isDown;
+	Input::MouseButtonType type;
+};
+
+MouseButtonState leftMBState = { false, Input::MouseButtonType::kLeft };
+MouseButtonState rightMBState = { false, Input::MouseButtonType::kRight };
+
+int mouseX = 0;
+int mouseY = 0;
+
 
 void InitializeKeyMap()
 {
@@ -39,6 +53,43 @@ void Input::SetKeyUp(unsigned int keyCode)
 	keyCode = k_inputMap->GetMappedValue(keyCode);
 	assert(keyCode < SIZE);
 	k_keyStates[keyCode] = false;
+}
+
+void Input::SetMouseButtonDown(bool isDown, MouseButtonType buttonType)
+{
+	if (buttonType == MouseButtonType::kLeft)
+	{
+		leftMBState.isDown = isDown;
+	}
+	else if (buttonType == MouseButtonType::kRight)
+	{
+		rightMBState.isDown = isDown;
+	}
+}
+
+bool Input::GetMouseButtonDown(MouseButtonType buttonType)
+{
+	if (buttonType == MouseButtonType::kLeft)
+	{
+		return leftMBState.isDown;
+	}
+	else if (buttonType == MouseButtonType::kRight)
+	{
+		return rightMBState.isDown;
+	}
+	return false;
+}
+
+void Input::SetMousePosition(int x, int y)
+{
+	mouseX = x;
+	mouseY = y;
+}
+
+void Input::GetMousePosition(int& x, int& y)
+{
+	x = mouseX;
+	y = mouseY;
 }
 
 void Input::Shutdown()
