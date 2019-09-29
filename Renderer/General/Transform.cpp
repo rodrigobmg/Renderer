@@ -3,7 +3,6 @@
 
 Transform::Transform()
 	:m_position(0.0f)
-	,m_rotation(0.0f)
 	,m_scale(1.0f)
 {
 }
@@ -11,12 +10,12 @@ Transform::Transform()
 Transform & Transform::operator=(const Transform & other)
 {
 	m_position = other.m_position;
-	m_rotation = other.m_rotation;
+	m_orientation = other.m_orientation;
 	m_scale = other.m_scale;
 	return *this;
 }
 
 const Matrix4d Transform::GetMatrix()
 {
-	return MatrixScale(m_scale) * MatrixRotationRollPitchYawDeg(m_rotation.x, m_rotation.y, m_rotation.z) * MatrixTranslation(m_position);
+	return MatrixScale(m_scale) * m_orientation.GetRotationMatrix() * MatrixTranslation(m_position);
 }

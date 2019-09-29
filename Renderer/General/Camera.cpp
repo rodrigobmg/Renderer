@@ -22,7 +22,7 @@ const Matrix4d& Camera::GetViewMatrix()
 	Vector3d lookAt(0.0f, 0.0f, 1.0f);
 
 	// Create the rotation matrix from the yaw, pitch, and roll values.
-	Matrix4d rotationMatrix = MatrixRotationRollPitchYawDeg(m_transform.m_rotation.x, m_transform.m_rotation.y, m_transform.m_rotation.z);
+	Matrix4d rotationMatrix = m_transform.m_orientation.GetRotationMatrix();
 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
 	lookAt = Vector4d(lookAt.x, lookAt.y, lookAt.z, 0.0f) * rotationMatrix;

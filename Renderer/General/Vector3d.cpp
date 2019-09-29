@@ -71,6 +71,16 @@ Vector3d::operator DirectX::XMVECTOR() const
 	return vector;
 }
 
+float Vector3d::GetSquaredLength() const
+{
+	return Dot(*this, *this);
+}
+
+float Vector3d::GetLength() const
+{
+	return sqrtf(GetSquaredLength());
+}
+
 Vector3d operator+(const Vector3d & v1, const Vector3d & v2)
 {
 	return Vector3d(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
@@ -79,4 +89,20 @@ Vector3d operator+(const Vector3d & v1, const Vector3d & v2)
 Vector3d operator*(const Vector3d& lhs, float rhs)
 {
 	return Vector3d(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
+}
+
+Vector3d operator/(const Vector3d& lhs, float rhs)
+{
+	return lhs * (1.0f / rhs);
+}
+
+float Dot(const Vector3d& a, const Vector3d& b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+Vector3d Normalize(const Vector3d& vector)
+{
+	float length = vector.GetLength();
+	return vector / length;
 }

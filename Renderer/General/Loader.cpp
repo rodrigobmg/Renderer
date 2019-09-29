@@ -3,6 +3,7 @@
 
 #include <General/IGraphics.h>
 #include <General/VertexElement.h>
+#include <General/Quaternion.h>
 #include <General/Vector4d.h>
 #include <General/Vector3d.h>
 #include <General/Vector2d.h>
@@ -241,7 +242,7 @@ SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const
 	node->mTransformation.Decompose(scale, rotation, position);
 	sceneObject->m_transform.m_position = Vector3d(position.x, position.y, position.z);
 	sceneObject->m_transform.m_scale = Vector3d(scale.x, scale.y, scale.z);
-	sceneObject->m_transform.m_rotation = Vector3d(rotation.x, rotation.y, rotation.z);
+	sceneObject->m_transform.m_orientation = Quaternion(Vector3d(rotation.x, rotation.y, rotation.z));
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{

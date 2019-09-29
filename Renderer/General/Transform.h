@@ -2,6 +2,7 @@
 
 #include "Matrix4d.h"
 #include "Vector3d.h"
+#include "Quaternion.h"
 
 class Transform
 {
@@ -13,6 +14,6 @@ public:
 	const Matrix4d GetMatrix();
 
 	Vector3d	m_position;
-	Vector3d	m_rotation;
+	Quaternion	m_orientation;
 	Vector3d	m_scale;
 };

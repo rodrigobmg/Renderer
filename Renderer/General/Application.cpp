@@ -77,23 +77,27 @@ void Application::Update()
 
 	if (Input::GetKeyDown(Input::KEY_UP))
 	{
-		m_object->m_transform.m_rotation.x += 1.0f;
+		Vector3d delta(Math::DEG2RAD, 0.0f, 0.0f);
+		m_object->m_transform.m_orientation *= Quaternion(delta);
 	}
 	if (Input::GetKeyDown(Input::KEY_DOWN))
 	{
-		m_object->m_transform.m_rotation.x -= 1.0f;
+		Vector3d delta(-Math::DEG2RAD, 0.0f, 0.0f);
+		m_object->m_transform.m_orientation *= Quaternion(delta);
 	}
 	if (Input::GetKeyDown(Input::KEY_LEFT))
 	{
-		m_object->m_transform.m_rotation.y += 1.0f;
+		Vector3d delta(0.0f, Math::DEG2RAD, 0.0f);
+		m_object->m_transform.m_orientation *= Quaternion(delta);
 	}
 	if (Input::GetKeyDown(Input::KEY_RIGHT))
 	{
-		m_object->m_transform.m_rotation.y -= 1.0f;
+		Vector3d delta(0.0f, -Math::DEG2RAD, 0.0f);
+		m_object->m_transform.m_orientation *= Quaternion(delta);
 	}
 	if (Input::GetKeyDown(Input::KEY_R))
 	{
-		m_object->m_transform.m_rotation = Vector3d();
+		m_object->m_transform.m_orientation = Quaternion();
 	}
 
 	int x, y;

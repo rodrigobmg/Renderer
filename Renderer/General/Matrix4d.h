@@ -19,7 +19,6 @@ public:
 
 	static const Matrix4d& Identity();
 
-private:
 	union
 	{
 		DirectX::XMMATRIX m_matrix;
@@ -37,8 +36,6 @@ private:
 };
 
 Matrix4d operator*(const Matrix4d& m1, const Matrix4d& m2);
-Matrix4d MatrixRotationRollPitchYawDeg(float roll, float pitch, float yaw);
-Matrix4d MatrixRotationRollPitchYaw(float roll, float pitch, float yaw);
 Matrix4d MatrixLookAtLH(const Vector3d& position, const Vector3d& lookAt, const Vector3d& up);
 Matrix4d MatrixTranspose(const Matrix4d& matrix);
 Matrix4d MatrixPerspectiveFovLH(float FOV, float aspectRatio, float nearZ, float farZ);

@@ -157,6 +157,7 @@
     <ClCompile Include="Directx11\DX11ObjectConstantBuffer.cpp" />
     <ClCompile Include="Directx11\DX11Shader.cpp" />
     <ClCompile Include="General\Matrix4d.cpp" />
+    <ClCompile Include="General\Quaternion.cpp" />
     <ClCompile Include="General\Transform.cpp" />
     <ClCompile Include="General\Vector2d.cpp" />
     <ClCompile Include="General\Vector3d.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="General\Color.h" />
     <ClInclude Include="General\MaterialConstantBuffer.h" />
     <ClInclude Include="General\Matrix4d.h" />
+    <ClInclude Include="General\Quaternion.h" />
     <ClInclude Include="General\Transform.h" />
     <ClInclude Include="General\Vector2d.h" />
     <ClInclude Include="General\Vector3d.h" />

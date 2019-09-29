@@ -57,16 +57,6 @@ Matrix4d operator*(const Matrix4d & m1, const Matrix4d & m2)
 	return DirectX::XMMatrixMultiply(m1, m2);
 }
 
-Matrix4d MatrixRotationRollPitchYawDeg(float roll, float pitch, float yaw)
-{
-	return MatrixRotationRollPitchYaw(roll * Math::DEG2RAD, pitch * Math::DEG2RAD, yaw * Math::DEG2RAD);
-}
-
-Matrix4d MatrixRotationRollPitchYaw(float roll, float pitch, float yaw)
-{
-	return DirectX::XMMatrixRotationRollPitchYaw(roll, pitch, yaw);
-}
-
 Matrix4d MatrixLookAtLH(const Vector3d & position, const Vector3d & lookAt, const Vector3d & up)
 {
 	return DirectX::XMMatrixLookAtLH(position, lookAt, up);

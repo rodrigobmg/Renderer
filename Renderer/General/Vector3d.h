@@ -17,6 +17,8 @@ public:
 
 	operator DirectX::XMFLOAT3() const { return m_vector; }
 	operator DirectX::XMVECTOR() const;
+	float GetSquaredLength() const;
+	float GetLength() const;
 
 	union
 	{
@@ -31,3 +33,6 @@ public:
 class Matrix4d;
 Vector3d operator+(const Vector3d& v1, const Vector3d& v2);
 Vector3d operator*(const Vector3d& lhs, float rhs);
+Vector3d operator/(const Vector3d& lhs, float rhs);
+float Dot(const Vector3d& a, const Vector3d& b);
+Vector3d Normalize(const Vector3d& vector);

@@ -84,6 +84,9 @@
     <ClCompile Include="Directx11\DX11MaterialConstantBuffer.cpp">
       <Filter>Directx11\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="General\Quaternion.cpp">
+      <Filter>General\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -233,6 +236,9 @@
     </ClInclude>
     <ClInclude Include="Directx11\DX11MaterialConstantBuffer.h">
       <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Quaternion.h">
+      <Filter>General\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
