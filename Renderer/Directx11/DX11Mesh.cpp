@@ -3,7 +3,7 @@
 
 #include <General\Loader.h>
 
-DX11Mesh::DX11Mesh(const UniquePtr<ID3D11Device>& device, const UniquePtr<ID3D11DeviceContext>& deviceContext, const VertexArrayPtr& vertexArray, const IndexArrayPtr& indexArray, PrimitiveType type)
+DX11Mesh::DX11Mesh(const UniquePtr<ID3D11Device>& device, const UniquePtr<ID3D11DeviceContext>& deviceContext, const IVertexArrayPtr& vertexArray, const IIndexArrayPtr& indexArray, PrimitiveType type)
 	: m_device(device)
 	, m_deviceContext(deviceContext)
 	, m_vertices(vertexArray)

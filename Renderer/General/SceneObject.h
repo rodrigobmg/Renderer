@@ -6,7 +6,7 @@ class SceneObject
 public:
 	SceneObject();
 	SceneObject(const SceneObject&) = delete;
-	SceneObject(const vector<MeshPtr>& meshes, const vector<MaterialPtr>& materials, const ConstantBufferPtr& objectConstantBuffer);
+	SceneObject(const vector<IMeshPtr>& meshes, const vector<MaterialPtr>& materials, const IConstantBufferPtr& objectConstantBuffer);
 	~SceneObject();
 
 	void Render();
@@ -14,16 +14,19 @@ public:
 	void AddChild(const SceneObjectPtr& sceneObject);
 	void SetParent(const SceneObjectPtr& sceneObject) { m_parent = sceneObject; }
 	const SceneObjectWeakPtr& GetParent() const { return m_parent; }
-	void SetMeshData(const vector<MeshPtr>& meshes, const vector<MaterialPtr>& materials, const ConstantBufferPtr& constBuffer);
+	void SetMeshData(const vector<IMeshPtr>& meshes, const vector<MaterialPtr>& materials, const IConstantBufferPtr& constBuffer);
+	size_t GetNumMaterials() const { return m_materials.size(); }
+	const MaterialPtr GetMaterial(int index) const;
+	const vector<SceneObjectPtr>& GetChildren() const { return m_children; }
 
 private:
 	Matrix4d GetParentMatrix() const;
 
 	vector<SceneObjectPtr>		m_children;
 	SceneObjectWeakPtr			m_parent;
-	vector<MeshPtr>				m_meshes;
+	vector<IMeshPtr>			m_meshes;
 	vector<MaterialPtr>			m_materials;
-	ConstantBufferPtr			m_objectConstantBuffer;
+	IConstantBufferPtr			m_objectConstantBuffer;
 	ObjectConstantBufferData*	m_objectConstantBufferData;
 
 public:

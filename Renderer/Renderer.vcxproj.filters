@@ -275,5 +275,11 @@
     <None Include="..\Assets\Shaders\color.vs">
       <Filter>Directx11\Graphics\Shaders</Filter>
     </None>
+    <None Include="..\Assets\Shaders\light.ps">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </None>
+    <None Include="..\Assets\Shaders\light.vs">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

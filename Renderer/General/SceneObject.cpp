@@ -11,7 +11,7 @@ SceneObject::SceneObject()
 {
 }
 
-SceneObject::SceneObject(const vector<MeshPtr>& meshes, const vector<MaterialPtr>& materials, const ConstantBufferPtr& objectConstantBuffer)
+SceneObject::SceneObject(const vector<IMeshPtr>& meshes, const vector<MaterialPtr>& materials, const IConstantBufferPtr& objectConstantBuffer)
 	: m_meshes(meshes)
 	, m_materials(materials)
 	, m_objectConstantBuffer(objectConstantBuffer)
@@ -57,7 +57,7 @@ void SceneObject::AddChild(const SceneObjectPtr& sceneObject)
 	m_children.push_back(sceneObject);
 }
 
-void SceneObject::SetMeshData(const vector<MeshPtr>& meshes, const vector<MaterialPtr>& materials, const ConstantBufferPtr& constBuffer)
+void SceneObject::SetMeshData(const vector<IMeshPtr>& meshes, const vector<MaterialPtr>& materials, const IConstantBufferPtr& constBuffer)
 {
 	m_meshes = meshes;
 	m_materials = materials;
@@ -66,6 +66,15 @@ void SceneObject::SetMeshData(const vector<MeshPtr>& meshes, const vector<Materi
 	{
 		m_objectConstantBufferData = new ObjectConstantBufferData();
 	}
+}
+
+const MaterialPtr SceneObject::GetMaterial(int index) const
+{
+	if (index < m_materials.size())
+	{
+		return m_materials[index];
+	}
+	return nullptr;
 }
 
 Matrix4d SceneObject::GetParentMatrix() const

@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "SceneObject.h"
 #include "Window.h"
+#include "PointLight.h"
 
 #include <Directx11/DX11Graphics.h>
 #include <General/Loader.h>
@@ -25,14 +26,23 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 	m_ready = m_graphics->Initialize(m_window, windowWidth, windowHeight, kVsyncEnabled, kFullscreen, kScreenDepth, kScreenNear);
 
 	m_object = Loader::LoadModel("Assets/cube.object", m_graphics);
+
 	if (!m_object)
 	{
-		m_ready = false;
+		m_ready &= false;
 	}
+
 	if (m_object)
 	{
 		m_object->m_transform.m_scale *= 0.2f;
 	}
+
+	m_pointLight.reset(new PointLight(Color(1.0f), Vector3d(-10.0f, 10.0f, -50.0f), m_graphics));
+	if (!m_pointLight)
+	{
+		m_ready &= false;
+	}
+
 	assert(m_window);
 }
 
@@ -40,6 +50,8 @@ Application::~Application()
 {
 	//Explicitly release pointer so that all graphics resources are destroyed before graphics is shut down
 	m_object.reset();
+	m_pointLight.reset();
+
 	if (m_graphics)
 	{
 		m_graphics->Shutdown();
@@ -61,8 +73,10 @@ void Application::Render()
 {
 	if (m_graphics)
 	{
-		m_graphics->StartRender();
+		vector<IPointLightPtr> lights(1, m_pointLight);
+		m_graphics->StartRender(lights);
 		m_object->Render();
+		m_pointLight->Render();
 		m_graphics->EndRender();
 	}
 }

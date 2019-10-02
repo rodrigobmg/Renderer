@@ -35,7 +35,7 @@ struct MeshData
 	PrimitiveType			m_primitiveType;
 };
 
-void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const GraphicsPtr& graphics)
+void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const IGraphicsPtr& graphics)
 {
 	size_t vertexCount = aiMesh->mNumVertices;
 	assert(vertexCount < std::numeric_limits<uint16_t>::max());
@@ -152,7 +152,7 @@ bool GetBitmapFromMaterial(const aiMaterial* material, const aiTextureType textu
 	return result;
 }
 
-void ExtractMaterialData(const GraphicsPtr& graphics, const aiScene* scene, const aiMesh* aiMesh, const std::string& directory, MaterialPtr& material)
+void ExtractMaterialData(const IGraphicsPtr& graphics, const aiScene* scene, const aiMesh* aiMesh, const std::string& directory, MaterialPtr& material)
 {
 	aiMaterial* aiMaterial = scene->mMaterials[aiMesh->mMaterialIndex];
 	unsigned int diffuseCount = aiMaterial->GetTextureCount(aiTextureType_DIFFUSE);
@@ -192,8 +192,8 @@ void ExtractMaterialData(const GraphicsPtr& graphics, const aiScene* scene, cons
 		GetBitmapFromMaterial(aiMaterial, aiTextureType_SPECULAR, directory, specular);
 	}
 
-	TexturePtr diffuseTexture = graphics->CreateTexture(diffuse);
-	TexturePtr specularTexture = graphics->CreateTexture(specular);
+	ITexturePtr diffuseTexture = graphics->CreateTexture(diffuse);
+	ITexturePtr specularTexture = graphics->CreateTexture(specular);
 	material->SetDiffuseTexture(diffuseTexture);
 	material->SetSpecularTexture(specularTexture);
 
@@ -206,11 +206,11 @@ void ExtractMaterialData(const GraphicsPtr& graphics, const aiScene* scene, cons
 	material->SetShininessStrength(shininessStrength);
 }
 
-SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const string& directory, const GraphicsPtr& graphics,
-	const ShaderPtr& vertexShader, const ShaderPtr& pixelShader)
+SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const string& directory, const IGraphicsPtr& graphics,
+	const IShaderPtr& vertexShader, const IShaderPtr& pixelShader)
 {
 	SceneObjectPtr sceneObject(new SceneObject());
-	vector<MeshPtr> meshes;
+	vector<IMeshPtr> meshes;
 	MaterialPtr defaultMaterial(new Material(vertexShader, pixelShader, graphics->CreateMaterialConstantBuffer()));
 	vector<MaterialPtr> materials;
 
@@ -225,7 +225,7 @@ SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const
 		{
 			material.reset(new Material(vertexShader, pixelShader, graphics->CreateMaterialConstantBuffer()));
 			ExtractMaterialData(graphics, scene, mesh, directory, material);
-			SamplerStatePtr samplerState = graphics->CreateSamplerState();
+			ISamplerStatePtr samplerState = graphics->CreateSamplerState();
 			material->SetSamplerState(samplerState);
 		}
 
@@ -254,7 +254,7 @@ SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const
 	return sceneObject;
 }
 
-SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics)
+SceneObjectPtr Loader::LoadModel(const string& path, const IGraphicsPtr& graphics)
 {
 	std::ifstream fileStream(path.c_str());
 	if (!fileStream.is_open())
@@ -270,8 +270,8 @@ SceneObjectPtr Loader::LoadModel(const string& path, const GraphicsPtr& graphics
 	string vertexShaderPath = objectDescription["vertex_shader"];
 	string pixelShaderPath = objectDescription["pixel_shader"];
 
-	ShaderPtr vertexShader = graphics->CreateShader(vertexShaderPath, ShaderType::VERTEX_SHADER);
-	ShaderPtr pixelShader = graphics->CreateShader(pixelShaderPath, ShaderType::PIXEL_SHADER);
+	IShaderPtr vertexShader = graphics->CreateShader(vertexShaderPath, ShaderType::VERTEX_SHADER);
+	IShaderPtr pixelShader = graphics->CreateShader(pixelShaderPath, ShaderType::PIXEL_SHADER);
 
 	Assimp::Importer importer; 
 	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);

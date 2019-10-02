@@ -15,7 +15,7 @@
 #include <General/SceneObject.h>
 #include <General/Material.h>
 #include <General/Camera.h>
-#include <General/PointLight.h>
+#include <General/IPointLight.h>
 
 //Reference:http://www.rastertek.com/
 
@@ -30,7 +30,6 @@ DX11Graphics::DX11Graphics()
 	, m_rasterState(nullptr)
 	, m_camera(nullptr)
 	, m_frameConstantBufferData(nullptr)
-	, m_pointLight(nullptr)
 	, m_vsyncEnabled(false)
 	, m_graphicsDeviceMemory(0)
 	, m_graphicsDeviceDescription{0}
@@ -145,7 +144,7 @@ bool GetGraphicsDeviceInfo(int screenWidth, int screenHeight, unsigned int& refr
 	return true;
 }
 
-void InitSwapChainDescription(DXGI_SWAP_CHAIN_DESC &swapChainDesc, int screenWidth, int screenHeight, bool vsyncEnabled, unsigned int refreshRateNumerator, unsigned int refreshRateDenominator, const WindowPtr& window, bool fullscreen)
+void InitSwapChainDescription(DXGI_SWAP_CHAIN_DESC &swapChainDesc, int screenWidth, int screenHeight, bool vsyncEnabled, unsigned int refreshRateNumerator, unsigned int refreshRateDenominator, const IWindowPtr& window, bool fullscreen)
 {
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 
@@ -270,7 +269,7 @@ void InitRasterDescription(D3D11_RASTERIZER_DESC &rasterDesc)
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 }
 
-bool DX11Graphics::Initialize(const WindowPtr& window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear)
+bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear)
 {
 	m_vsyncEnabled = vsync;
 	HRESULT result;
@@ -420,13 +419,11 @@ bool DX11Graphics::Initialize(const WindowPtr& window, int screenWidth, int scre
 	//Create orthographic projection matrix
 	m_orthoMatrix = MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 
-	m_pointLight = new PointLight(Color(1.0f), Vector3d(0.0f, 35.0f, -50.0f));
-
 	return true;
 }
 
 static const float kClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-void DX11Graphics::StartRender()
+void DX11Graphics::StartRender(const vector<IPointLightPtr>& pointLights)
 {
 	//Clear back buffer
 	m_deviceContext->ClearRenderTargetView(m_renderTargetView, kClearColor);
@@ -437,10 +434,10 @@ void DX11Graphics::StartRender()
 
 	// Get the view, and projection matrices and set them in the per frame constant buffer
 	m_frameConstantBufferData->m_view = MatrixTranspose(m_camera->GetViewMatrix());
-	Color lightColor = m_pointLight->GetColor();
-	Vector3d lightPosition = m_pointLight->GetPosition();
-	m_frameConstantBufferData->m_pointLightData.m_color = lightColor;
-	m_frameConstantBufferData->m_pointLightData.m_position = Vector4d(lightPosition.x, lightPosition.y, lightPosition.z, 1.0f);
+
+
+	m_frameConstantBufferData->m_pointLightData[0].m_color = pointLights[0]->GetColor();
+	m_frameConstantBufferData->m_pointLightData[0].m_position = pointLights[0]->GetPosition();
 	m_frameConstantBufferData->m_cameraPosition = m_camera->GetTransform().m_position;
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
@@ -463,11 +460,6 @@ void DX11Graphics::EndRender()
 
 void DX11Graphics::Shutdown()
 {
-	if (m_pointLight)
-	{
-		delete m_pointLight;
-	}
-
 	//Release constant buffer
 	if (m_frameConstantBuffer)
 	{
@@ -553,9 +545,9 @@ SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const uint16_t* indexData,
 	return indexArray;
 }
 
-ShaderPtr DX11Graphics::CreateShader(const string& path, ShaderType shaderType) const
+IShaderPtr DX11Graphics::CreateShader(const string& path, ShaderType shaderType) const
 {
-	ShaderPtr shader(new DX11Shader(m_device, m_deviceContext, shaderType));
+	IShaderPtr shader(new DX11Shader(m_device, m_deviceContext, shaderType));
 	if (shader->Initialize(path.c_str()))
 	{
 		return shader;
@@ -563,9 +555,9 @@ ShaderPtr DX11Graphics::CreateShader(const string& path, ShaderType shaderType) 
 	return nullptr;
 }
 
-MeshPtr DX11Graphics::CreateMesh(const VertexArrayPtr& vertexData, const IndexArrayPtr& indexData, PrimitiveType primitive) const
+IMeshPtr DX11Graphics::CreateMesh(const IVertexArrayPtr& vertexData, const IIndexArrayPtr& indexData, PrimitiveType primitive) const
 {
-	MeshPtr mesh(new DX11Mesh(m_device, m_deviceContext, vertexData, indexData, primitive));
+	IMeshPtr mesh(new DX11Mesh(m_device, m_deviceContext, vertexData, indexData, primitive));
 	if (mesh->Initialize())
 	{
 		return mesh;
@@ -573,14 +565,14 @@ MeshPtr DX11Graphics::CreateMesh(const VertexArrayPtr& vertexData, const IndexAr
 	return nullptr;
 }
 
-ConstantBufferPtr DX11Graphics::CreateObjectConstantBuffer() const
+IConstantBufferPtr DX11Graphics::CreateObjectConstantBuffer() const
 {
-	return ConstantBufferPtr(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
+	return IConstantBufferPtr(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
 }
 
-TexturePtr DX11Graphics::CreateTexture(const BitmapPtr& bitmap) const
+ITexturePtr DX11Graphics::CreateTexture(const BitmapPtr& bitmap) const
 {
-	TexturePtr texture(new DX11Texture(m_device, m_deviceContext));
+	ITexturePtr texture(new DX11Texture(m_device, m_deviceContext));
 	if (texture->Initialize(bitmap))
 	{
 		return texture;
@@ -588,9 +580,9 @@ TexturePtr DX11Graphics::CreateTexture(const BitmapPtr& bitmap) const
 	return nullptr;
 }
 
-SamplerStatePtr DX11Graphics::CreateSamplerState() const
+ISamplerStatePtr DX11Graphics::CreateSamplerState() const
 {
-	SamplerStatePtr samplerState(new DX11SamplerState(m_device, m_deviceContext));
+	ISamplerStatePtr samplerState(new DX11SamplerState(m_device, m_deviceContext));
 	if (samplerState->Initialize())
 	{
 		return samplerState;
@@ -598,7 +590,7 @@ SamplerStatePtr DX11Graphics::CreateSamplerState() const
 	return nullptr;
 }
 
-ConstantBufferPtr DX11Graphics::CreateMaterialConstantBuffer() const
+IConstantBufferPtr DX11Graphics::CreateMaterialConstantBuffer() const
 {
-	return ConstantBufferPtr(new DX11MaterialConstantBuffer(m_device, m_deviceContext));
+	return IConstantBufferPtr(new DX11MaterialConstantBuffer(m_device, m_deviceContext));
 }

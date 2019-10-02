@@ -1,5 +1,5 @@
 {
-	"model": "Assets/Models/pointlight/pointlight.glb",
+	"model": "Assets/Models/pointlight/pointlight.obj",
 	"vertex_shader": "Assets/Shaders/light.vs",
 	"pixel_shader": "Assets/Shaders/light.ps"
 }

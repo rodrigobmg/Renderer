@@ -6,7 +6,7 @@
 #include "IConstantBuffer.h"
 #include "MaterialConstantBuffer.h"
 
-Material::Material(const ShaderPtr& vertexShader, const ShaderPtr& pixelShader, const ConstantBufferPtr& constantBuffer)
+Material::Material(const IShaderPtr& vertexShader, const IShaderPtr& pixelShader, const IConstantBufferPtr& constantBuffer)
 	: m_vertexShader(vertexShader)
 	, m_pixelShader(pixelShader)
 	, m_diffuse(nullptr)

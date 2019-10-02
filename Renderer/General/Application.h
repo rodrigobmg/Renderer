@@ -13,9 +13,10 @@ public:
 	virtual bool IsReady() const override { return m_ready; }
 
 private:
-	WindowPtr		m_window;
-	GraphicsPtr		m_graphics;
+	IWindowPtr		m_window;
+	IGraphicsPtr	m_graphics;
 	SceneObjectPtr	m_object;
+	IPointLightPtr	m_pointLight;
 	int				m_mousePosX;
 	int				m_mousePosY;
 	bool			m_firstMouseMove;

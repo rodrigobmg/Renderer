@@ -45,6 +45,7 @@ class Vector3d;
 class Bitmap;
 class ITexture;
 class ISamplerState;
+class IPointLight;
 
 struct ObjectConstantBufferData;
 struct VertexElement;
@@ -53,17 +54,18 @@ struct MaterialConstantBufferData;
 
 typedef SharedPtr<SceneObject> SceneObjectPtr;
 typedef WeakPtr<SceneObject> SceneObjectWeakPtr;
-typedef SharedPtr<IMesh> MeshPtr;
+typedef SharedPtr<IMesh> IMeshPtr;
 typedef SharedPtr<Material> MaterialPtr;
-typedef SharedPtr<IConstantBuffer> ConstantBufferPtr;
-typedef SharedPtr<IShader> ShaderPtr;
-typedef SharedPtr<IVertexArray> VertexArrayPtr;
-typedef SharedPtr<IIndexArray> IndexArrayPtr;
-typedef SharedPtr<IWindow> WindowPtr;
-typedef SharedPtr<IGraphics> GraphicsPtr;
+typedef SharedPtr<IConstantBuffer> IConstantBufferPtr;
+typedef SharedPtr<IShader> IShaderPtr;
+typedef SharedPtr<IVertexArray> IVertexArrayPtr;
+typedef SharedPtr<IIndexArray> IIndexArrayPtr;
+typedef SharedPtr<IWindow> IWindowPtr;
+typedef SharedPtr<IGraphics> IGraphicsPtr;
 typedef SharedPtr<Bitmap> BitmapPtr;
-typedef SharedPtr<ITexture> TexturePtr;
-typedef SharedPtr<ISamplerState> SamplerStatePtr;
+typedef SharedPtr<ITexture> ITexturePtr;
+typedef SharedPtr<ISamplerState> ISamplerStatePtr;
+typedef SharedPtr<IPointLight> IPointLightPtr;
 
 #include <Directx11/DX11Includes.h>
 
