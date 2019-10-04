@@ -207,11 +207,13 @@ void ExtractMaterialData(const IGraphicsPtr& graphics, const aiScene* scene, con
 }
 
 SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const string& directory, const IGraphicsPtr& graphics,
-	const IShaderPtr& vertexShader, const IShaderPtr& pixelShader)
+	const string& vertexShaderPath, const string& pixelShaderPath)
 {
 	SceneObjectPtr sceneObject(new SceneObject());
 	vector<IMeshPtr> meshes;
-	MaterialPtr defaultMaterial(new Material(vertexShader, pixelShader, graphics->CreateMaterialConstantBuffer()));
+	IShaderPtr defaultVertexShader = graphics->CreateShader(vertexShaderPath, nullptr, ShaderType::VERTEX_SHADER);
+	IShaderPtr defaultPixelShader = graphics->CreateShader(pixelShaderPath, nullptr, ShaderType::PIXEL_SHADER);
+	MaterialPtr defaultMaterial(new Material(defaultVertexShader, defaultPixelShader, graphics->CreateMaterialConstantBuffer()));
 	vector<MaterialPtr> materials;
 
 	for (unsigned int meshIndex = 0; meshIndex < node->mNumMeshes; meshIndex++)
@@ -223,6 +225,8 @@ SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const
 		MaterialPtr material = defaultMaterial;
 		if (scene->HasMaterials())
 		{
+			IShaderPtr vertexShader = graphics->CreateShader(vertexShaderPath, meshData.m_vertexData, ShaderType::VERTEX_SHADER);
+			IShaderPtr pixelShader = graphics->CreateShader(pixelShaderPath, nullptr, ShaderType::PIXEL_SHADER);
 			material.reset(new Material(vertexShader, pixelShader, graphics->CreateMaterialConstantBuffer()));
 			ExtractMaterialData(graphics, scene, mesh, directory, material);
 			ISamplerStatePtr samplerState = graphics->CreateSamplerState();
@@ -246,7 +250,7 @@ SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		SceneObjectPtr child = CreateSceneObject(scene, node->mChildren[i], directory, graphics, vertexShader, pixelShader);
+		SceneObjectPtr child = CreateSceneObject(scene, node->mChildren[i], directory, graphics, vertexShaderPath, pixelShaderPath);
 		child->SetParent(sceneObject);
 		sceneObject->AddChild(child);
 	}
@@ -270,9 +274,6 @@ SceneObjectPtr Loader::LoadModel(const string& path, const IGraphicsPtr& graphic
 	string vertexShaderPath = objectDescription["vertex_shader"];
 	string pixelShaderPath = objectDescription["pixel_shader"];
 
-	IShaderPtr vertexShader = graphics->CreateShader(vertexShaderPath, ShaderType::VERTEX_SHADER);
-	IShaderPtr pixelShader = graphics->CreateShader(pixelShaderPath, ShaderType::PIXEL_SHADER);
-
 	Assimp::Importer importer; 
 	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
@@ -280,6 +281,7 @@ SceneObjectPtr Loader::LoadModel(const string& path, const IGraphicsPtr& graphic
 		ERROR_LOG("ERROR::ASSIMP:: {}", error);
 		return false;
 	}
+
 	string directory = modelPath.substr(0, modelPath.find_last_of('/') + 1);
-	return CreateSceneObject(scene, scene->mRootNode, directory, graphics, vertexShader, pixelShader);
+	return CreateSceneObject(scene, scene->mRootNode, directory, graphics, vertexShaderPath, pixelShaderPath);
 }

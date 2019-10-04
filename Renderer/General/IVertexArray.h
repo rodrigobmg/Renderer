@@ -16,4 +16,5 @@ public:
 	virtual const byte* GetVertexData() const = 0;
 	virtual size_t GetBufferSize() const = 0;
 	virtual size_t GetStride() const = 0;
+	virtual const vector<VertexElement>& GetVertexElements() const = 0;
 };

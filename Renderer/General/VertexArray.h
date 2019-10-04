@@ -1,7 +1,6 @@
 #pragma once
 #include "IVertexArray.h"
 
-struct VertexElement;
 class VertexArray : public IVertexArray
 {
 public:
@@ -12,6 +11,7 @@ public:
 	virtual const byte* GetVertexData() const override { return m_vertexData; }
 	virtual size_t GetBufferSize() const override { return m_bufferSize; }
 	virtual size_t GetStride() const override { return m_bufferSize / m_vertexCount; }
+	virtual const vector<VertexElement>& GetVertexElements() const override { return m_vertexElements; }
 
 private:
 	vector<VertexElement>	m_vertexElements;

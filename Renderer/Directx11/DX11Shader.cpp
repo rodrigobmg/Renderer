@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "DX11Shader.h"
-#include "General/VertexArray.h"
+
+#include <General\VertexArray.h>
+#include <General\VertexElement.h>
+
 #include <d3dcompiler.h>
 
 static const char* kMainMethod = "main";
@@ -37,7 +40,7 @@ DX11Shader::~DX11Shader()
 	}
 }
 
-bool DX11Shader::Initialize(const char * shaderFilePath)
+bool DX11Shader::Initialize(const char * shaderFilePath, const IVertexArrayPtr& vertexArray)
 {
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* shaderBuffer;
@@ -101,16 +104,58 @@ bool DX11Shader::Initialize(const char * shaderFilePath)
 
 	if (m_type == ShaderType::VERTEX_SHADER)
 	{
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = 
+		if (vertexArray)
 		{
-			{"POSITION",	0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	0,	D3D11_INPUT_PER_VERTEX_DATA,	0},
-			{"NORMAL",		0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	12,	D3D11_INPUT_PER_VERTEX_DATA,	0},
-			{"TEXCOORD",	0,	DXGI_FORMAT_R32G32_FLOAT,		0,	24,	D3D11_INPUT_PER_VERTEX_DATA,	0}
-		};
+			const vector<VertexElement>& vertexElements = vertexArray->GetVertexElements();
+			D3D11_INPUT_ELEMENT_DESC* inputElementDesc = new D3D11_INPUT_ELEMENT_DESC[vertexElements.size()];
 
-		int numberOfElements = sizeof(inputElementDesc) / sizeof(inputElementDesc[0]);
-		result = m_device->CreateInputLayout(inputElementDesc, numberOfElements, shaderBuffer->GetBufferPointer(),
-			shaderBuffer->GetBufferSize(), &m_layout);
+			for (int i = 0; i < vertexElements.size(); i++)
+			{
+				inputElementDesc[i].SemanticName = vertexElements[i].m_name.c_str();
+				inputElementDesc[i].SemanticIndex = vertexElements[i].m_index;
+
+				switch (vertexElements[i].m_type)
+				{
+				case VertexElementType::FLOAT1:
+					inputElementDesc[i].Format = DXGI_FORMAT_R32_FLOAT;
+					break;
+				case VertexElementType::FLOAT2:
+					inputElementDesc[i].Format = DXGI_FORMAT_R32G32_FLOAT;
+					break;
+				case VertexElementType::FLOAT3:
+					inputElementDesc[i].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+					break;
+				case VertexElementType::FLOAT4:
+					inputElementDesc[i].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+					break;
+				default:
+					ERROR_LOG("Invalid vertex type");
+					return false;
+				}
+				inputElementDesc[i].InputSlot = 0;
+				inputElementDesc[i].AlignedByteOffset = vertexElements[i].m_offset;
+				inputElementDesc[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+				inputElementDesc[i].InstanceDataStepRate = 0;
+			}
+
+			UINT numberOfElements = static_cast<UINT>(vertexElements.size());
+			result = m_device->CreateInputLayout(inputElementDesc, numberOfElements, shaderBuffer->GetBufferPointer(),
+				shaderBuffer->GetBufferSize(), &m_layout);
+
+			delete[] inputElementDesc;
+		}
+		else
+		{
+			D3D11_INPUT_ELEMENT_DESC inputElementDesc[3] =
+			{
+				{"POSITION",	0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	0,	D3D11_INPUT_PER_VERTEX_DATA,	0},
+				{"NORMAL",		0,	DXGI_FORMAT_R32G32B32_FLOAT,	0,	12,	D3D11_INPUT_PER_VERTEX_DATA,	0},
+				{"TEXCOORD",	0,	DXGI_FORMAT_R32G32_FLOAT,		0,	24,	D3D11_INPUT_PER_VERTEX_DATA,	0}
+			};
+			int numberOfElements = sizeof(inputElementDesc) / sizeof(inputElementDesc[0]);
+			result = m_device->CreateInputLayout(inputElementDesc, numberOfElements, shaderBuffer->GetBufferPointer(),
+				shaderBuffer->GetBufferSize(), &m_layout);
+		}
 
 		if (FAILED(result))
 		{

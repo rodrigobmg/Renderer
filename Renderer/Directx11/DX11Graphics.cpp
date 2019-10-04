@@ -545,10 +545,10 @@ SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const uint16_t* indexData,
 	return indexArray;
 }
 
-IShaderPtr DX11Graphics::CreateShader(const string& path, ShaderType shaderType) const
+IShaderPtr DX11Graphics::CreateShader(const string& path, const IVertexArrayPtr& vertexArray, ShaderType shaderType) const
 {
 	IShaderPtr shader(new DX11Shader(m_device, m_deviceContext, shaderType));
-	if (shader->Initialize(path.c_str()))
+	if (shader->Initialize(path.c_str(), vertexArray))
 	{
 		return shader;
 	}
