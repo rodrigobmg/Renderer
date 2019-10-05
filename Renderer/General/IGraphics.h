@@ -14,7 +14,7 @@ public:
 	virtual void Shutdown() = 0;
 	virtual IVertexArrayPtr CreateVertexArray(size_t vertexCount, const byte* vertexData, const vector<VertexElement>& vertexElements) const = 0;
 	virtual IIndexArrayPtr CreateIndexArray(const uint16_t* indexData, size_t indexCount) const = 0;
-	virtual IShaderPtr CreateShader(const string& path, const IVertexArrayPtr& vertexArray, ShaderType shaderType) const = 0;
+	virtual IShaderPtr CreateShader(const string& path, ShaderType shaderType) const = 0;
 	virtual IMeshPtr CreateMesh(const IVertexArrayPtr& vertexData, const IIndexArrayPtr& indexData, PrimitiveType primitive) const = 0;
 	virtual IConstantBufferPtr CreateObjectConstantBuffer() const = 0;
 	virtual IConstantBufferPtr CreateMaterialConstantBuffer() const = 0;

@@ -2,6 +2,11 @@
 
 #include <General/IShader.h>
 
+struct ID3D11VertexShader;
+struct ID3D11DeviceContext;
+struct ID3D11Device;
+struct ID3D11InputLayout;
+struct ID3D11PixelShader;
 class DX11Shader : public IShader
 {
 public:
@@ -9,7 +14,7 @@ public:
 	DX11Shader(const DX11Shader&) = delete;
 	~DX11Shader();
 
-	virtual bool Initialize(const char* shaderFilePath, const IVertexArrayPtr& vertexArray) override;
+	virtual bool Initialize(const char* shaderFilePath) override;
 	virtual void Render() override;
 
 private:
