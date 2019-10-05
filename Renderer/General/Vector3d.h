@@ -1,6 +1,7 @@
 #pragma once
 
 class Vector4d;
+class Quaternion;
 class Vector3d
 {
 public:
@@ -9,6 +10,7 @@ public:
 	Vector3d(float x, float y, float z);
 	Vector3d(const Vector3d& other);
 	Vector3d(const DirectX::XMFLOAT3& other);
+	Vector3d(const DirectX::XMVECTOR& other);
 	Vector3d(const Vector4d& other);
 	Vector3d& operator=(const Vector3d& other);
 	Vector3d& operator*=(float rhs);
@@ -36,3 +38,4 @@ Vector3d operator*(const Vector3d& lhs, float rhs);
 Vector3d operator/(const Vector3d& lhs, float rhs);
 float Dot(const Vector3d& a, const Vector3d& b);
 Vector3d Normalize(const Vector3d& vector);
+Vector3d operator*(const Vector3d& lhs, const Quaternion& rhs);

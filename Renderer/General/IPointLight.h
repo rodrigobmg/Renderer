@@ -9,4 +9,5 @@ public:
 	virtual ~IPointLight() {}
 
 	virtual const Vector3d& GetPosition() const = 0;
+	virtual void SetPosition(const Vector3d& position) = 0;
 };

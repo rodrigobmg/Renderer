@@ -37,7 +37,7 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 		m_object->m_transform.m_scale *= 0.2f;
 	}
 
-	m_pointLight.reset(new PointLight(Color(1.0f), Vector3d(-10.0f, 10.0f, -50.0f), m_graphics));
+	m_pointLight.reset(new PointLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Vector3d(0.0f, 0.0f, -50.0f), m_graphics));
 	if (!m_pointLight)
 	{
 		m_ready &= false;
@@ -81,6 +81,7 @@ void Application::Render()
 	}
 }
 
+static const float kMousMoveMultiplier = 100.0f;
 void Application::Update()
 {
 	assert(m_ready);
@@ -121,6 +122,16 @@ void Application::Update()
 	if (m_firstMouseMove)
 	{
 		m_firstMouseMove = false;
+	}
+	else if(Input::GetMouseButtonDown(Input::MouseButtonType::kRight))
+	{
+		float deltaX = (x - m_mousePosX) / static_cast<float>(m_window->GetWindowWidth());
+		float deltaY = (y - m_mousePosY) / static_cast<float>(m_window->GetWindowHeight());
+
+		Quaternion rotation(Vector3d(Math::DEG2RAD * kMousMoveMultiplier * deltaY, Math::DEG2RAD * kMousMoveMultiplier * deltaX, 0.f));
+		Vector3d lightPosition = m_pointLight->GetPosition();
+		m_pointLight->SetPosition(lightPosition * rotation);
+
 	}
 
 	m_mousePosX = x;

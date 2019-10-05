@@ -15,6 +15,8 @@ public:
 	Quaternion& operator*=(const Quaternion& other);
 	~Quaternion() {}
 
+	operator DirectX::XMVECTOR() const { return m_quaternion; }
+
 private:
 	union
 	{

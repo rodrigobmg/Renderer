@@ -2,35 +2,43 @@
 #include "Vector3d.h"
 
 #include "Vector4d.h"
+#include "Quaternion.h"
 
 Vector3d::Vector3d()
-	:x(0.f)
-	,y(0.f)
-	,z(0.f)
+	: x(0.f)
+	, y(0.f)
+	, z(0.f)
 {
 }
 
 Vector3d::Vector3d(float x)
-	:x(x)
-	,y(x)
-	,z(x)
+	: x(x)
+	, y(x)
+	, z(x)
 {
 }
 
 Vector3d::Vector3d(float x, float y, float z)
-	:x(x)
-	,y(y)
-	,z(z)
+	: x(x)
+	, y(y)
+	, z(z)
 {
 }
 
 Vector3d::Vector3d(const Vector3d & other)
-	:m_vector(other.m_vector)
+	: m_vector(other.m_vector)
 {
 }
 
 Vector3d::Vector3d(const DirectX::XMFLOAT3 & other)
-	:m_vector(other)
+	: m_vector(other)
+{
+}
+
+Vector3d::Vector3d(const DirectX::XMVECTOR& other)
+	: x(other.m128_f32[0])
+	, y(other.m128_f32[1])
+	, z(other.m128_f32[2])
 {
 }
 
@@ -105,4 +113,9 @@ Vector3d Normalize(const Vector3d& vector)
 {
 	float length = vector.GetLength();
 	return vector / length;
+}
+
+Vector3d operator*(const Vector3d& lhs, const Quaternion& rhs)
+{
+	return DirectX::XMVector3Rotate(lhs, rhs);
 }

@@ -25,6 +25,12 @@ PointLight::PointLight(const Color & color, const Vector3d & position, const IGr
 	m_sceneObject->m_transform.m_position = m_position;
 }
 
+void PointLight::SetPosition(const Vector3d& position)
+{
+	m_position = position;
+	m_sceneObject->m_transform.m_position = m_position;
+}
+
 void PointLight::Render()
 {
 	m_sceneObject->Render();
