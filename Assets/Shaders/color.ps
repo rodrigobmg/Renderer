@@ -37,7 +37,7 @@ float4 main(PixelInputType input) : SV_TARGET
 	float intensity = clamp(dot(normalize(input.normal), pixelToLight),0,1);
 	float4 textureColor = diffuseTexture.Sample(sampleType, input.uv);
 
-	float3 ambient = pointLight[0].color.xyz * ambientStrength;
+	float3 ambient = textureColor.xyz * ambientStrength;
 	float3 diffuse = textureColor.xyz * intensity;
 
 	float specularStrength = specularTexture.Sample(sampleType, input.uv).x;

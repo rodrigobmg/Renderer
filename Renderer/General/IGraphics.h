@@ -20,4 +20,6 @@ public:
 	virtual IConstantBufferPtr CreateMaterialConstantBuffer() const = 0;
 	virtual ITexturePtr CreateTexture(const BitmapPtr& bitmap) const = 0;
 	virtual ISamplerStatePtr CreateSamplerState() const = 0;
+	virtual ICameraPtr CreateCamera() const = 0;
+	virtual void SetActiveCamera(const ICameraPtr& camera) = 0;
 };

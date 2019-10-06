@@ -54,3 +54,10 @@ Quaternion& Quaternion::operator*=(const Quaternion& other)
 	m_quaternion = DirectX::XMQuaternionMultiply(m_quaternion, other.m_quaternion);
 	return *this;
 }
+
+Quaternion operator*(const Quaternion& lhs, const Quaternion& rhs)
+{
+	Quaternion local = lhs;
+	local *= rhs;
+	return local;
+}

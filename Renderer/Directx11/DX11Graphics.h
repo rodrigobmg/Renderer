@@ -24,6 +24,8 @@ public:
 	virtual ITexturePtr CreateTexture(const BitmapPtr& bitmap) const override;
 	virtual ISamplerStatePtr CreateSamplerState() const override;
 	virtual IConstantBufferPtr CreateMaterialConstantBuffer() const override;
+	virtual ICameraPtr CreateCamera() const;
+	virtual void SetActiveCamera(const ICameraPtr& camera) { m_activeCamera = camera; }
 
 private:
 	UniquePtr<ID3D11Device>			m_device;
@@ -34,7 +36,7 @@ private:
 	ID3D11DepthStencilState*		m_depthStencilState;
 	ID3D11DepthStencilView*			m_depthStencilView;
 	ID3D11RasterizerState*			m_rasterState;
-	ICamera*						m_camera;
+	mutable ICameraPtr				m_activeCamera;
 	Matrix4d						m_projectionMatrix;
 	Matrix4d						m_orthoMatrix;
 	SharedPtr<IConstantBuffer>		m_frameConstantBuffer;

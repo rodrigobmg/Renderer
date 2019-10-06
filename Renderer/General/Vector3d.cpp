@@ -4,6 +4,10 @@
 #include "Vector4d.h"
 #include "Quaternion.h"
 
+const Vector3d Vector3d::kUp(0.0f, 1.0f, 0.0f);
+const Vector3d Vector3d::kForward(0.0f, 0.0f, 1.0f);
+const Vector3d Vector3d::kSide(1.0f, 0.0f, 0.0f);
+
 Vector3d::Vector3d()
 	: x(0.f)
 	, y(0.f)
@@ -49,9 +53,25 @@ Vector3d::Vector3d(const Vector4d & other)
 {
 }
 
-Vector3d & Vector3d::operator=(const Vector3d & other)
+Vector3d & Vector3d::operator=(const Vector3d & rhs)
 {
-	m_vector = other.m_vector;
+	m_vector = rhs.m_vector;
+	return *this;
+}
+
+Vector3d& Vector3d::operator+=(const Vector3d& rhs)
+{
+	x += rhs.x;
+	y += rhs.y;
+	z += rhs.z;
+	return *this;
+}
+
+Vector3d& Vector3d::operator-=(const Vector3d& rhs)
+{
+	x -= rhs.x;
+	y -= rhs.y;
+	z -= rhs.z;
 	return *this;
 }
 

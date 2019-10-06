@@ -27,3 +27,5 @@ private:
 		};
 	};
 };
+
+Quaternion operator*(const Quaternion& lhs, const Quaternion& rhs);

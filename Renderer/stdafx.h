@@ -66,6 +66,7 @@ typedef SharedPtr<Bitmap> BitmapPtr;
 typedef SharedPtr<ITexture> ITexturePtr;
 typedef SharedPtr<ISamplerState> ISamplerStatePtr;
 typedef SharedPtr<IPointLight> IPointLightPtr;
+typedef SharedPtr<ICamera> ICameraPtr;
 
 #include <Directx11/DX11Includes.h>
 

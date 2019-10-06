@@ -10,6 +10,9 @@ public:
 	virtual void Run() override;
 	void Render();
 	virtual void Update() override;
+	void MoveCamera(int x, int y);
+	void RotateLight(int x, int y);
+	void RotateObject();
 	virtual bool IsReady() const override { return m_ready; }
 
 private:
@@ -17,6 +20,7 @@ private:
 	IGraphicsPtr	m_graphics;
 	SceneObjectPtr	m_object;
 	IPointLightPtr	m_pointLight;
+	ICameraPtr		m_camera;
 	int				m_mousePosX;
 	int				m_mousePosY;
 	bool			m_firstMouseMove;

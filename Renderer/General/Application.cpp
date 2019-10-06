@@ -5,9 +5,10 @@
 #include "SceneObject.h"
 #include "Window.h"
 #include "PointLight.h"
+#include "Loader.h"
+#include "ICamera.h"
 
 #include <Directx11/DX11Graphics.h>
-#include <General/Loader.h>
 
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
@@ -25,22 +26,26 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 	m_graphics.reset(new DX11Graphics());
 	m_ready = m_graphics->Initialize(m_window, windowWidth, windowHeight, kVsyncEnabled, kFullscreen, kScreenDepth, kScreenNear);
 
-	m_object = Loader::LoadModel("Assets/cube.object", m_graphics);
+	m_camera = m_graphics->CreateCamera();
+	if (!m_camera)
+	{
+		m_ready = false;
+		return;
+	}
 
+	m_object = Loader::LoadModel("Assets/cube.object", m_graphics);
 	if (!m_object)
 	{
-		m_ready &= false;
+		m_ready = false;
+		return;
 	}
-
-	if (m_object)
-	{
-		m_object->m_transform.m_scale *= 0.2f;
-	}
+	m_object->m_transform.m_scale *= 0.2f;
 
 	m_pointLight.reset(new PointLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Vector3d(0.0f, 0.0f, -50.0f), m_graphics));
 	if (!m_pointLight)
 	{
-		m_ready &= false;
+		m_ready = false;
+		return;
 	}
 
 	assert(m_window);
@@ -81,7 +86,7 @@ void Application::Render()
 	}
 }
 
-static const float kMousMoveMultiplier = 100.0f;
+static const float kMousMoveMultiplier = Math::DEG2RAD * 100.0f;
 void Application::Update()
 {
 	assert(m_ready);
@@ -90,50 +95,94 @@ void Application::Update()
 		m_window->Close();
 	}
 
+	RotateObject();
+
+	int x, y;
+	Input::GetMousePosition(x, y);
+	if (m_firstMouseMove)
+	{
+		m_firstMouseMove = false;
+		m_mousePosX = x;
+		m_mousePosY = y;
+	}
+	
+	if(Input::GetMouseButtonDown(Input::MouseButtonType::kRight))
+	{
+		RotateLight(x, y);
+	}
+
+	MoveCamera(x, y);
+
+	m_mousePosX = x;
+	m_mousePosY = y;
+}
+
+void Application::MoveCamera(int x, int y)
+{
+	Transform cameraTransform = m_camera->GetTransform();
+	if (Input::GetMouseButtonDown(Input::MouseButtonType::kLeft))
+	{
+		float deltaX = (x - m_mousePosX) / static_cast<float>(m_window->GetWindowWidth());
+		float deltaY = (y - m_mousePosY) / static_cast<float>(m_window->GetWindowHeight());
+
+		Quaternion deltaRotation(Vector3d(kMousMoveMultiplier * deltaY, kMousMoveMultiplier * deltaX, 0.f));
+		cameraTransform.m_orientation = deltaRotation * cameraTransform.m_orientation;
+	}
+
+	Vector3d forward = Vector3d::kForward * cameraTransform.m_orientation;
+	Vector3d side = Vector3d::kSide * cameraTransform.m_orientation;
+	if (Input::GetKeyDown(Input::Keys::KEY_W))
+	{
+		cameraTransform.m_position += forward;
+	}
+	if (Input::GetKeyDown(Input::Keys::KEY_S))
+	{
+		cameraTransform.m_position -= forward;
+	}
+	if (Input::GetKeyDown(Input::Keys::KEY_A))
+	{
+		cameraTransform.m_position -= side;
+	}
+	if (Input::GetKeyDown(Input::Keys::KEY_D))
+	{
+		cameraTransform.m_position += side;
+	}
+	m_camera->SetTransform(cameraTransform);
+}
+
+void Application::RotateLight(int x, int y)
+{
+	float deltaX = (x - m_mousePosX) / static_cast<float>(m_window->GetWindowWidth());
+	float deltaY = (y - m_mousePosY) / static_cast<float>(m_window->GetWindowHeight());
+
+	Quaternion deltaRotation(Vector3d(Math::DEG2RAD * kMousMoveMultiplier * deltaY, Math::DEG2RAD * kMousMoveMultiplier * deltaX, 0.f));
+	Vector3d lightPosition = m_pointLight->GetPosition();
+	m_pointLight->SetPosition(lightPosition * deltaRotation);
+}
+
+void Application::RotateObject()
+{
+	Vector3d delta;
 	if (Input::GetKeyDown(Input::KEY_UP))
 	{
-		Vector3d delta(Math::DEG2RAD, 0.0f, 0.0f);
-		m_object->m_transform.m_orientation *= Quaternion(delta);
+		delta.x = Math::DEG2RAD;
 	}
 	if (Input::GetKeyDown(Input::KEY_DOWN))
 	{
-		Vector3d delta(-Math::DEG2RAD, 0.0f, 0.0f);
-		m_object->m_transform.m_orientation *= Quaternion(delta);
+		delta.x = -Math::DEG2RAD;
 	}
 	if (Input::GetKeyDown(Input::KEY_LEFT))
 	{
-		Vector3d delta(0.0f, Math::DEG2RAD, 0.0f);
-		m_object->m_transform.m_orientation *= Quaternion(delta);
+		delta.y = Math::DEG2RAD;
 	}
 	if (Input::GetKeyDown(Input::KEY_RIGHT))
 	{
-		Vector3d delta(0.0f, -Math::DEG2RAD, 0.0f);
-		m_object->m_transform.m_orientation *= Quaternion(delta);
+		delta.y = -Math::DEG2RAD;
 	}
 	if (Input::GetKeyDown(Input::KEY_R))
 	{
 		m_object->m_transform.m_orientation = Quaternion();
 	}
 
-	int x, y;
-	Input::GetMousePosition(x, y);
-
-
-	if (m_firstMouseMove)
-	{
-		m_firstMouseMove = false;
-	}
-	else if(Input::GetMouseButtonDown(Input::MouseButtonType::kRight))
-	{
-		float deltaX = (x - m_mousePosX) / static_cast<float>(m_window->GetWindowWidth());
-		float deltaY = (y - m_mousePosY) / static_cast<float>(m_window->GetWindowHeight());
-
-		Quaternion rotation(Vector3d(Math::DEG2RAD * kMousMoveMultiplier * deltaY, Math::DEG2RAD * kMousMoveMultiplier * deltaX, 0.f));
-		Vector3d lightPosition = m_pointLight->GetPosition();
-		m_pointLight->SetPosition(lightPosition * rotation);
-
-	}
-
-	m_mousePosX = x;
-	m_mousePosY = y;
+	m_object->m_transform.m_orientation *= Quaternion(delta);
 }

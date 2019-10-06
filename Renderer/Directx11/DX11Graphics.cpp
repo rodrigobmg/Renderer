@@ -28,7 +28,7 @@ DX11Graphics::DX11Graphics()
 	, m_depthStencilState(nullptr)
 	, m_depthStencilView(nullptr)
 	, m_rasterState(nullptr)
-	, m_camera(nullptr)
+	, m_activeCamera(nullptr)
 	, m_frameConstantBufferData(nullptr)
 	, m_vsyncEnabled(false)
 	, m_graphicsDeviceMemory(0)
@@ -398,18 +398,6 @@ bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int scr
 	float fieldOfView = Math::PI / 4.0f;
 	float screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
 
-	// Create the camera object.
-	m_camera = new Camera();
-	if (!m_camera)
-	{
-		return false;
-	}
-
-	// Set the initial position of the camera.
-	Transform transform;
-	transform.m_position = Vector3d(0.0f, 10.0f, -80.0f);
-	m_camera->SetTransform(transform);
-
 	m_frameConstantBuffer.reset(new DX11FrameConstantBuffer(m_device, m_deviceContext));
 	m_frameConstantBufferData = new FrameConstantBufferData();
 
@@ -433,12 +421,12 @@ void DX11Graphics::StartRender(const vector<IPointLightPtr>& pointLights)
 
 
 	// Get the view, and projection matrices and set them in the per frame constant buffer
-	m_frameConstantBufferData->m_view = MatrixTranspose(m_camera->GetViewMatrix());
+	m_frameConstantBufferData->m_view = MatrixTranspose(m_activeCamera->GetViewMatrix());
 
 
 	m_frameConstantBufferData->m_pointLightData[0].m_color = pointLights[0]->GetColor();
 	m_frameConstantBufferData->m_pointLightData[0].m_position = pointLights[0]->GetPosition();
-	m_frameConstantBufferData->m_cameraPosition = m_camera->GetTransform().m_position;
+	m_frameConstantBufferData->m_cameraPosition = m_activeCamera->GetTransform().m_position;
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
 }
@@ -469,13 +457,6 @@ void DX11Graphics::Shutdown()
 	if (m_frameConstantBufferData)
 	{
 		delete m_frameConstantBufferData;
-	}
-
-	// Release the camera object.
-	if (m_camera)
-	{
-		delete m_camera;
-		m_camera = nullptr;
 	}
 
 	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
@@ -593,4 +574,14 @@ ISamplerStatePtr DX11Graphics::CreateSamplerState() const
 IConstantBufferPtr DX11Graphics::CreateMaterialConstantBuffer() const
 {
 	return IConstantBufferPtr(new DX11MaterialConstantBuffer(m_device, m_deviceContext));
+}
+
+ICameraPtr DX11Graphics::CreateCamera() const
+{
+	ICameraPtr camera(new Camera());
+	if (!m_activeCamera)
+	{
+		m_activeCamera = camera;
+	}
+	return camera;
 }
