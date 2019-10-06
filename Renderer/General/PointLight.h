@@ -1,7 +1,9 @@
 #pragma once
 
 #include "IPointLight.h"
-#include <General/Vector3d.h>
+
+#include "Vector3d.h"
+#include "Quaternion.h"
 
 class PointLight : public IPointLight
 {
@@ -11,8 +13,10 @@ public:
 	PointLight(const PointLight&) = delete;
 	~PointLight() {}
 
-	virtual const Vector3d& GetPosition() const override { return m_position; }
+	virtual const Vector3d& GetWorldPosition() const override { return m_worldPosition; }
 	virtual void SetPosition(const Vector3d& position) override;
+	virtual const Quaternion& GetRotationAroundOrigin() const override { return m_rotationAroundOrigin; }
+	virtual void SetRotationAroundOrigin(const Quaternion& rotation) override;
 
 	virtual void SetColor(const Color& color) override { m_color = color; }
 	virtual const Color& GetColor() const override { return m_color; }
@@ -22,5 +26,7 @@ public:
 private:
 	SceneObjectPtr	m_sceneObject;
 	Color			m_color;
+	Quaternion		m_rotationAroundOrigin;
 	Vector3d		m_position;
+	Vector3d		m_worldPosition;
 };

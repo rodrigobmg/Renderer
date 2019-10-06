@@ -425,7 +425,7 @@ void DX11Graphics::StartRender(const vector<IPointLightPtr>& pointLights)
 
 
 	m_frameConstantBufferData->m_pointLightData[0].m_color = pointLights[0]->GetColor();
-	m_frameConstantBufferData->m_pointLightData[0].m_position = pointLights[0]->GetPosition();
+	m_frameConstantBufferData->m_pointLightData[0].m_position = pointLights[0]->GetWorldPosition();
 	m_frameConstantBufferData->m_cameraPosition = m_activeCamera->GetTransform().m_position;
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);

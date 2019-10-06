@@ -155,9 +155,9 @@ void Application::RotateLight(int x, int y)
 	float deltaX = (x - m_mousePosX) / static_cast<float>(m_window->GetWindowWidth());
 	float deltaY = (y - m_mousePosY) / static_cast<float>(m_window->GetWindowHeight());
 
-	Quaternion deltaRotation(Vector3d(Math::DEG2RAD * kMousMoveMultiplier * deltaY, Math::DEG2RAD * kMousMoveMultiplier * deltaX, 0.f));
-	Vector3d lightPosition = m_pointLight->GetPosition();
-	m_pointLight->SetPosition(lightPosition * deltaRotation);
+	Quaternion deltaRotation(Vector3d(kMousMoveMultiplier * deltaY, kMousMoveMultiplier * deltaX, 0.f));
+	const Quaternion& lightRotation = m_pointLight->GetRotationAroundOrigin();
+	m_pointLight->SetRotationAroundOrigin(deltaRotation * lightRotation);
 }
 
 void Application::RotateObject()

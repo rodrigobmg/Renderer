@@ -58,6 +58,7 @@ Window::Window(HINSTANCE hInstance, int windowWidth, int windowHeight, const cha
 	ShowCursor(false);
 
 	Window::s_instance = this;
+	SetCapture(m_hwnd);
 }
 
 Window::~Window()
@@ -73,6 +74,7 @@ Window::~Window()
 	// Remove the application instance.
 	UnregisterClass(m_applicationName, m_hinstance);
 	m_hinstance = NULL;
+	ReleaseCapture();
 }
 
 bool Window::Closed() const
@@ -92,20 +94,8 @@ void Window::ProcessInputs()
 
 void Window::Close()
 {
-	ReleaseMouse();
-	DestroyWindow(m_hwnd);
-}
-
-void Window::CaptureMouse()
-{
-	
-	ReleaseMouse();
-	SetCapture(m_hwnd);
-}
-
-void Window::ReleaseMouse()
-{
 	ReleaseCapture();
+	DestroyWindow(m_hwnd);
 }
 
 LRESULT CALLBACK Window::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
@@ -136,25 +126,21 @@ LRESULT CALLBACK Window::HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM w
 	}
 	case WM_LBUTTONDOWN:
 	{
-		Window::s_instance->CaptureMouse();
 		Input::SetMouseButtonDown(true, Input::MouseButtonType::kLeft);
 		return 0;
 	}
 	case WM_LBUTTONUP:
 	{
-		Window::s_instance->ReleaseMouse();
 		Input::SetMouseButtonDown(false, Input::MouseButtonType::kLeft);
 		return 0;
 	}
 	case WM_RBUTTONDOWN:
 	{
-		Window::s_instance->CaptureMouse();
 		Input::SetMouseButtonDown(true, Input::MouseButtonType::kRight);
 		return 0;
 	}
 	case WM_RBUTTONUP:
 	{
-		Window::s_instance->ReleaseMouse();
 		Input::SetMouseButtonDown(false, Input::MouseButtonType::kRight);
 		return 0;
 	}

@@ -19,8 +19,6 @@ public:
 	virtual int GetWindowHeight() const override { return m_windowHeight; }
 
 private:
-	void CaptureMouse();
-	void ReleaseMouse();
 	static LRESULT CALLBACK HandleWindowMessages(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 
 	static Window*	s_instance;
