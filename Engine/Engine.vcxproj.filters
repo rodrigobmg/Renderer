@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="General\Application\IApplication.h">
+      <Filter>General\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Application\IInputMap.h">
+      <Filter>General\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Application\Input.h">
+      <Filter>General\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Application\IWindow.h">
+      <Filter>General\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Application\Window.h">
+      <Filter>General\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\Bitmap.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\Camera.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\FrameConstantBuffer.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\ICamera.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IConstantBuffer.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IGraphics.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IIndexArray.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\ILight.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IMesh.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IndexArray.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IPointLight.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IRenderer.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\ISamplerState.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IShader.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\ITexture.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IVertexArray.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\Loader.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\Material.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\MaterialConstantBuffer.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\ObjectConstantBuffer.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\PointLight.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\SceneObject.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\VertexArray.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\VertexElement.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Color.h">
+      <Filter>General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Math.h">
+      <Filter>General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Matrix4d.h">
+      <Filter>General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Quaternion.h">
+      <Filter>General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Transform.h">
+      <Filter>General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Vector2d.h">
+      <Filter>General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Vector3d.h">
+      <Filter>General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Math\Vector4d.h">
+      <Filter>General\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\DX11Includes.h">
+      <Filter>Directx11</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Application\DX11InputMap.h">
+      <Filter>Directx11\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Graphics\DX11ConstantBuffer.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Graphics\DX11FrameConstantBuffer.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Graphics\DX11Graphics.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Graphics\DX11MaterialConstantBuffer.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Graphics\DX11Mesh.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Graphics\DX11ObjectConstantBuffer.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Graphics\DX11SamplerState.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Graphics\DX11Shader.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Directx11\Graphics\DX11Texture.h">
+      <Filter>Directx11\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineDefines.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="General\Application\Input.cpp">
+      <Filter>General\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Application\Window.cpp">
+      <Filter>General\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\Bitmap.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\Camera.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\IndexArray.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\Loader.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\Material.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\PointLight.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\SceneObject.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\VertexArray.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\VertexElement.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Matrix4d.cpp">
+      <Filter>General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Quaternion.cpp">
+      <Filter>General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Transform.cpp">
+      <Filter>General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Vector2d.cpp">
+      <Filter>General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Vector3d.cpp">
+      <Filter>General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Math\Vector4d.cpp">
+      <Filter>General\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Application\DX11InputMap.cpp">
+      <Filter>Directx11\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Graphics\DX11ConstantBuffer.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Graphics\DX11FrameConstantBuffer.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Graphics\DX11Graphics.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Graphics\DX11MaterialConstantBuffer.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Graphics\DX11Mesh.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Graphics\DX11ObjectConstantBuffer.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Graphics\DX11SamplerState.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Graphics\DX11Shader.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx11\Graphics\DX11Texture.cpp">
+      <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="General">
+      <UniqueIdentifier>{ecaa1613-0e7a-44f3-911b-50ce0b301763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Application">
+      <UniqueIdentifier>{fd70aff9-8e2b-48cf-bac0-d533fd033c0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Graphics">
+      <UniqueIdentifier>{3b9176b6-51cb-441c-a98a-21dadd300fbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Math">
+      <UniqueIdentifier>{21769dfd-9796-49ff-9cb0-0b80ab248656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Directx11">
+      <UniqueIdentifier>{2abf439a-418e-4e0e-b8b1-2876d4f43100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Directx11\Application">
+      <UniqueIdentifier>{e021c0cc-4cd6-43bd-8163-bda1a9c361b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Directx11\Graphics">
+      <UniqueIdentifier>{1fec1cbc-4643-461f-af55-70ef34891838}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Directx11\Graphics\Shaders">
+      <UniqueIdentifier>{7758d2e6-c0ed-41fd-9429-f0f62a3bc9b4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="..\Assets\Shaders\color.ps">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </None>
+    <None Include="..\Assets\Shaders\color.vs">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </None>
+    <None Include="..\Assets\Shaders\light.ps">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </None>
+    <None Include="..\Assets\Shaders\light.vs">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

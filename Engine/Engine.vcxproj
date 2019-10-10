@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{9D806AD9-BFD3-45BB-BF51-1C091549F0BE}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Output\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)Intermediates\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Output\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)Intermediates\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\Externals\</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)Externals;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;Assimp/assimp-vc140-mt.lib;spdlog/spdlog.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\Externals\</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)Externals;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;Assimp/assimp-vc140-mt.lib;spdlog/spdlog.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Directx11\Application\DX11InputMap.h" />
+    <ClInclude Include="Directx11\DX11Includes.h" />
+    <ClInclude Include="Directx11\Graphics\DX11ConstantBuffer.h" />
+    <ClInclude Include="Directx11\Graphics\DX11FrameConstantBuffer.h" />
+    <ClInclude Include="Directx11\Graphics\DX11Graphics.h" />
+    <ClInclude Include="Directx11\Graphics\DX11MaterialConstantBuffer.h" />
+    <ClInclude Include="Directx11\Graphics\DX11Mesh.h" />
+    <ClInclude Include="Directx11\Graphics\DX11ObjectConstantBuffer.h" />
+    <ClInclude Include="Directx11\Graphics\DX11SamplerState.h" />
+    <ClInclude Include="Directx11\Graphics\DX11Shader.h" />
+    <ClInclude Include="Directx11\Graphics\DX11Texture.h" />
+    <ClInclude Include="EngineDefines.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="General\Application\IApplication.h" />
+    <ClInclude Include="General\Application\IInputMap.h" />
+    <ClInclude Include="General\Application\Input.h" />
+    <ClInclude Include="General\Application\IWindow.h" />
+    <ClInclude Include="General\Application\Window.h" />
+    <ClInclude Include="General\Graphics\Bitmap.h" />
+    <ClInclude Include="General\Graphics\Camera.h" />
+    <ClInclude Include="General\Graphics\FrameConstantBuffer.h" />
+    <ClInclude Include="General\Graphics\ICamera.h" />
+    <ClInclude Include="General\Graphics\IConstantBuffer.h" />
+    <ClInclude Include="General\Graphics\IGraphics.h" />
+    <ClInclude Include="General\Graphics\IIndexArray.h" />
+    <ClInclude Include="General\Graphics\ILight.h" />
+    <ClInclude Include="General\Graphics\IMesh.h" />
+    <ClInclude Include="General\Graphics\IndexArray.h" />
+    <ClInclude Include="General\Graphics\IPointLight.h" />
+    <ClInclude Include="General\Graphics\IRenderer.h" />
+    <ClInclude Include="General\Graphics\ISamplerState.h" />
+    <ClInclude Include="General\Graphics\IShader.h" />
+    <ClInclude Include="General\Graphics\ITexture.h" />
+    <ClInclude Include="General\Graphics\IVertexArray.h" />
+    <ClInclude Include="General\Graphics\Loader.h" />
+    <ClInclude Include="General\Graphics\Material.h" />
+    <ClInclude Include="General\Graphics\MaterialConstantBuffer.h" />
+    <ClInclude Include="General\Graphics\ObjectConstantBuffer.h" />
+    <ClInclude Include="General\Graphics\PointLight.h" />
+    <ClInclude Include="General\Graphics\SceneObject.h" />
+    <ClInclude Include="General\Graphics\VertexArray.h" />
+    <ClInclude Include="General\Graphics\VertexElement.h" />
+    <ClInclude Include="General\Math\Color.h" />
+    <ClInclude Include="General\Math\Math.h" />
+    <ClInclude Include="General\Math\Matrix4d.h" />
+    <ClInclude Include="General\Math\Quaternion.h" />
+    <ClInclude Include="General\Math\Transform.h" />
+    <ClInclude Include="General\Math\Vector2d.h" />
+    <ClInclude Include="General\Math\Vector3d.h" />
+    <ClInclude Include="General\Math\Vector4d.h" />
+    <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Directx11\Application\DX11InputMap.cpp" />
+    <ClCompile Include="Directx11\Graphics\DX11ConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\Graphics\DX11FrameConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\Graphics\DX11Graphics.cpp" />
+    <ClCompile Include="Directx11\Graphics\DX11MaterialConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\Graphics\DX11Mesh.cpp" />
+    <ClCompile Include="Directx11\Graphics\DX11ObjectConstantBuffer.cpp" />
+    <ClCompile Include="Directx11\Graphics\DX11SamplerState.cpp" />
+    <ClCompile Include="Directx11\Graphics\DX11Shader.cpp" />
+    <ClCompile Include="Directx11\Graphics\DX11Texture.cpp" />
+    <ClCompile Include="General\Application\Input.cpp" />
+    <ClCompile Include="General\Application\Window.cpp" />
+    <ClCompile Include="General\Graphics\Bitmap.cpp" />
+    <ClCompile Include="General\Graphics\Camera.cpp" />
+    <ClCompile Include="General\Graphics\IndexArray.cpp" />
+    <ClCompile Include="General\Graphics\Loader.cpp" />
+    <ClCompile Include="General\Graphics\Material.cpp" />
+    <ClCompile Include="General\Graphics\PointLight.cpp" />
+    <ClCompile Include="General\Graphics\SceneObject.cpp" />
+    <ClCompile Include="General\Graphics\VertexArray.cpp" />
+    <ClCompile Include="General\Graphics\VertexElement.cpp" />
+    <ClCompile Include="General\Math\Matrix4d.cpp" />
+    <ClCompile Include="General\Math\Quaternion.cpp" />
+    <ClCompile Include="General\Math\Transform.cpp" />
+    <ClCompile Include="General\Math\Vector2d.cpp" />
+    <ClCompile Include="General\Math\Vector3d.cpp" />
+    <ClCompile Include="General\Math\Vector4d.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Assets\Shaders\color.ps" />
+    <None Include="..\Assets\Shaders\color.vs" />
+    <None Include="..\Assets\Shaders\light.ps" />
+    <None Include="..\Assets\Shaders\light.vs" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\nlohmann.json.3.7.0\build\native\nlohmann.json.targets" Condition="Exists('..\packages\nlohmann.json.3.7.0\build\native\nlohmann.json.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\nlohmann.json.3.7.0\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nlohmann.json.3.7.0\build\native\nlohmann.json.targets'))" />
+  </Target>
+</Project>
