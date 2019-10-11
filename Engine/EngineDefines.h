@@ -51,3 +51,4 @@ typedef SharedPtr<ICamera> ICameraPtr;
 
 #define ERROR_LOG(...) SPDLOG_ERROR(__VA_ARGS__)
 #define DEBUG_LOG(...) SPDLOG_DEBUG(__VA_ARGS__)
+#define INFO_LOG(...) SPDLOG_INFO(__VA_ARGS__)

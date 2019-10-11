@@ -1,17 +1,26 @@
 #ifndef PCH_H
 #define PCH_H
 
+#define NOMINMAX
 #ifdef _DEBUG
 #define SPDLOG_ACTIVE_LEVEL 0
 #endif // _DEBUG
 
+#include <string>
+#include <memory>
+#include <vector>
 #include <iostream>
 #include <filesystem>
 
-#include <Externals/spdlog/spdlog.h>
-#include <Externals/spdlog/sinks/msvc_sink.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_sinks.h>
 
-#define ERROR_LOG(...) SPDLOG_ERROR(__VA_ARGS__)
-#define DEBUG_LOG(...) SPDLOG_DEBUG(__VA_ARGS__)
+#include <General/Math/Math.h>
+
+#include <EngineDefines.h>
+
+#include <Directx11/DX11Includes.h>
+
+namespace fs = std::filesystem;
 
 #endif //PCH_H

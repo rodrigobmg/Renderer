@@ -20,7 +20,6 @@ Window::Window(HINSTANCE hInstance, int windowWidth, int windowHeight, const cha
 
 	// Get the instance of this application.
 	m_hinstance = hInstance;
-	ERROR_LOG("Error: {}", GetLastError());
 
 	// Setup the windows class with default settings.
 	wc.style = CS_HREDRAW | CS_VREDRAW;

@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include "ShaderCompiler.h"
+
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 
@@ -9,25 +11,31 @@ int main(int argc, char *argv[])
 
 #ifdef _DEBUG
 	//Setup logger
-	spdlog::set_default_logger(std::make_shared<spdlog::logger>("msvc_logger", std::make_shared<spdlog::sinks::msvc_sink_mt>()));
+	spdlog::set_default_logger(std::make_shared<spdlog::logger>("assetmanager_logger", std::make_shared<spdlog::sinks::stdout_sink_mt>()));
 #endif // _DEBUG
 
-	using namespace std;
-	using namespace filesystem;
 	if (argc == 3)
 	{
-		path inputPath(argv[1]);
-		path outputPath(argv[2]);
+		fs::path inputPath(argv[1]);
+		fs::path outputPath(argv[2]);
 		try
 		{
-			if (exists(outputPath))
+			if (fs::exists(outputPath))
 			{
-				remove_all(outputPath);
+				fs::remove_all(outputPath);
 			}
-			copy(inputPath, outputPath, copy_options::recursive | copy_options::overwrite_existing);
+
+			INFO_LOG("Compiling Shaders");
+			if (!ShaderCompiler::CompileShaders(inputPath))
+			{
+				return -1;
+			}
+
+			INFO_LOG("Copying Files");
+			copy(inputPath, outputPath, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
 			return 0;
 		}
-		catch (const exception& ex)
+		catch (const std::exception& ex)
 		{
 			ERROR_LOG("Error processing files {}", ex.what());
 			return -1;
