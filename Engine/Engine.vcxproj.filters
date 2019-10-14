@@ -273,5 +273,16 @@
     <None Include="..\Assets\Shaders\light.vs">
       <Filter>Directx11\Graphics\Shaders</Filter>
     </None>
+    <None Include="..\Assets\Shaders\inputtypes.inc">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Assets\Shaders\structs.inc">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </Text>
+    <Text Include="..\Assets\Shaders\constantbuffers.inc">
+      <Filter>Directx11\Graphics\Shaders</Filter>
+    </Text>
   </ItemGroup>
 </Project>

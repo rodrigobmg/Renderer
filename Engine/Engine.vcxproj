@@ -188,9 +188,14 @@
   <ItemGroup>
     <None Include="..\Assets\Shaders\color.ps" />
     <None Include="..\Assets\Shaders\color.vs" />
+    <None Include="..\Assets\Shaders\inputtypes.inc" />
     <None Include="..\Assets\Shaders\light.ps" />
     <None Include="..\Assets\Shaders\light.vs" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Assets\Shaders\constantbuffers.inc" />
+    <Text Include="..\Assets\Shaders\structs.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
