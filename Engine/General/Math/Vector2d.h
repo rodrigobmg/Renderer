@@ -25,3 +25,14 @@ public:
 };
 
 Vector2d operator+(const Vector2d& v1, const Vector2d& v2);
+
+class VectorInt2d
+{
+public:
+	VectorInt2d()
+		: x(0)
+		, y(0)
+	{}
+
+	int x, y;
+};

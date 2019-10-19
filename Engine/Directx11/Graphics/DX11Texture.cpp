@@ -26,18 +26,47 @@ DX11Texture::~DX11Texture()
 	}
 }
 
-DXGI_FORMAT GetFormat(int numChannels)
+DXGI_FORMAT GetFormat(int numChannels, Bitmap::DataFormat format)
 {
 	switch (numChannels)
 	{
 	case 1:
-		return DXGI_FORMAT_R32_FLOAT;
+		if (format == Bitmap::DataFormat::FLOAT)
+		{
+			return DXGI_FORMAT_R32_FLOAT;
+		}
+		else
+		{
+			return DXGI_FORMAT_R8_UINT;
+		}
 	case 2:
-		return DXGI_FORMAT_R32G32_FLOAT;
+		if (format == Bitmap::DataFormat::FLOAT)
+		{
+			return DXGI_FORMAT_R32G32_FLOAT;
+		}
+		else
+		{
+			return DXGI_FORMAT_R8G8_UINT;
+		}
 	case 3:
-		return DXGI_FORMAT_R32G32B32_FLOAT;
+		if (format == Bitmap::DataFormat::FLOAT)
+		{
+			return DXGI_FORMAT_R32G32B32_FLOAT;
+		}
+		else
+		{
+			assert("Unsupported number of channels");
+			return DXGI_FORMAT_UNKNOWN;
+		}
 	case 4:
-		return DXGI_FORMAT_R32G32B32A32_FLOAT;
+		if (format == Bitmap::DataFormat::FLOAT)
+		{
+			return DXGI_FORMAT_R32G32B32A32_FLOAT;
+		}
+		else
+		{
+			return DXGI_FORMAT_R8G8B8A8_UINT;
+		}
 	default:
 		assert("Unsupported number of channels");
 		return DXGI_FORMAT_UNKNOWN;
@@ -46,7 +75,7 @@ DXGI_FORMAT GetFormat(int numChannels)
 
 bool DX11Texture::Initialize(const BitmapPtr& bitmap)
 {
-	DXGI_FORMAT format = GetFormat(bitmap->GetNumChannels());
+	DXGI_FORMAT format = GetFormat(bitmap->GetNumChannels(), bitmap->GetDataFormat());
 	if (format == DXGI_FORMAT_UNKNOWN)
 	{
 		return false;

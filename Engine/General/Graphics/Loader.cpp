@@ -12,10 +12,11 @@
 #include <General/Graphics/Bitmap.h>
 #include <General/Math/Color.h>
 
-#include <Assimp/include/assimp/Importer.hpp>
-#include <Assimp/include/assimp/scene.h>
-#include <Assimp/include/assimp/postprocess.h>
-#include <STB_Image/Includes.h>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -136,18 +137,17 @@ bool GetBitmapFromMaterial(const aiMaterial* material, const aiTextureType textu
 		float* data = stbi_loadf(filePath.c_str(), &width, &height, &channels, kRequiredNumberOfComponents);
 		if (data)
 		{
-			result = bitmap->Alloc(data, width, height, kRequiredNumberOfComponents);
+			result = bitmap->Alloc(data, width, height, kRequiredNumberOfComponents, Bitmap::DataFormat::FLOAT);
 			if (!result)
 			{
 				ERROR_LOG("Failed to create bitmap: {}", filePath);
 			}
+			stbi_image_free(data);
 		}
 		else
 		{
 			ERROR_LOG("Failed to load texture: {}", filePath);
-			return false;
 		}
-		stbi_image_free(data);
 	}
 	return result;
 }
@@ -168,7 +168,7 @@ void ExtractMaterialData(const IGraphicsPtr& graphics, const aiScene* scene, con
 		if (aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse) == aiReturn_SUCCESS)
 		{
 			Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
-			diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4);
+			diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4, Bitmap::DataFormat::FLOAT);
 		}
 	}
 
@@ -178,7 +178,7 @@ void ExtractMaterialData(const IGraphicsPtr& graphics, const aiScene* scene, con
 		if (aiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, aiSpecular) == aiReturn_SUCCESS)
 		{
 			Color specularColor(aiSpecular.r, aiSpecular.g, aiSpecular.b, 1.0f);
-			specular->Alloc(reinterpret_cast<float*>(&specularColor), 1, 1, 4);
+			specular->Alloc(reinterpret_cast<float*>(&specularColor), 1, 1, 4, Bitmap::DataFormat::FLOAT);
 		}
 	}
 

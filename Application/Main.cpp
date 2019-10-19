@@ -6,8 +6,8 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 
-static const int kApplicationWindowWidth = 800;
-static const int kApplicationWindowHeight = 600;
+static const int kApplicationWindowWidth = 1920;
+static const int kApplicationWindowHeight = 1080;
 static const char* kApplicationName = "Renderer";
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)

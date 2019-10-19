@@ -148,6 +148,9 @@
       <Filter>Directx11\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="EngineDefines.h" />
+    <ClInclude Include="General\Graphics\Font.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -231,6 +234,9 @@
     </ClCompile>
     <ClCompile Include="Directx11\Graphics\DX11Texture.cpp">
       <Filter>Directx11\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\Font.cpp">
+      <Filter>General\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

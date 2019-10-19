@@ -91,8 +91,7 @@
       <Command>$(OutDir)AssetManager.exe $(SolutionDir)Assets $(OutDir)Assets</Command>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Message>
-      </Message>
+      <Message>Running asset manager</Message>
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>ALWAYS_RUN</Outputs>
@@ -122,8 +121,7 @@
       <Command>$(OutDir)AssetManager.exe $(SolutionDir)Assets $(OutDir)Assets</Command>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Message>
-      </Message>
+      <Message>Running asset manager</Message>
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>ALWAYS_RUN</Outputs>

@@ -16,6 +16,7 @@
 #include <General/Graphics/Material.h>
 #include <General/Graphics/Camera.h>
 #include <General/Graphics/IPointLight.h>
+#include <General/Graphics/Font.h>
 
 //Reference:http://www.rastertek.com/
 
@@ -30,6 +31,7 @@ DX11Graphics::DX11Graphics()
 	, m_rasterState(nullptr)
 	, m_activeCamera(nullptr)
 	, m_frameConstantBufferData(nullptr)
+	, m_font(new Font())
 	, m_vsyncEnabled(false)
 	, m_graphicsDeviceMemory(0)
 	, m_graphicsDeviceDescription{0}
@@ -448,6 +450,8 @@ void DX11Graphics::EndRender()
 
 void DX11Graphics::Shutdown()
 {
+	m_font.reset();
+
 	//Release constant buffer
 	if (m_frameConstantBuffer)
 	{
@@ -584,4 +588,10 @@ ICameraPtr DX11Graphics::CreateCamera() const
 		m_activeCamera = camera;
 	}
 	return camera;
+}
+
+bool DX11Graphics::LoadFont(const string& fontFile)
+{
+	assert(m_font);
+	return m_font->Load(fontFile, *this);
 }

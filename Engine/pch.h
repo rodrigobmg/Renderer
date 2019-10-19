@@ -19,8 +19,8 @@
 #include <memory>
 #include <climits>
 
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/msvc_sink.h>
+#include <spdlog.h>
+#include <sinks/msvc_sink.h>
 
 #include <General/Math/Math.h>
 

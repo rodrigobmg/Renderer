@@ -23,10 +23,12 @@ class ICamera;
 class IPointLight;
 class IGraphics;
 class Vector3d;
+class Vector2d;
 class Bitmap;
 class ITexture;
 class ISamplerState;
 class IPointLight;
+class Font;
 
 struct ObjectConstantBufferData;
 struct VertexElement;

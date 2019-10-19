@@ -22,7 +22,7 @@ PointLight::PointLight(const Color & color, const Vector3d & position, const IGr
 {
 	m_sceneObject = Loader::LoadModel("Assets/pointlight.object", graphics);
 	BitmapPtr diffuse(new Bitmap());
-	diffuse->Alloc(reinterpret_cast<float*>(&m_color), 1, 1, 4);
+	diffuse->Alloc(reinterpret_cast<float*>(&m_color), 1, 1, 4, Bitmap::DataFormat::FLOAT);
 	m_sceneObject->GetChildren()[0]->GetMaterial(0)->SetDiffuseTexture(graphics->CreateTexture(diffuse));
 	m_sceneObject->m_transform.m_position = m_position;
 }

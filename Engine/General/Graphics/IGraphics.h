@@ -22,4 +22,5 @@ public:
 	virtual ISamplerStatePtr CreateSamplerState() const = 0;
 	virtual ICameraPtr CreateCamera() const = 0;
 	virtual void SetActiveCamera(const ICameraPtr& camera) = 0;
+	virtual bool LoadFont(const string& fontFile) = 0;
 };

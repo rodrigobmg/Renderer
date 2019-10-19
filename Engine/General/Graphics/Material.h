@@ -24,7 +24,7 @@ private:
 	IShaderPtr					m_pixelShader;
 	ITexturePtr					m_diffuse;
 	ITexturePtr					m_specular;
-	ISamplerStatePtr				m_samplerState;
+	ISamplerStatePtr			m_samplerState;
 	IConstantBufferPtr			m_materialConstantBuffer;
 	MaterialConstantBufferData* m_materialConstantBufferData;
 };

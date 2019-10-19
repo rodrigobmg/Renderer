@@ -53,6 +53,12 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 		return;
 	}
 
+	if (!m_graphics->LoadFont("Assets/OpenSans-Regular.ttf"))
+	{
+		m_ready = false;
+		return;
+	}
+
 	assert(m_window);
 }
 

@@ -24,8 +24,9 @@ public:
 	virtual ITexturePtr CreateTexture(const BitmapPtr& bitmap) const override;
 	virtual ISamplerStatePtr CreateSamplerState() const override;
 	virtual IConstantBufferPtr CreateMaterialConstantBuffer() const override;
-	virtual ICameraPtr CreateCamera() const;
-	virtual void SetActiveCamera(const ICameraPtr& camera) { m_activeCamera = camera; }
+	virtual ICameraPtr CreateCamera() const override;
+	virtual void SetActiveCamera(const ICameraPtr& camera) override { m_activeCamera = camera; }
+	virtual bool LoadFont(const string& fontFile) override;
 
 private:
 	UniquePtr<ID3D11Device>			m_device;
@@ -41,6 +42,7 @@ private:
 	Matrix4d						m_orthoMatrix;
 	SharedPtr<IConstantBuffer>		m_frameConstantBuffer;
 	FrameConstantBufferData*		m_frameConstantBufferData;
+	UniquePtr<Font>					m_font;
 	bool							m_vsyncEnabled;
 	int								m_graphicsDeviceMemory;
 	char							m_graphicsDeviceDescription[128];

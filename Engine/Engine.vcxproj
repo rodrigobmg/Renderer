@@ -63,7 +63,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\Externals\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\Externals\freetype2\include;$(ProjectDir)..\Externals\spdlog\;$(ProjectDir)..\Externals\Assimp\include;$(ProjectDir)..\Externals\STB_Image\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -71,7 +71,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)Externals;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;Assimp/assimp-vc140-mt.lib;spdlog/spdlog.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;Assimp/assimp-vc140-mt.lib;spdlog/spdlog.lib;freetype2/freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -86,7 +86,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\Externals\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\Externals\freetype2\include;$(ProjectDir)..\Externals\spdlog\;$(ProjectDir)..\Externals\Assimp\include;$(ProjectDir)..\Externals\STB_Image\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -96,7 +96,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)Externals;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;Assimp/assimp-vc140-mt.lib;spdlog/spdlog.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;Assimp/assimp-vc140-mt.lib;spdlog/spdlog.lib;freetype2/freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -120,6 +120,7 @@
     <ClInclude Include="General\Application\Window.h" />
     <ClInclude Include="General\Graphics\Bitmap.h" />
     <ClInclude Include="General\Graphics\Camera.h" />
+    <ClInclude Include="General\Graphics\Font.h" />
     <ClInclude Include="General\Graphics\FrameConstantBuffer.h" />
     <ClInclude Include="General\Graphics\ICamera.h" />
     <ClInclude Include="General\Graphics\IConstantBuffer.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="General\Application\Window.cpp" />
     <ClCompile Include="General\Graphics\Bitmap.cpp" />
     <ClCompile Include="General\Graphics\Camera.cpp" />
+    <ClCompile Include="General\Graphics\Font.cpp" />
     <ClCompile Include="General\Graphics\IndexArray.cpp" />
     <ClCompile Include="General\Graphics\Loader.cpp" />
     <ClCompile Include="General\Graphics\Material.cpp" />
