@@ -40,9 +40,8 @@ bool ShaderCompiler::CompileShaders(const fs::path& inputPath)
 		GetShaderFilePaths(inputPath, shaderPaths);
 		if (!shaderPaths.empty())
 		{
-			IWindowPtr window(new Window(GetModuleHandle(NULL), 100, 100, kWindowName.c_str()));
 			IGraphicsPtr graphics(new DX11Graphics());
-			if (!graphics->Initialize(window, kWindowWidth, kWindowHeight, true, false, kScreenDepth, kScreenNear))
+			if (!graphics->Initialize(nullptr, kWindowWidth, kWindowHeight, true, false, kScreenDepth, kScreenNear))
 			{
 				if (graphics)
 				{

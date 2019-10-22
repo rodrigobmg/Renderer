@@ -274,11 +274,13 @@ void InitRasterDescription(D3D11_RASTERIZER_DESC &rasterDesc)
 bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear)
 {
 	m_vsyncEnabled = vsync;
+	//Set the feature level  to DX11
+	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_1;
+
 	HRESULT result;
 	unsigned int refreshRateNumerator, refreshRateDenominator;
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	D3D_FEATURE_LEVEL featureLevel;
 	ID3D11Texture2D* backBufferPtr;
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
@@ -291,12 +293,6 @@ bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int scr
 		return false;
 	}
 
-	//Intialize swap chain description
-	InitSwapChainDescription(swapChainDesc, screenWidth, screenHeight, m_vsyncEnabled, refreshRateNumerator, refreshRateDenominator, window, fullscreen);
-
-	//Set the feature level  to DX11
-	featureLevel = D3D_FEATURE_LEVEL_11_0;
-
 	//Create the swap chain, D3D device and D3D device context
 	{
 		ID3D11Device* device = nullptr;
@@ -307,9 +303,22 @@ bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int scr
 		flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif // _DEBUG
 
+		const D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_HARDWARE;
+		const UINT numFeatureLevels = 1;
+		const UINT sdkVersion = D3D11_SDK_VERSION;
 
-		result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, flags, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain,
-			&device, NULL, &deviceContext);
+		if (window)
+		{
+			//Intialize swap chain description
+			InitSwapChainDescription(swapChainDesc, screenWidth, screenHeight, m_vsyncEnabled, refreshRateNumerator, refreshRateDenominator, window, fullscreen);
+			result = D3D11CreateDeviceAndSwapChain(NULL, driverType, NULL, flags, &featureLevel, numFeatureLevels, sdkVersion, &swapChainDesc, &m_swapChain,
+				&device, NULL, &deviceContext);
+		}
+		else
+		{
+			result = D3D11CreateDevice(NULL, driverType, NULL, flags, &featureLevel, numFeatureLevels, sdkVersion, &device, NULL, &deviceContext);
+		}
+
 		m_device.reset(device);
 		m_deviceContext.reset(deviceContext);
 	}
@@ -319,95 +328,98 @@ bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int scr
 		return false;
 	}
 
-	//Get the pointer to the back buffer
-	result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
-	if (FAILED(result))
+	if (m_swapChain)
 	{
-		return false;
+		//Get the pointer to the back buffer
+		result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//Create the render target view with the back buffer pointer
+		result = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//Release the pointer to the back buffer as we no longer need it
+		backBufferPtr->Release();
+		backBufferPtr = nullptr;
+
+		//Initialize the description of the depth buffer
+		InitDepthBufferDescription(depthBufferDesc, screenWidth, screenHeight);
+
+		//Create the texture for the depth buffer using the filled out description
+		result = m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//Initialize the description of the stencil state
+		InitDepthStencilDescription(depthStencilDesc);
+
+		//Create the depth stencil state
+		result = m_device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//Set the depth stencil state
+		m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
+
+		// Initailze the depth stencil view.
+		InitDepthStencilViewDescription(depthStencilViewDesc);
+
+		// Create the depth stencil view.
+		result = m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
+
+		//Setup the raster description which will determine how and what polygons will be drawn
+		InitRasterDescription(rasterDesc);
+
+		//Create the rasterizer state from the description
+		result = m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		//Set the rasterizer state
+		m_deviceContext->RSSetState(m_rasterState);
+
+		//Set up viewport
+		viewport.Width = static_cast<float>(screenWidth);
+		viewport.Height = static_cast<float>(screenHeight);
+		viewport.MinDepth = 0.0f;
+		viewport.MaxDepth = 1.0f;
+		viewport.TopLeftX = 0.0f;
+		viewport.TopLeftY = 0.0f;
+
+		//Create the viewport
+		m_deviceContext->RSSetViewports(1, &viewport);
+
+		//Set up projection matrix
+		float fieldOfView = Math::PI / 4.0f;
+		float screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
+
+		m_frameConstantBuffer.reset(new DX11FrameConstantBuffer(m_device, m_deviceContext));
+		m_frameConstantBufferData = new FrameConstantBufferData();
+
+		//Create the projection matrix
+		m_frameConstantBufferData->m_projection = MatrixTranspose(MatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
+
+		//Create orthographic projection matrix
+		m_orthoMatrix = MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 	}
-
-	//Create the render target view with the back buffer pointer
-	result = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	//Release the pointer to the back buffer as we no longer need it
-	backBufferPtr->Release();
-	backBufferPtr = nullptr;
-
-	//Initialize the description of the depth buffer
-	InitDepthBufferDescription(depthBufferDesc, screenWidth, screenHeight);
-
-	//Create the texture for the depth buffer using the filled out description
-	result = m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	//Initialize the description of the stencil state
-	InitDepthStencilDescription(depthStencilDesc);
-
-	//Create the depth stencil state
-	result = m_device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	//Set the depth stencil state
-	m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
-
-	// Initailze the depth stencil view.
-	InitDepthStencilViewDescription(depthStencilViewDesc);
-
-	// Create the depth stencil view.
-	result = m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
-
-	//Setup the raster description which will determine how and what polygons will be drawn
-	InitRasterDescription(rasterDesc);
-
-	//Create the rasterizer state from the description
-	result = m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	//Set the rasterizer state
-	m_deviceContext->RSSetState(m_rasterState);
-
-	//Set up viewport
-	viewport.Width = static_cast<float>(screenWidth);
-	viewport.Height = static_cast<float>(screenHeight);
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
-	viewport.TopLeftX = 0.0f;
-	viewport.TopLeftY = 0.0f;
-
-	//Create the viewport
-	m_deviceContext->RSSetViewports(1, &viewport);
-
-	//Set up projection matrix
-	float fieldOfView = Math::PI / 4.0f;
-	float screenAspect = static_cast<float>(screenWidth) / static_cast<float>(screenHeight);
-
-	m_frameConstantBuffer.reset(new DX11FrameConstantBuffer(m_device, m_deviceContext));
-	m_frameConstantBufferData = new FrameConstantBufferData();
-
-	//Create the projection matrix
-	m_frameConstantBufferData->m_projection = MatrixTranspose(MatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
-
-	//Create orthographic projection matrix
-	m_orthoMatrix = MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 
 	return true;
 }
