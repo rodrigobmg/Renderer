@@ -151,6 +151,12 @@
     <ClInclude Include="General\Graphics\Font.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="General\Application\Timer.h">
+      <Filter>General\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Application\ApplicationBase.h">
+      <Filter>General\Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -237,6 +243,12 @@
     </ClCompile>
     <ClCompile Include="General\Graphics\Font.cpp">
       <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Application\Timer.cpp">
+      <Filter>General\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Application\ApplicationBase.cpp">
+      <Filter>General\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 #include "Application.h"
 
 #include <General/Application/Input.h>
-#include <General/Application/Window.h>
+#include <General/Application/IWindow.h>
 #include <General/Graphics/SceneObject.h>
 #include <General/Graphics/PointLight.h>
 #include <General/Graphics/Loader.h>
@@ -13,23 +13,21 @@
 #include <General/Math/Math.h>
 #include <General/Math/Transform.h>
 
-#include <Directx11/Graphics/DX11Graphics.h>
-
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
 const float kScreenDepth = 1000.0f;
 const float kScreenNear = 0.1f;
 
 Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight, const char* name)
-	: m_mousePosX(0)
+	: ApplicationBase(hInstance, windowWidth, windowHeight, name, kVsyncEnabled, kFullscreen, kScreenNear, kScreenDepth)
+	, m_mousePosX(0)
 	, m_mousePosY(0)
 	, m_firstMouseMove(true)
-	, m_ready(false)
 {
-	assert(!m_window);
-	m_window.reset(new Window(hInstance, windowWidth, windowHeight, name));
-	m_graphics.reset(new DX11Graphics());
-	m_ready = m_graphics->Initialize(m_window, windowWidth, windowHeight, kVsyncEnabled, kFullscreen, kScreenDepth, kScreenNear);
+	if (!m_ready)
+	{
+		return;
+	}
 
 	m_camera = m_graphics->CreateCamera();
 	if (!m_camera)
@@ -61,22 +59,6 @@ Application::~Application()
 	//Explicitly release pointer so that all graphics resources are destroyed before graphics is shut down
 	m_object.reset();
 	m_pointLight.reset();
-
-	if (m_graphics)
-	{
-		m_graphics->Shutdown();
-	}
-}
-
-void Application::Run()
-{
-	assert(m_ready);
-	while (!m_window->Closed())
-	{
-		m_window->ProcessInputs();
-		Update();
-		Render();
-	}
 }
 
 void Application::Render()
@@ -91,14 +73,10 @@ void Application::Render()
 	}
 }
 
-static const float kMousMoveMultiplier = Math::DEG2RAD * 100.0f;
+static const float kMousMoveMultiplier = Math::DEG2RAD * 10000.0f;
 void Application::Update()
 {
-	assert(m_ready);
-	if (Input::GetKeyDown(Input::KEY_ESC))
-	{
-		m_window->Close();
-	}
+	ApplicationBase::Update();
 
 	RotateObject();
 
@@ -122,20 +100,24 @@ void Application::Update()
 	m_mousePosY = y;
 }
 
+static const float kCameraSpeed = 100.0f;
 void Application::MoveCamera(int x, int y)
 {
+	float deltaTime = m_timer.GetDeltaTime();
 	Transform cameraTransform = m_camera->GetTransform();
 	if (Input::GetMouseButtonDown(Input::MouseButtonType::kLeft))
 	{
 		float deltaX = (x - m_mousePosX) / static_cast<float>(m_window->GetWindowWidth());
 		float deltaY = (y - m_mousePosY) / static_cast<float>(m_window->GetWindowHeight());
 
-		Quaternion deltaRotation(Vector3d(kMousMoveMultiplier * deltaY, kMousMoveMultiplier * deltaX, 0.f));
+		Quaternion deltaRotation(Vector3d(kMousMoveMultiplier * deltaY, kMousMoveMultiplier * deltaX, 0.f) * deltaTime);
 		cameraTransform.m_orientation = deltaRotation * cameraTransform.m_orientation;
 	}
 
 	Vector3d forward = Vector3d::kForward * cameraTransform.m_orientation;
+	forward *= deltaTime * kCameraSpeed;
 	Vector3d side = Vector3d::kSide * cameraTransform.m_orientation;
+	side *= deltaTime * kCameraSpeed;
 	if (Input::GetKeyDown(Input::Keys::KEY_W))
 	{
 		cameraTransform.m_position += forward;
@@ -157,16 +139,18 @@ void Application::MoveCamera(int x, int y)
 
 void Application::RotateLight(int x, int y)
 {
+	float deltaTime = m_timer.GetDeltaTime();
 	float deltaX = (x - m_mousePosX) / static_cast<float>(m_window->GetWindowWidth());
 	float deltaY = (y - m_mousePosY) / static_cast<float>(m_window->GetWindowHeight());
 
-	Quaternion deltaRotation(Vector3d(kMousMoveMultiplier * deltaY, kMousMoveMultiplier * deltaX, 0.f));
+	Quaternion deltaRotation(Vector3d(kMousMoveMultiplier * deltaY, kMousMoveMultiplier * deltaX, 0.f) * deltaTime);
 	const Quaternion& lightRotation = m_pointLight->GetRotationAroundOrigin();
 	m_pointLight->SetRotationAroundOrigin(deltaRotation * lightRotation);
 }
 
 void Application::RotateObject()
 {
+	float deltaTime = m_timer.GetDeltaTime();
 	Vector3d delta;
 	if (Input::GetKeyDown(Input::KEY_UP))
 	{
@@ -189,5 +173,5 @@ void Application::RotateObject()
 		m_object->m_transform.m_orientation = Quaternion();
 	}
 
-	m_object->m_transform.m_orientation *= Quaternion(delta);
+	m_object->m_transform.m_orientation *= Quaternion(delta * deltaTime);
 }
