@@ -1,6 +1,7 @@
 #pragma once
 
 #include <General/Application/ApplicationBase.h>
+#include <General/Graphics/PointLight.h>
 
 class Application : public ApplicationBase
 {
@@ -15,8 +16,8 @@ public:
 
 private:
 	SceneObjectPtr	m_object;
-	IPointLightPtr	m_pointLight;
 	ICameraPtr		m_camera;
+	PointLight		m_pointLight;
 	int				m_mousePosX;
 	int				m_mousePosY;
 	bool			m_firstMouseMove;

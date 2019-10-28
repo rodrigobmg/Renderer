@@ -4,7 +4,6 @@
 #include <General/Application/Input.h>
 #include <General/Application/IWindow.h>
 #include <General/Graphics/SceneObject.h>
-#include <General/Graphics/PointLight.h>
 #include <General/Graphics/Loader.h>
 #include <General/Graphics/ICamera.h>
 #include <General/Graphics/IGraphics.h>
@@ -44,31 +43,23 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 	}
 	m_object->m_transform.m_scale *= 0.2f;
 
-	m_pointLight.reset(new PointLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Vector3d(0.0f, 0.0f, -50.0f), m_graphics));
-	if (!m_pointLight)
-	{
-		m_ready = false;
-		return;
-	}
+	m_pointLight = PointLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Vector3d(0.0f, 0.0f, -50.0f), m_graphics);
 
 	assert(m_window);
 }
 
 Application::~Application()
 {
-	//Explicitly release pointer so that all graphics resources are destroyed before graphics is shut down
-	m_object.reset();
-	m_pointLight.reset();
 }
 
 void Application::Render()
 {
 	if (m_graphics)
 	{
-		vector<IPointLightPtr> lights(1, m_pointLight);
+		vector<PointLight> lights(1, m_pointLight);
 		m_graphics->StartRender(lights);
 		m_object->Render();
-		m_pointLight->Render();
+		m_pointLight.Render();
 		m_graphics->EndRender();
 	}
 }
@@ -144,8 +135,8 @@ void Application::RotateLight(int x, int y)
 	float deltaY = (y - m_mousePosY) / static_cast<float>(m_window->GetWindowHeight());
 
 	Quaternion deltaRotation(Vector3d(kMousMoveMultiplier * deltaY, kMousMoveMultiplier * deltaX, 0.f) * deltaTime);
-	const Quaternion& lightRotation = m_pointLight->GetRotationAroundOrigin();
-	m_pointLight->SetRotationAroundOrigin(deltaRotation * lightRotation);
+	const Quaternion& lightRotation = m_pointLight.GetRotationAroundOrigin();
+	m_pointLight.SetRotationAroundOrigin(deltaRotation * lightRotation);
 }
 
 void Application::RotateObject()

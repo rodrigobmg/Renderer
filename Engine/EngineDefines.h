@@ -27,8 +27,9 @@ class Vector2d;
 class Bitmap;
 class ITexture;
 class ISamplerState;
-class IPointLight;
+class ILight;
 class Font;
+class PointLight;
 
 struct ObjectConstantBufferData;
 struct VertexElement;
@@ -48,8 +49,9 @@ typedef SharedPtr<IGraphics> IGraphicsPtr;
 typedef SharedPtr<Bitmap> BitmapPtr;
 typedef SharedPtr<ITexture> ITexturePtr;
 typedef SharedPtr<ISamplerState> ISamplerStatePtr;
-typedef SharedPtr<IPointLight> IPointLightPtr;
+typedef SharedPtr<ILight> ILightPtr;
 typedef SharedPtr<ICamera> ICameraPtr;
+typedef SharedPtr<IPointLight> IPointLightPtr;
 
 #define ERROR_LOG(...) SPDLOG_ERROR(__VA_ARGS__)
 #define DEBUG_LOG(...) SPDLOG_DEBUG(__VA_ARGS__)

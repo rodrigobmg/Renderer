@@ -54,7 +54,7 @@ Window::Window(HINSTANCE hInstance, int windowWidth, int windowHeight, const cha
 	SetFocus(m_hwnd);
 
 	// Hide the mouse cursor.
-	ShowCursor(false);
+	ShowCursor(true);
 
 	Window::s_instance = this;
 	SetCapture(m_hwnd);

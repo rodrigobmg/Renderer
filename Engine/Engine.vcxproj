@@ -122,6 +122,8 @@
     <ClInclude Include="General\Application\Window.h" />
     <ClInclude Include="General\Graphics\Bitmap.h" />
     <ClInclude Include="General\Graphics\Camera.h" />
+    <ClInclude Include="General\Graphics\DirectionalLight.h" />
+    <ClInclude Include="General\Graphics\IDirectionalLight.h" />
     <ClInclude Include="General\Graphics\Font.h" />
     <ClInclude Include="General\Graphics\FrameConstantBuffer.h" />
     <ClInclude Include="General\Graphics\ICamera.h" />
@@ -137,6 +139,7 @@
     <ClInclude Include="General\Graphics\IShader.h" />
     <ClInclude Include="General\Graphics\ITexture.h" />
     <ClInclude Include="General\Graphics\IVertexArray.h" />
+    <ClInclude Include="General\Graphics\Light.h" />
     <ClInclude Include="General\Graphics\Loader.h" />
     <ClInclude Include="General\Graphics\Material.h" />
     <ClInclude Include="General\Graphics\MaterialConstantBuffer.h" />
@@ -172,8 +175,10 @@
     <ClCompile Include="General\Application\Window.cpp" />
     <ClCompile Include="General\Graphics\Bitmap.cpp" />
     <ClCompile Include="General\Graphics\Camera.cpp" />
+    <ClCompile Include="General\Graphics\DirectionalLight.cpp" />
     <ClCompile Include="General\Graphics\Font.cpp" />
     <ClCompile Include="General\Graphics\IndexArray.cpp" />
+    <ClCompile Include="General\Graphics\Light.cpp" />
     <ClCompile Include="General\Graphics\Loader.cpp" />
     <ClCompile Include="General\Graphics\Material.cpp" />
     <ClCompile Include="General\Graphics\PointLight.cpp" />

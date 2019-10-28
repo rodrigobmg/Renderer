@@ -12,7 +12,7 @@ public:
 	~DX11Graphics();
 
 	virtual bool Initialize(const IWindowPtr& window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear) override;
-	virtual void StartRender(const vector<IPointLightPtr>& pointLights) override;
+	virtual void StartRender(const vector<PointLight>& lights) override;
 	virtual void EndRender() override;
 	virtual void Shutdown() override;
 

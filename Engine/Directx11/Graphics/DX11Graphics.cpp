@@ -15,7 +15,7 @@
 #include <General/Graphics/SceneObject.h>
 #include <General/Graphics/Material.h>
 #include <General/Graphics/Camera.h>
-#include <General/Graphics/IPointLight.h>
+#include <General/Graphics/PointLight.h>
 #include <General/Graphics/Font.h>
 
 //Reference:http://www.rastertek.com/
@@ -425,7 +425,7 @@ bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int scr
 }
 
 static const float kClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-void DX11Graphics::StartRender(const vector<IPointLightPtr>& pointLights)
+void DX11Graphics::StartRender(const vector<PointLight>& lights)
 {
 	//Clear back buffer
 	m_deviceContext->ClearRenderTargetView(m_renderTargetView, kClearColor);
@@ -437,9 +437,8 @@ void DX11Graphics::StartRender(const vector<IPointLightPtr>& pointLights)
 	// Get the view, and projection matrices and set them in the per frame constant buffer
 	m_frameConstantBufferData->m_view = MatrixTranspose(m_activeCamera->GetViewMatrix());
 
-
-	m_frameConstantBufferData->m_pointLightData[0].m_color = pointLights[0]->GetColor();
-	m_frameConstantBufferData->m_pointLightData[0].m_position = pointLights[0]->GetWorldPosition();
+	m_frameConstantBufferData->m_pointLightData[0].m_color = lights[0].GetColor();
+	m_frameConstantBufferData->m_pointLightData[0].m_position = lights[0].GetWorldPosition();
 	m_frameConstantBufferData->m_cameraPosition = m_activeCamera->GetTransform().m_position;
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);

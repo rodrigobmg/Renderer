@@ -39,16 +39,10 @@
     <ClInclude Include="General\Graphics\IIndexArray.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="General\Graphics\ILight.h">
-      <Filter>General\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="General\Graphics\IMesh.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="General\Graphics\IndexArray.h">
-      <Filter>General\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="General\Graphics\IPointLight.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="General\Graphics\IRenderer.h">
@@ -76,9 +70,6 @@
       <Filter>General\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="General\Graphics\ObjectConstantBuffer.h">
-      <Filter>General\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="General\Graphics\PointLight.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="General\Graphics\SceneObject.h">
@@ -157,6 +148,24 @@
     <ClInclude Include="General\Application\ApplicationBase.h">
       <Filter>General\Application</Filter>
     </ClInclude>
+    <ClInclude Include="General\Graphics\IDirectionalLight.h">
+      <Filter>General\Graphics\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\ILight.h">
+      <Filter>General\Graphics\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\IPointLight.h">
+      <Filter>General\Graphics\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\PointLight.h">
+      <Filter>General\Graphics\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\DirectionalLight.h">
+      <Filter>General\Graphics\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\Light.h">
+      <Filter>General\Graphics\Lights</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -179,9 +188,6 @@
       <Filter>General\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="General\Graphics\Material.cpp">
-      <Filter>General\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="General\Graphics\PointLight.cpp">
       <Filter>General\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="General\Graphics\SceneObject.cpp">
@@ -250,6 +256,13 @@
     <ClCompile Include="General\Application\ApplicationBase.cpp">
       <Filter>General\Application</Filter>
     </ClCompile>
+    <ClCompile Include="General\Graphics\PointLight.cpp">
+      <Filter>General\Graphics\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\Light.cpp">
+      <Filter>General\Graphics\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\DirectionalLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="General">
@@ -275,6 +288,9 @@
     </Filter>
     <Filter Include="Directx11\Graphics\Shaders">
       <UniqueIdentifier>{7758d2e6-c0ed-41fd-9429-f0f62a3bc9b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Graphics\Lights">
+      <UniqueIdentifier>{8c18ec06-73ce-44f1-8b0b-7ab7b704df64}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

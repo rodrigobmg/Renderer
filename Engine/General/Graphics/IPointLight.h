@@ -1,10 +1,8 @@
 #pragma once
 
-#include "ILight.h"
-
 class Vector3d;
 class Quaternion;
-class IPointLight : public ILight
+class IPointLight
 {
 public:
 	virtual ~IPointLight() {}
