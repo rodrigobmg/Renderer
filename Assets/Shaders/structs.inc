@@ -1,5 +1,6 @@
 struct PointLightData
 {
-	float4 position;
 	float4 color;
+	float3 position;
+	float intensity;
 };

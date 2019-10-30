@@ -439,6 +439,7 @@ void DX11Graphics::StartRender(const vector<PointLight>& lights)
 
 	m_frameConstantBufferData->m_pointLightData[0].m_color = lights[0].GetColor();
 	m_frameConstantBufferData->m_pointLightData[0].m_position = lights[0].GetWorldPosition();
+	m_frameConstantBufferData->m_pointLightData[0].m_intensity = lights[0].GetIntensity();
 	m_frameConstantBufferData->m_cameraPosition = m_activeCamera->GetTransform().m_position;
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);

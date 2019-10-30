@@ -1,23 +1,24 @@
 #pragma once
 
-#include "ILight.h"
+#include <General/Math/Color.h>
 
-class Light : public ILight
+class Light
 {
 public:
-	Light(LightType lightType);
-	Light(const Color& color, const IGraphicsPtr& graphics, LightType lightType);
+	Light();
+	Light(const Color& color, const IGraphicsPtr& graphics);
 	Light(const Light& other);
 	~Light() {}
 
-	virtual void SetColor(const Color& color) override { m_color = color; }
-	virtual const Color& GetColor() const override { return m_color; }
-	virtual const SceneObjectPtr& GetSceneObject() const override { return m_sceneObject; }
-	virtual void Render() override;
-	virtual LightType GetLightType() const { return m_lightType; }
+	void SetColor(const Color& color) { m_color = color; }
+	const Color& GetColor() const { return m_color; }
+	const SceneObjectPtr& GetSceneObject() const { return m_sceneObject; }
+	float GetIntensity() const { return m_intensity; }
+	void SetIntensity(float intensity) { m_intensity = intensity; }
+	void Render();
 
 protected:
 	SceneObjectPtr	m_sceneObject;
 	Color			m_color;
-	LightType		m_lightType;
+	float			m_intensity;
 };

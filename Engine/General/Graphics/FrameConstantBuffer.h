@@ -5,8 +5,9 @@
 
 struct PointLightData
 {
-	Vector4d	m_position;
 	Vector4d	m_color;
+	Vector3d	m_position;
+	float		m_intensity;
 };
 
 static const int kNumPointLights = 1;

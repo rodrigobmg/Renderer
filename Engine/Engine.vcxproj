@@ -123,17 +123,14 @@
     <ClInclude Include="General\Graphics\Bitmap.h" />
     <ClInclude Include="General\Graphics\Camera.h" />
     <ClInclude Include="General\Graphics\DirectionalLight.h" />
-    <ClInclude Include="General\Graphics\IDirectionalLight.h" />
     <ClInclude Include="General\Graphics\Font.h" />
     <ClInclude Include="General\Graphics\FrameConstantBuffer.h" />
     <ClInclude Include="General\Graphics\ICamera.h" />
     <ClInclude Include="General\Graphics\IConstantBuffer.h" />
     <ClInclude Include="General\Graphics\IGraphics.h" />
     <ClInclude Include="General\Graphics\IIndexArray.h" />
-    <ClInclude Include="General\Graphics\ILight.h" />
     <ClInclude Include="General\Graphics\IMesh.h" />
     <ClInclude Include="General\Graphics\IndexArray.h" />
-    <ClInclude Include="General\Graphics\IPointLight.h" />
     <ClInclude Include="General\Graphics\IRenderer.h" />
     <ClInclude Include="General\Graphics\ISamplerState.h" />
     <ClInclude Include="General\Graphics\IShader.h" />

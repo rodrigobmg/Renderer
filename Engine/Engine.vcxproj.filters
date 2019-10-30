@@ -148,22 +148,13 @@
     <ClInclude Include="General\Application\ApplicationBase.h">
       <Filter>General\Application</Filter>
     </ClInclude>
-    <ClInclude Include="General\Graphics\IDirectionalLight.h">
-      <Filter>General\Graphics\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="General\Graphics\ILight.h">
-      <Filter>General\Graphics\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="General\Graphics\IPointLight.h">
-      <Filter>General\Graphics\Lights</Filter>
-    </ClInclude>
     <ClInclude Include="General\Graphics\PointLight.h">
       <Filter>General\Graphics\Lights</Filter>
     </ClInclude>
-    <ClInclude Include="General\Graphics\DirectionalLight.h">
+    <ClInclude Include="General\Graphics\Light.h">
       <Filter>General\Graphics\Lights</Filter>
     </ClInclude>
-    <ClInclude Include="General\Graphics\Light.h">
+    <ClInclude Include="General\Graphics\DirectionalLight.h">
       <Filter>General\Graphics\Lights</Filter>
     </ClInclude>
   </ItemGroup>
@@ -262,7 +253,9 @@
     <ClCompile Include="General\Graphics\Light.cpp">
       <Filter>General\Graphics\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="General\Graphics\DirectionalLight.cpp" />
+    <ClCompile Include="General\Graphics\DirectionalLight.cpp">
+      <Filter>General\Graphics\Lights</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="General">

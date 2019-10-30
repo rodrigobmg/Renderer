@@ -9,8 +9,8 @@ static const float ambientStrength = 0.1;
 
 float4 main(PixelInputType input) : SV_TARGET
 {
-	float4 pixelToLight = normalize(pointLight[0].position - input.worldSpacePosition);
-	float intensity = clamp(dot(normalize(input.normal), pixelToLight),0,1);
+	float4 pixelToLight = normalize(float4(pointLight[0].position, 1.0) - input.worldSpacePosition);
+	float intensity = pointLight[0].intensity * clamp(dot(normalize(input.normal), pixelToLight),0,1);
 	float4 textureColor = diffuseTexture.Sample(sampleType, input.uv);
 
 	float3 ambient = textureColor.xyz * ambientStrength;
