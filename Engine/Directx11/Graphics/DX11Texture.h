@@ -7,7 +7,7 @@ public:
 	DX11Texture(const DevicePtr& device, const DeviceContextPtr& deviceContext);
 	~DX11Texture();
 
-	virtual bool Initialize(const BitmapPtr& bitmap) override;
+	virtual bool Initialize(const void* data, UINT width, UINT height, UINT pitch, TextureFormat format) override;
 	virtual void Bind(unsigned int slot) override;
 
 private:

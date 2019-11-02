@@ -2,7 +2,6 @@
 #include "Light.h"
 
 #include "Material.h"
-#include "Bitmap.h"
 #include "IGraphics.h"
 #include "Loader.h"
 
@@ -21,9 +20,8 @@ Light::Light(const Color& color, const IGraphicsPtr& graphics)
 	m_sceneObject = Loader::LoadModel("Assets/pointlight.object", graphics);
 	if (m_sceneObject)
 	{
-		BitmapPtr diffuse(new Bitmap());
-		diffuse->Alloc(reinterpret_cast<float*>(&m_color), 1, 1, 4, Bitmap::DataFormat::FLOAT);
-		m_sceneObject->GetChildren()[0]->GetMaterial(0)->SetDiffuseTexture(graphics->CreateTexture(diffuse));
+		ITexturePtr texture = graphics->CreateTexture(reinterpret_cast<float*>(&m_color), 1, 1, sizeof(float) * 4, TextureFormat::RGBA32f);
+		m_sceneObject->GetChildren()[0]->GetMaterial(0)->SetDiffuseTexture(texture);
 	}
 }
 

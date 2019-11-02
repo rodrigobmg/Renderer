@@ -3,6 +3,7 @@
 #include <General/Graphics/IGraphics.h>
 #include <General/Math/Matrix4d.h>
 
+class TextureManager;
 class DX11Graphics : public IGraphics
 {
 public:
@@ -21,7 +22,8 @@ public:
 	virtual IShaderPtr CreateShader(const string& path, ShaderType shaderType) const override;
 	virtual IMeshPtr CreateMesh(const IVertexArrayPtr& vertexData, const IIndexArrayPtr& indexData, PrimitiveType primitive) const override;
 	virtual IConstantBufferPtr CreateObjectConstantBuffer() const override;
-	virtual ITexturePtr CreateTexture(const BitmapPtr& bitmap) const override;
+	virtual ITexturePtr CreateTexture(const void* data, UINT width, UINT height, UINT pitch, TextureFormat format) const override;
+	virtual ITexturePtr CreateTexture(const string& path) const override;
 	virtual ISamplerStatePtr CreateSamplerState() const override;
 	virtual IConstantBufferPtr CreateMaterialConstantBuffer() const override;
 	virtual ICameraPtr CreateCamera() const override;
@@ -38,11 +40,12 @@ private:
 	ID3D11DepthStencilView*			m_depthStencilView;
 	ID3D11RasterizerState*			m_rasterState;
 	mutable ICameraPtr				m_activeCamera;
-	Matrix4d						m_projectionMatrix;
-	Matrix4d						m_orthoMatrix;
 	SharedPtr<IConstantBuffer>		m_frameConstantBuffer;
 	FrameConstantBufferData*		m_frameConstantBufferData;
 	UniquePtr<Font>					m_font;
+	UniquePtr<TextureManager>		m_textureManager;
+	Matrix4d						m_projectionMatrix;
+	Matrix4d						m_orthoMatrix;
 	bool							m_vsyncEnabled;
 	int								m_graphicsDeviceMemory;
 	char							m_graphicsDeviceDescription[128];

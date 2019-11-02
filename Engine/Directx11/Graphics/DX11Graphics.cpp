@@ -17,6 +17,7 @@
 #include <General/Graphics/Camera.h>
 #include <General/Graphics/PointLight.h>
 #include <General/Graphics/Font.h>
+#include <General/Graphics/TextureManager.h>
 
 //Reference:http://www.rastertek.com/
 
@@ -32,6 +33,7 @@ DX11Graphics::DX11Graphics()
 	, m_activeCamera(nullptr)
 	, m_frameConstantBufferData(nullptr)
 	, m_font(new Font())
+	, m_textureManager(nullptr)
 	, m_vsyncEnabled(false)
 	, m_graphicsDeviceMemory(0)
 	, m_graphicsDeviceDescription{0}
@@ -421,6 +423,8 @@ bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int scr
 		m_orthoMatrix = MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 	}
 
+	m_textureManager.reset(new TextureManager(*this));
+
 	return true;
 }
 
@@ -462,13 +466,9 @@ void DX11Graphics::EndRender()
 
 void DX11Graphics::Shutdown()
 {
+	m_textureManager.reset();
 	m_font.reset();
-
-	//Release constant buffer
-	if (m_frameConstantBuffer)
-	{
-		m_frameConstantBuffer.reset();
-	}
+	m_frameConstantBuffer.reset();
 
 	if (m_frameConstantBufferData)
 	{
@@ -567,14 +567,20 @@ IConstantBufferPtr DX11Graphics::CreateObjectConstantBuffer() const
 	return IConstantBufferPtr(new DX11ObjectConstantBuffer(m_device, m_deviceContext));
 }
 
-ITexturePtr DX11Graphics::CreateTexture(const BitmapPtr& bitmap) const
+ITexturePtr DX11Graphics::CreateTexture(const void* data, UINT width, UINT height, UINT pitch, TextureFormat format) const
 {
 	ITexturePtr texture(new DX11Texture(m_device, m_deviceContext));
-	if (texture->Initialize(bitmap))
+	if (texture->Initialize(data, width, height, pitch, format))
 	{
 		return texture;
 	}
 	return nullptr;
+}
+
+ITexturePtr DX11Graphics::CreateTexture(const string& path) const
+{
+	assert(m_textureManager);
+	return m_textureManager->GetTexture(path);
 }
 
 ISamplerStatePtr DX11Graphics::CreateSamplerState() const

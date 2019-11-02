@@ -5,7 +5,6 @@
 #include FT_FREETYPE_H
 
 #include <General/Graphics/IGraphics.h>
-#include <General/Graphics/Bitmap.h>
 
 bool Font::Load(string filePath, IGraphics& graphics)
 {
@@ -41,13 +40,7 @@ bool Font::Load(string filePath, IGraphics& graphics)
 			continue;
 		}
 
-		BitmapPtr bitmap(new Bitmap);
-		if (!bitmap->Alloc(face->glyph->bitmap.buffer, face->glyph->bitmap.width, face->glyph->bitmap.rows, 1, Bitmap::DataFormat::UNSIGNED_BYTE))
-		{
-			ERROR_LOG("Failed to create bitmap for character {}", static_cast<char>(c));
-			continue;
-		}
-		ITexturePtr texture = graphics.CreateTexture(bitmap);
+		ITexturePtr texture = graphics.CreateTexture(face->glyph->bitmap.buffer, face->glyph->bitmap.width, face->glyph->bitmap.rows, sizeof(byte) * face->glyph->bitmap.width, TextureFormat::R8u);
 		if (texture)
 		{
 			Character character;

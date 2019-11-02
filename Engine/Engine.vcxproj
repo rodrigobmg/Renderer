@@ -120,7 +120,6 @@
     <ClInclude Include="General\Application\IWindow.h" />
     <ClInclude Include="General\Application\Timer.h" />
     <ClInclude Include="General\Application\Window.h" />
-    <ClInclude Include="General\Graphics\Bitmap.h" />
     <ClInclude Include="General\Graphics\Camera.h" />
     <ClInclude Include="General\Graphics\DirectionalLight.h" />
     <ClInclude Include="General\Graphics\Font.h" />
@@ -143,6 +142,7 @@
     <ClInclude Include="General\Graphics\ObjectConstantBuffer.h" />
     <ClInclude Include="General\Graphics\PointLight.h" />
     <ClInclude Include="General\Graphics\SceneObject.h" />
+    <ClInclude Include="General\Graphics\TextureManager.h" />
     <ClInclude Include="General\Graphics\VertexArray.h" />
     <ClInclude Include="General\Graphics\VertexElement.h" />
     <ClInclude Include="General\Math\Color.h" />
@@ -170,7 +170,6 @@
     <ClCompile Include="General\Application\Input.cpp" />
     <ClCompile Include="General\Application\Timer.cpp" />
     <ClCompile Include="General\Application\Window.cpp" />
-    <ClCompile Include="General\Graphics\Bitmap.cpp" />
     <ClCompile Include="General\Graphics\Camera.cpp" />
     <ClCompile Include="General\Graphics\DirectionalLight.cpp" />
     <ClCompile Include="General\Graphics\Font.cpp" />
@@ -180,6 +179,7 @@
     <ClCompile Include="General\Graphics\Material.cpp" />
     <ClCompile Include="General\Graphics\PointLight.cpp" />
     <ClCompile Include="General\Graphics\SceneObject.cpp" />
+    <ClCompile Include="General\Graphics\TextureManager.cpp" />
     <ClCompile Include="General\Graphics\VertexArray.cpp" />
     <ClCompile Include="General\Graphics\VertexElement.cpp" />
     <ClCompile Include="General\Math\Matrix4d.cpp" />

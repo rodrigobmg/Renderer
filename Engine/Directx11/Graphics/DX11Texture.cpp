@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "DX11Texture.h"
 
-#include <General/Graphics/Bitmap.h>
+#include <General/Graphics/IGraphics.h>
 
 DX11Texture::DX11Texture(const DevicePtr& device, const DeviceContextPtr& deviceContext)
 	: m_device(device)
@@ -26,64 +26,33 @@ DX11Texture::~DX11Texture()
 	}
 }
 
-DXGI_FORMAT GetFormat(int numChannels, Bitmap::DataFormat format)
+DXGI_FORMAT GetFormat(TextureFormat format)
 {
-	switch (numChannels)
+	switch (format)
 	{
-	case 1:
-		if (format == Bitmap::DataFormat::FLOAT)
-		{
-			return DXGI_FORMAT_R32_FLOAT;
-		}
-		else
-		{
-			return DXGI_FORMAT_R8_UINT;
-		}
-	case 2:
-		if (format == Bitmap::DataFormat::FLOAT)
-		{
-			return DXGI_FORMAT_R32G32_FLOAT;
-		}
-		else
-		{
-			return DXGI_FORMAT_R8G8_UINT;
-		}
-	case 3:
-		if (format == Bitmap::DataFormat::FLOAT)
-		{
-			return DXGI_FORMAT_R32G32B32_FLOAT;
-		}
-		else
-		{
-			assert("Unsupported number of channels");
-			return DXGI_FORMAT_UNKNOWN;
-		}
-	case 4:
-		if (format == Bitmap::DataFormat::FLOAT)
-		{
-			return DXGI_FORMAT_R32G32B32A32_FLOAT;
-		}
-		else
-		{
-			return DXGI_FORMAT_R8G8B8A8_UINT;
-		}
+	case TextureFormat::RGBA32f:
+		return DXGI_FORMAT_R32G32B32A32_FLOAT;
+	case TextureFormat::RGB32f:
+		return DXGI_FORMAT_R32G32B32_FLOAT;
+	case TextureFormat::R8u:
+		return DXGI_FORMAT_R8_UINT;
 	default:
 		assert("Unsupported number of channels");
 		return DXGI_FORMAT_UNKNOWN;
 	}
 }
 
-bool DX11Texture::Initialize(const BitmapPtr& bitmap)
+bool DX11Texture::Initialize(const void* data, UINT width, UINT height, UINT pitch, TextureFormat texFormat)
 {
-	DXGI_FORMAT format = GetFormat(bitmap->GetNumChannels(), bitmap->GetDataFormat());
+	DXGI_FORMAT format = GetFormat(texFormat);
 	if (format == DXGI_FORMAT_UNKNOWN)
 	{
 		return false;
 	}
 
 	D3D11_TEXTURE2D_DESC desc;
-	desc.Width = bitmap->GetWidth();
-	desc.Height = bitmap->GetHeight();
+	desc.Width = width;
+	desc.Height = height;
 	desc.MipLevels = 1;
 	desc.ArraySize = 1;
 	desc.Format = format;
@@ -95,8 +64,8 @@ bool DX11Texture::Initialize(const BitmapPtr& bitmap)
 	desc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA initData;
-	initData.pSysMem = bitmap->GetData();
-	initData.SysMemPitch = static_cast<UINT>(bitmap->GetPitch());
+	initData.pSysMem = data;
+	initData.SysMemPitch = pitch;
 	initData.SysMemSlicePitch = 0;
 
 	HRESULT result = m_device->CreateTexture2D(&desc, &initData, &m_texture);

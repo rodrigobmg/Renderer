@@ -1,5 +1,0 @@
-{
-	"model": "Assets/Models/sponza/sponza.obj",
-	"vertex_shader": "Assets/Shaders/color.vs",
-	"pixel_shader": "Assets/Shaders/color.ps"
-}

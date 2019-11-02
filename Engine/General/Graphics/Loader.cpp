@@ -9,14 +9,11 @@
 #include <General/Math/Vector4d.h>
 #include <General/Math/Vector3d.h>
 #include <General/Math/Vector2d.h>
-#include <General/Graphics/Bitmap.h>
 #include <General/Math/Color.h>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -122,34 +119,18 @@ void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const IGraphics
 	meshData.m_vertexData = graphics->CreateVertexArray(vertexCount, vertexDataPtr.get(), vertexElements);
 }
 
-static const int kRequiredNumberOfComponents = 4;
-bool GetBitmapFromMaterial(const aiMaterial* material, const aiTextureType textureType, const string& directory, const BitmapPtr& bitmap) {
+string GetTextureFilePathFromMaterial(const aiMaterial* material, const aiTextureType textureType, const string& directory) {
 
 	bool result = false;
 	aiString file;
 	if (material->GetTexture(textureType, 0, &file) == aiReturn_SUCCESS)
 	{
-		std::string filePath = std::string(file.C_Str());
+		string filePath(file.C_Str());
 		filePath = filePath.substr(filePath.find_last_of("\\") + 1);
 		filePath = directory + filePath;
-
-		int width, height, channels;
-		float* data = stbi_loadf(filePath.c_str(), &width, &height, &channels, kRequiredNumberOfComponents);
-		if (data)
-		{
-			result = bitmap->Alloc(data, width, height, kRequiredNumberOfComponents, Bitmap::DataFormat::FLOAT);
-			if (!result)
-			{
-				ERROR_LOG("Failed to create bitmap: {}", filePath);
-			}
-			stbi_image_free(data);
-		}
-		else
-		{
-			ERROR_LOG("Failed to load texture: {}", filePath);
-		}
+		return filePath;
 	}
-	return result;
+	return string();
 }
 
 void ExtractMaterialData(const IGraphicsPtr& graphics, const aiScene* scene, const aiMesh* aiMesh, const std::string& directory, MaterialPtr& material)
@@ -158,9 +139,8 @@ void ExtractMaterialData(const IGraphicsPtr& graphics, const aiScene* scene, con
 	unsigned int diffuseCount = aiMaterial->GetTextureCount(aiTextureType_DIFFUSE);
 	unsigned int specularCount = aiMaterial->GetTextureCount(aiTextureType_SPECULAR);
 	unsigned int normalCount = aiMaterial->GetTextureCount(aiTextureType_HEIGHT);
-
-	BitmapPtr diffuse(new Bitmap());
-	BitmapPtr specular(new Bitmap());
+	ITexturePtr diffuseTexture;
+	ITexturePtr specularTexture;
 
 	//Default diffuse
 	{
@@ -168,7 +148,7 @@ void ExtractMaterialData(const IGraphicsPtr& graphics, const aiScene* scene, con
 		if (aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuse) == aiReturn_SUCCESS)
 		{
 			Color diffuseColor(aiDiffuse.r, aiDiffuse.g, aiDiffuse.b, 1.0f);
-			diffuse->Alloc(reinterpret_cast<float*>(&diffuseColor), 1, 1, 4, Bitmap::DataFormat::FLOAT);
+			diffuseTexture = graphics->CreateTexture(reinterpret_cast<float*>(&diffuseColor), 1, 1, sizeof(float) * 4, TextureFormat::RGBA32f);
 		}
 	}
 
@@ -178,22 +158,30 @@ void ExtractMaterialData(const IGraphicsPtr& graphics, const aiScene* scene, con
 		if (aiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, aiSpecular) == aiReturn_SUCCESS)
 		{
 			Color specularColor(aiSpecular.r, aiSpecular.g, aiSpecular.b, 1.0f);
-			specular->Alloc(reinterpret_cast<float*>(&specularColor), 1, 1, 4, Bitmap::DataFormat::FLOAT);
+			specularTexture = graphics->CreateTexture(reinterpret_cast<float*>(&specularColor), 1, 1, sizeof(float) * 4, TextureFormat::RGBA32f);
 		}
 	}
 
+	string diffusePath;
 	if (diffuseCount > 0)
 	{
-		GetBitmapFromMaterial(aiMaterial, aiTextureType_DIFFUSE, directory, diffuse);
+		diffusePath = GetTextureFilePathFromMaterial(aiMaterial, aiTextureType_DIFFUSE, directory);
 	}
 
+	string specularPath;
 	if (specularCount > 0)
 	{
-		GetBitmapFromMaterial(aiMaterial, aiTextureType_SPECULAR, directory, specular);
+		specularPath = GetTextureFilePathFromMaterial(aiMaterial, aiTextureType_SPECULAR, directory);
 	}
 
-	ITexturePtr diffuseTexture = graphics->CreateTexture(diffuse);
-	ITexturePtr specularTexture = graphics->CreateTexture(specular);
+	if (!diffusePath.empty())
+	{
+		diffuseTexture = graphics->CreateTexture(diffusePath);
+	}
+	if (!specularPath.empty())
+	{
+		specularTexture = graphics->CreateTexture(specularPath);
+	}
 	material->SetDiffuseTexture(diffuseTexture);
 	material->SetSpecularTexture(specularTexture);
 
