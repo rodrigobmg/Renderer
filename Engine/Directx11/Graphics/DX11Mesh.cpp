@@ -70,7 +70,7 @@ bool DX11Mesh::Initialize()
 
 	//Set up the description of the static index buffer
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = static_cast<UINT>(sizeof(uint16_t) * m_indices->GetIndexCount());
+	indexBufferDesc.ByteWidth = static_cast<UINT>(sizeof(uint32_t) * m_indices->GetIndexCount());
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
@@ -100,7 +100,7 @@ void DX11Mesh::Render()
 		m_deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 
 		//Set the index buffer to active in the input assembler so it can be rendered
-		m_deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+		m_deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 		//Set the type of primitive that should be rendered
 		m_deviceContext->IASetPrimitiveTopology(m_topology);

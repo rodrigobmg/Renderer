@@ -36,21 +36,14 @@ struct MeshData
 void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const IGraphicsPtr& graphics)
 {
 	size_t vertexCount = aiMesh->mNumVertices;
-	assert(vertexCount < std::numeric_limits<uint16_t>::max());
+	assert(vertexCount < std::numeric_limits<uint32_t>::max());
 	size_t indexCount = static_cast<size_t>(aiMesh->mNumFaces) * static_cast<size_t>(aiMesh->mFaces[0].mNumIndices);
-	UniquePtr<uint16_t> indexDataPtr(new uint16_t[indexCount]);
-	uint16_t* indexData = indexDataPtr.get();
+	UniquePtr<uint32_t> indexDataPtr(new uint32_t[indexCount]);
+	uint32_t* indexData = indexDataPtr.get();
 
-	int numUVChannels = aiMesh->GetNumUVChannels();
-	assert(numUVChannels > 0);
-
-	size_t totalNumVertexElements = static_cast<size_t>(numUVChannels);
 	assert(aiMesh->HasNormals());
-	totalNumVertexElements++;
 	assert(aiMesh->HasPositions());
-	totalNumVertexElements++;
-	assert(totalNumVertexElements == 3);
-	vector<VertexElement> vertexElements(totalNumVertexElements);
+	vector<VertexElement> vertexElements(3);
 
 	vertexElements[0].m_name = "POSITION";
 	vertexElements[0].m_offset = 0;
@@ -86,7 +79,12 @@ void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const IGraphics
 
 		//TEXCOORD_0
 		{
-			Vector2d UV(aiMesh->mTextureCoords[0][i].x, aiMesh->mTextureCoords[0][i].y);
+			Vector2d UV;
+			if (aiMesh->HasTextureCoords(0))
+			{
+				UV.x = aiMesh->mTextureCoords[0][i].x;
+				UV.y = aiMesh->mTextureCoords[0][i].y;
+			}
 			memcpy((verteData + vertexElements[2].m_offset), &UV, VertexElement::GetVertexElementSize(vertexElements[2].m_type));
 		}
 
@@ -95,7 +93,7 @@ void ExtractVertexData(const aiMesh* aiMesh, MeshData& meshData, const IGraphics
 
 	for (unsigned int i = 0; i < aiMesh->mNumFaces; i++) {
 		for (unsigned int j = 0; j < aiMesh->mFaces[i].mNumIndices; j++) {
-			indexData[j + (i * 3)] = aiMesh->mFaces[i].mIndices[j];
+			indexData[j + (i * 3)] = static_cast<uint32_t>(aiMesh->mFaces[i].mIndices[j]);
 		}
 	}
 

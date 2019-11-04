@@ -35,7 +35,7 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 		return;
 	}
 
-	m_object = Loader::LoadModel("Assets/cube.object", m_graphics);
+	m_object = Loader::LoadModel("Assets/spaceship.object", m_graphics);
 	if (!m_object)
 	{
 		m_ready = false;

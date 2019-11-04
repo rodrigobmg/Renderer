@@ -536,7 +536,7 @@ SharedPtr<IVertexArray> DX11Graphics::CreateVertexArray(size_t vertexCount, cons
 	return vertexArray;
 }
 
-SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const uint16_t* indexData, size_t indexCount) const
+SharedPtr<IIndexArray> DX11Graphics::CreateIndexArray(const uint32_t* indexData, size_t indexCount) const
 {
 	SharedPtr<IIndexArray> indexArray(new IndexArray(indexCount, indexData));
 	return indexArray;

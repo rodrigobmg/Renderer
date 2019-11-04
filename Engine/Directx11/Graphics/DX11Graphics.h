@@ -18,7 +18,7 @@ public:
 	virtual void Shutdown() override;
 
 	virtual IVertexArrayPtr CreateVertexArray(size_t vertexCount, const byte* vertexData, const vector<VertexElement>& vertexElements) const override;
-	virtual IIndexArrayPtr CreateIndexArray(const uint16_t* indexData, size_t indexCount) const override;
+	virtual IIndexArrayPtr CreateIndexArray(const uint32_t* indexData, size_t indexCount) const override;
 	virtual IShaderPtr CreateShader(const string& path, ShaderType shaderType) const override;
 	virtual IMeshPtr CreateMesh(const IVertexArrayPtr& vertexData, const IIndexArrayPtr& indexData, PrimitiveType primitive) const override;
 	virtual IConstantBufferPtr CreateObjectConstantBuffer() const override;
