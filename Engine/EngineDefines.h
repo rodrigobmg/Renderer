@@ -14,7 +14,6 @@ class IMesh;
 class Material;
 class IConstantBuffer;
 class Material;
-class SceneObject;
 class IShader;
 class IWindow;
 class IVertexArray;
@@ -27,14 +26,14 @@ class ITexture;
 class ISamplerState;
 class Font;
 class PointLight;
+class SceneNode;
+class Scene;
 
 struct ObjectConstantBufferData;
 struct VertexElement;
 struct FrameConstantBufferData;
 struct MaterialConstantBufferData;
 
-typedef SharedPtr<SceneObject> SceneObjectPtr;
-typedef WeakPtr<SceneObject> SceneObjectWeakPtr;
 typedef SharedPtr<IMesh> IMeshPtr;
 typedef SharedPtr<Material> MaterialPtr;
 typedef SharedPtr<IConstantBuffer> IConstantBufferPtr;
@@ -46,6 +45,9 @@ typedef SharedPtr<IGraphics> IGraphicsPtr;
 typedef SharedPtr<ITexture> ITexturePtr;
 typedef SharedPtr<ISamplerState> ISamplerStatePtr;
 typedef SharedPtr<ICamera> ICameraPtr;
+typedef SharedPtr<SceneNode> SceneNodePtr;
+typedef WeakPtr<SceneNode> SceneNodeWeakPtr;
+typedef SharedPtr<Scene> ScenePtr;
 
 #define ERROR_LOG(...) SPDLOG_ERROR(__VA_ARGS__)
 #define DEBUG_LOG(...) SPDLOG_DEBUG(__VA_ARGS__)

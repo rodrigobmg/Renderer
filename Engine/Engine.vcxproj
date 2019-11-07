@@ -139,9 +139,11 @@
     <ClInclude Include="General\Graphics\Loader.h" />
     <ClInclude Include="General\Graphics\Material.h" />
     <ClInclude Include="General\Graphics\MaterialConstantBuffer.h" />
+    <ClInclude Include="General\Graphics\MeshNode.h" />
     <ClInclude Include="General\Graphics\ObjectConstantBuffer.h" />
     <ClInclude Include="General\Graphics\PointLight.h" />
-    <ClInclude Include="General\Graphics\SceneObject.h" />
+    <ClInclude Include="General\Graphics\Scene.h" />
+    <ClInclude Include="General\Graphics\SceneNode.h" />
     <ClInclude Include="General\Graphics\TextureManager.h" />
     <ClInclude Include="General\Graphics\VertexArray.h" />
     <ClInclude Include="General\Graphics\VertexElement.h" />
@@ -177,8 +179,10 @@
     <ClCompile Include="General\Graphics\Light.cpp" />
     <ClCompile Include="General\Graphics\Loader.cpp" />
     <ClCompile Include="General\Graphics\Material.cpp" />
+    <ClCompile Include="General\Graphics\MeshNode.cpp" />
     <ClCompile Include="General\Graphics\PointLight.cpp" />
-    <ClCompile Include="General\Graphics\SceneObject.cpp" />
+    <ClCompile Include="General\Graphics\Scene.cpp" />
+    <ClCompile Include="General\Graphics\SceneNode.cpp" />
     <ClCompile Include="General\Graphics\TextureManager.cpp" />
     <ClCompile Include="General\Graphics\VertexArray.cpp" />
     <ClCompile Include="General\Graphics\VertexElement.cpp" />

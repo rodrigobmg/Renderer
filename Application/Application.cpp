@@ -3,7 +3,8 @@
 
 #include <General/Application/Input.h>
 #include <General/Application/IWindow.h>
-#include <General/Graphics/SceneObject.h>
+#include <General/Graphics/Scene.h>
+#include <General/Graphics/SceneNode.h>
 #include <General/Graphics/Loader.h>
 #include <General/Graphics/ICamera.h>
 #include <General/Graphics/IGraphics.h>
@@ -35,15 +36,14 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 		return;
 	}
 
-	m_object = Loader::LoadModel("Assets/spaceship.object", m_graphics);
-	if (!m_object)
+	m_scene = Loader::LoadScene("Assets/spaceship.object", m_graphics);
+	if (!m_scene)
 	{
 		m_ready = false;
 		return;
 	}
-	m_object->m_transform.m_scale *= 0.2f;
 
-	m_pointLight = PointLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Vector3d(0.0f, 0.0f, -50.0f), m_graphics);
+	m_pointLight = PointLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Vector3d(0.0f, 0.0f, -200.0f), m_graphics);
 
 	assert(m_window);
 }
@@ -56,9 +56,9 @@ void Application::Render()
 {
 	if (m_graphics)
 	{
-		vector<PointLight> lights(1, m_pointLight);
+		vector<PointLight*> lights(1, &m_pointLight);
 		m_graphics->StartRender(lights);
-		m_object->Render();
+		m_scene->Render();
 		m_pointLight.Render();
 		m_graphics->EndRender();
 	}
@@ -89,6 +89,9 @@ void Application::Update()
 
 	m_mousePosX = x;
 	m_mousePosY = y;
+
+	m_scene->Update();
+	m_pointLight.GetScene()->Update();
 }
 
 static const float kCameraSpeed = 100.0f;
@@ -161,8 +164,8 @@ void Application::RotateObject()
 	}
 	if (Input::GetKeyDown(Input::KEY_R))
 	{
-		m_object->m_transform.m_orientation = Quaternion();
+		m_scene->GetRootNode()->m_localTransform.m_orientation = Quaternion();
 	}
 
-	m_object->m_transform.m_orientation *= Quaternion(delta * deltaTime);
+	m_scene->GetRootNode()->m_localTransform.m_orientation *= Quaternion(delta * deltaTime);
 }

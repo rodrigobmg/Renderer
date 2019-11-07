@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "PointLight.h"
 
-#include "SceneObject.h"
+#include "Scene.h"
+#include "SceneNode.h"
 
 
 PointLight::PointLight()
@@ -16,7 +17,10 @@ PointLight::PointLight(const Color& color, const Vector3d& position, const IGrap
 	, m_position(position)
 	, m_worldPosition(position)
 {
-	m_sceneObject->m_transform.m_position = m_position;
+	if (m_scene)
+	{
+		m_scene->GetRootNode()->m_localTransform.m_position = m_position;
+	}
 }
 
 PointLight::PointLight(const PointLight& other)
@@ -31,7 +35,10 @@ void PointLight::SetPosition(const Vector3d& position)
 {
 	m_position = position;
 	m_worldPosition = m_position;
-	m_sceneObject->m_transform.m_position = m_worldPosition;
+	if (m_scene)
+	{
+		m_scene->GetRootNode()->m_localTransform.m_position = m_worldPosition;
+	}
 	m_rotationAroundOrigin = Quaternion();
 }
 
@@ -39,5 +46,8 @@ void PointLight::SetRotationAroundOrigin(const Quaternion& rotation)
 {
 	m_rotationAroundOrigin = rotation;
 	m_worldPosition = m_position * m_rotationAroundOrigin;
-	m_sceneObject->m_transform.m_position = m_worldPosition;
+	if (m_scene)
+	{
+		m_scene->GetRootNode()->m_localTransform.m_position = m_worldPosition;
+	}
 }

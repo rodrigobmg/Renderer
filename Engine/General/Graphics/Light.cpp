@@ -5,7 +5,9 @@
 #include "IGraphics.h"
 #include "Loader.h"
 
-#include <General/Graphics/SceneObject.h>
+#include "Scene.h"
+#include "SceneNode.h"
+#include "MeshNode.h"
 
 Light::Light()
 	: m_color(1.0f)
@@ -17,16 +19,17 @@ Light::Light(const Color& color, const IGraphicsPtr& graphics)
 	: m_color(color)
 	, m_intensity(1.0f)
 {
-	m_sceneObject = Loader::LoadModel("Assets/pointlight.object", graphics);
-	if (m_sceneObject)
+	m_scene = Loader::LoadScene("Assets/pointlight.object", graphics);
+	if (m_scene)
 	{
 		ITexturePtr texture = graphics->CreateTexture(reinterpret_cast<float*>(&m_color), 1, 1, sizeof(float) * 4, TextureFormat::RGBA32f);
-		m_sceneObject->GetChildren()[0]->GetMaterial(0)->SetDiffuseTexture(texture);
+		MeshNode* meshNode = static_cast<MeshNode*>(m_scene->GetRootNode()->GetChild(0).get());
+		meshNode->GetMaterial(0)->SetDiffuseTexture(texture);
 	}
 }
 
 Light::Light(const Light& other)
-	: m_sceneObject(other.m_sceneObject)
+	: m_scene(other.m_scene)
 	, m_color(other.m_color)
 	, m_intensity(other.m_intensity)
 {
@@ -34,8 +37,8 @@ Light::Light(const Light& other)
 
 void Light::Render()
 {
-	if (m_sceneObject)
+	if (m_scene)
 	{
-		m_sceneObject->Render();
+		m_scene->Render();
 	}
 }

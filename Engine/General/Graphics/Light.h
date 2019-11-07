@@ -12,13 +12,13 @@ public:
 
 	void SetColor(const Color& color) { m_color = color; }
 	const Color& GetColor() const { return m_color; }
-	const SceneObjectPtr& GetSceneObject() const { return m_sceneObject; }
+	const ScenePtr& GetScene() const { return m_scene; }
 	float GetIntensity() const { return m_intensity; }
 	void SetIntensity(float intensity) { m_intensity = intensity; }
-	void Render();
+	virtual void Render();
 
 protected:
-	SceneObjectPtr	m_sceneObject;
-	Color			m_color;
-	float			m_intensity;
+	ScenePtr	m_scene;
+	Color		m_color;
+	float		m_intensity;
 };

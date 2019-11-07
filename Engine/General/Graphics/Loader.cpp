@@ -3,7 +3,9 @@
 
 #include <General/Graphics/IGraphics.h>
 #include <General/Graphics/VertexElement.h>
-#include <General/Graphics/SceneObject.h>
+#include <General/Graphics/Scene.h>
+#include <General/Graphics/SceneNode.h>
+#include <General/Graphics/MeshNode.h>
 #include <General/Graphics/Material.h>
 #include <General/Math/Quaternion.h>
 #include <General/Math/Vector4d.h>
@@ -192,10 +194,9 @@ void ExtractMaterialData(const IGraphicsPtr& graphics, const aiScene* scene, con
 	material->SetShininessStrength(shininessStrength);
 }
 
-SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const string& directory, const IGraphicsPtr& graphics,
+SceneNodePtr CreateSceneDescription(const aiScene* scene, const aiNode* node, const string& directory, const IGraphicsPtr& graphics,
 	const IShaderPtr& vertexShader, const IShaderPtr& pixelShader)
 {
-	SceneObjectPtr sceneObject(new SceneObject());
 	vector<IMeshPtr> meshes;
 	MaterialPtr defaultMaterial(new Material(vertexShader, pixelShader, graphics->CreateMaterialConstantBuffer()));
 	vector<MaterialPtr> materials;
@@ -219,28 +220,34 @@ SceneObjectPtr CreateSceneObject(const aiScene* scene, const aiNode* node, const
 		materials.push_back(material);
 	}
 
+	SceneNodePtr sceneNode;
 	if (!meshes.empty())
 	{
-		sceneObject->SetMeshData(meshes, materials, graphics->CreateObjectConstantBuffer());
+		MeshNode* meshNode = new MeshNode(meshes, materials, graphics->CreateObjectConstantBuffer());
+		sceneNode.reset(meshNode);
+	}
+	else
+	{
+		sceneNode.reset(new SceneNode());
 	}
 
 	aiVector3D position, scale, rotation;
 	node->mTransformation.Decompose(scale, rotation, position);
-	sceneObject->m_transform.m_position = Vector3d(position.x, position.y, position.z);
-	sceneObject->m_transform.m_scale = Vector3d(scale.x, scale.y, scale.z);
-	sceneObject->m_transform.m_orientation = Quaternion(Vector3d(rotation.x, rotation.y, rotation.z));
+	sceneNode->m_localTransform.m_position = Vector3d(position.x, position.y, position.z);
+	sceneNode->m_localTransform.m_scale = Vector3d(scale.x, scale.y, scale.z);
+	sceneNode->m_localTransform.m_orientation = Quaternion(Vector3d(rotation.x, rotation.y, rotation.z));
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		SceneObjectPtr child = CreateSceneObject(scene, node->mChildren[i], directory, graphics, vertexShader, pixelShader);
-		child->SetParent(sceneObject);
-		sceneObject->AddChild(child);
+		SceneNodePtr child = CreateSceneDescription(scene, node->mChildren[i], directory, graphics, vertexShader, pixelShader);
+		child->SetParent(sceneNode);
+		sceneNode->AddChild(child);
 	}
 
-	return sceneObject;
+	return sceneNode;
 }
 
-SceneObjectPtr Loader::LoadModel(const string& path, const IGraphicsPtr& graphics)
+ScenePtr Loader::LoadScene(const string& path, const IGraphicsPtr& graphics)
 {
 	std::ifstream fileStream(path.c_str());
 	if (!fileStream.is_open())
@@ -260,12 +267,15 @@ SceneObjectPtr Loader::LoadModel(const string& path, const IGraphicsPtr& graphic
 	IShaderPtr pixelShader = graphics->CreateShader(pixelShaderPath, ShaderType::PIXEL_SHADER);
 
 	Assimp::Importer importer; 
-	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+	const aiScene* aiScene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
+	if (!aiScene || aiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !aiScene->mRootNode) {
 		string error = importer.GetErrorString();
 		ERROR_LOG("ERROR::ASSIMP:: {}", error);
 		return false;
 	}
 	string directory = modelPath.substr(0, modelPath.find_last_of('/') + 1);
-	return CreateSceneObject(scene, scene->mRootNode, directory, graphics, vertexShader, pixelShader);
+	ScenePtr scene(new Scene());
+	SceneNodePtr rootNode = CreateSceneDescription(aiScene, aiScene->mRootNode, directory, graphics, vertexShader, pixelShader);
+	scene->SetRootNode(rootNode);
+	return scene;
 }

@@ -69,9 +69,6 @@
     <ClInclude Include="General\Graphics\ObjectConstantBuffer.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="General\Graphics\SceneObject.h">
-      <Filter>General\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="General\Graphics\VertexArray.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
@@ -157,6 +154,15 @@
     <ClInclude Include="General\Graphics\TextureManager.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="General\Graphics\SceneNode.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\MeshNode.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\Scene.h">
+      <Filter>General\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -176,9 +182,6 @@
       <Filter>General\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="General\Graphics\Material.cpp">
-      <Filter>General\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="General\Graphics\SceneObject.cpp">
       <Filter>General\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="General\Graphics\VertexArray.cpp">
@@ -254,6 +257,15 @@
       <Filter>General\Graphics\Lights</Filter>
     </ClCompile>
     <ClCompile Include="General\Graphics\TextureManager.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\SceneNode.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\MeshNode.cpp">
+      <Filter>General\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\Scene.cpp">
       <Filter>General\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
