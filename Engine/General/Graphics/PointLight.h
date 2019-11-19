@@ -7,8 +7,7 @@
 class PointLight : public Light
 {
 public:
-	PointLight();
-	PointLight(const Color& color, const Vector3d& position, const IGraphicsPtr& graphics);
+	PointLight(const Color& color, const Vector3d& position);
 	PointLight(const PointLight& other);
 	~PointLight() {}
 

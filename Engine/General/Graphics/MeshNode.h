@@ -5,7 +5,7 @@
 class MeshNode : public SceneNode
 {
 public:
-	MeshNode(const vector<IMeshPtr>& meshes, const vector<MaterialPtr>& materials, const IConstantBufferPtr& objectConstantBuffer);
+	MeshNode(const vector<IMeshPtr>& meshes, const vector<MaterialPtr>& materials, const IConstantBufferPtr& objectConstantBuffer, const string& name);
 	virtual ~MeshNode();
 
 	virtual void Render() override;

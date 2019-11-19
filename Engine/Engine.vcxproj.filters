@@ -154,14 +154,17 @@
     <ClInclude Include="General\Graphics\TextureManager.h">
       <Filter>General\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="General\Graphics\SceneNode.h">
-      <Filter>General\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="General\Graphics\MeshNode.h">
-      <Filter>General\Graphics</Filter>
+      <Filter>General\Graphics\Scene</Filter>
     </ClInclude>
     <ClInclude Include="General\Graphics\Scene.h">
-      <Filter>General\Graphics</Filter>
+      <Filter>General\Graphics\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\SceneNode.h">
+      <Filter>General\Graphics\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\PointLightNode.h">
+      <Filter>General\Graphics\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -259,14 +262,17 @@
     <ClCompile Include="General\Graphics\TextureManager.cpp">
       <Filter>General\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="General\Graphics\SceneNode.cpp">
-      <Filter>General\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="General\Graphics\MeshNode.cpp">
-      <Filter>General\Graphics</Filter>
+      <Filter>General\Graphics\Scene</Filter>
     </ClCompile>
     <ClCompile Include="General\Graphics\Scene.cpp">
-      <Filter>General\Graphics</Filter>
+      <Filter>General\Graphics\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\SceneNode.cpp">
+      <Filter>General\Graphics\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\PointLightNode.cpp">
+      <Filter>General\Graphics\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -296,6 +302,9 @@
     </Filter>
     <Filter Include="General\Graphics\Lights">
       <UniqueIdentifier>{8c18ec06-73ce-44f1-8b0b-7ab7b704df64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General\Graphics\Scene">
+      <UniqueIdentifier>{b1ef4d3c-ba8c-4598-9113-66e9526eacc1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

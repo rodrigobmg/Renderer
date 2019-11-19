@@ -55,7 +55,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>Create</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
@@ -76,7 +76,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>Create</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -142,6 +142,7 @@
     <ClInclude Include="General\Graphics\MeshNode.h" />
     <ClInclude Include="General\Graphics\ObjectConstantBuffer.h" />
     <ClInclude Include="General\Graphics\PointLight.h" />
+    <ClInclude Include="General\Graphics\PointLightNode.h" />
     <ClInclude Include="General\Graphics\Scene.h" />
     <ClInclude Include="General\Graphics\SceneNode.h" />
     <ClInclude Include="General\Graphics\TextureManager.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="General\Graphics\Material.cpp" />
     <ClCompile Include="General\Graphics\MeshNode.cpp" />
     <ClCompile Include="General\Graphics\PointLight.cpp" />
+    <ClCompile Include="General\Graphics\PointLightNode.cpp" />
     <ClCompile Include="General\Graphics\Scene.cpp" />
     <ClCompile Include="General\Graphics\SceneNode.cpp" />
     <ClCompile Include="General\Graphics\TextureManager.cpp" />

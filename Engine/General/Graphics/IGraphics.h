@@ -17,7 +17,7 @@ public:
 	virtual ~IGraphics() {};
 	
 	virtual bool Initialize(const IWindowPtr& window, int screenWidth, int screenHeight, bool vsync, bool fullscreen, float screenDepth, float screenNear) = 0;
-	virtual void StartRender(const vector<PointLight*>& lights) = 0;
+	virtual void StartRender(const ScenePtr& scene) = 0;
 	virtual void EndRender() = 0;
 	virtual void Shutdown() = 0;
 	virtual IVertexArrayPtr CreateVertexArray(size_t vertexCount, const byte* vertexData, const vector<VertexElement>& vertexElements) const = 0;

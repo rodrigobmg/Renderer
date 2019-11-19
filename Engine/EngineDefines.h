@@ -25,7 +25,7 @@ class Vector2d;
 class ITexture;
 class ISamplerState;
 class Font;
-class PointLight;
+class Light;
 class SceneNode;
 class Scene;
 
@@ -48,6 +48,7 @@ typedef SharedPtr<ICamera> ICameraPtr;
 typedef SharedPtr<SceneNode> SceneNodePtr;
 typedef WeakPtr<SceneNode> SceneNodeWeakPtr;
 typedef SharedPtr<Scene> ScenePtr;
+typedef SharedPtr<Light> LightPtr;
 
 #define ERROR_LOG(...) SPDLOG_ERROR(__VA_ARGS__)
 #define DEBUG_LOG(...) SPDLOG_DEBUG(__VA_ARGS__)

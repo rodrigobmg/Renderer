@@ -12,6 +12,7 @@
 #include <General/Math/Vector3d.h>
 #include <General/Math/Math.h>
 #include <General/Math/Transform.h>
+#include <General/Graphics/PointLightNode.h>
 
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
@@ -36,14 +37,19 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 		return;
 	}
 
-	m_scene = Loader::LoadScene("Assets/spaceship.object", m_graphics);
+	m_scene = Loader::LoadScene("Assets/cube.object", m_graphics);
 	if (!m_scene)
 	{
 		m_ready = false;
 		return;
 	}
 
-	m_pointLight = PointLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Vector3d(0.0f, 0.0f, -200.0f), m_graphics);
+	if (!m_scene->ContainsNode(SceneNodeType::kPointLight))
+	{
+		SharedPtr<PointLight> light(new PointLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Vector3d(0.0f, 0.0f, -200.0f)));
+		SharedPtr<PointLightNode> node(new PointLightNode(light, "Main Light"));
+		m_scene->GetRootNode()->AddChild(node);
+	}
 
 	assert(m_window);
 }
@@ -56,10 +62,8 @@ void Application::Render()
 {
 	if (m_graphics)
 	{
-		vector<PointLight*> lights(1, &m_pointLight);
-		m_graphics->StartRender(lights);
+		m_graphics->StartRender(m_scene);
 		m_scene->Render();
-		m_pointLight.Render();
 		m_graphics->EndRender();
 	}
 }
@@ -91,10 +95,10 @@ void Application::Update()
 	m_mousePosY = y;
 
 	m_scene->Update();
-	m_pointLight.GetScene()->Update();
+	//m_pointLight.GetScene()->Update();
 }
 
-static const float kCameraSpeed = 100.0f;
+static const float kCameraSpeed = 1000.0f;
 void Application::MoveCamera(int x, int y)
 {
 	float deltaTime = m_timer.GetDeltaTime();
@@ -138,8 +142,8 @@ void Application::RotateLight(int x, int y)
 	float deltaY = (y - m_mousePosY) / static_cast<float>(m_window->GetWindowHeight());
 
 	Quaternion deltaRotation(Vector3d(kMousMoveMultiplier * deltaY, kMousMoveMultiplier * deltaX, 0.f) * deltaTime);
-	const Quaternion& lightRotation = m_pointLight.GetRotationAroundOrigin();
-	m_pointLight.SetRotationAroundOrigin(deltaRotation * lightRotation);
+	/*const Quaternion& lightRotation = m_pointLight.GetRotationAroundOrigin();
+	m_pointLight.SetRotationAroundOrigin(deltaRotation * lightRotation);*/
 }
 
 void Application::RotateObject()

@@ -6,8 +6,8 @@
 #include "ObjectConstantBuffer.h"
 #include "Material.h"
 
-MeshNode::MeshNode(const vector<IMeshPtr>& meshes, const vector<MaterialPtr>& materials, const IConstantBufferPtr& objectConstantBuffer)
-	: SceneNode(SceneNodeType::kMesh)
+MeshNode::MeshNode(const vector<IMeshPtr>& meshes, const vector<MaterialPtr>& materials, const IConstantBufferPtr& objectConstantBuffer, const string& name)
+	: SceneNode(name, SceneNodeType::kMesh)
 	, m_meshes(meshes)
 	, m_materials(materials)
 	, m_objectConstantBuffer(objectConstantBuffer)

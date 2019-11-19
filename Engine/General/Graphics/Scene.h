@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SceneNode.h"
+
 class Scene
 {
 public:
@@ -10,6 +12,8 @@ public:
 	void Update();
 	void Render();
 	SceneNodePtr& GetRootNode() { return m_rootNode; }
+	bool ContainsNode(SceneNodeType nodeType) const;
+	void GetNodesOfType(SceneNodeType nodeType, vector<const SceneNode*>& nodes) const;
 
 private:
 	SceneNodePtr	m_rootNode;

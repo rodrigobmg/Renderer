@@ -223,12 +223,12 @@ SceneNodePtr CreateSceneDescription(const aiScene* scene, const aiNode* node, co
 	SceneNodePtr sceneNode;
 	if (!meshes.empty())
 	{
-		MeshNode* meshNode = new MeshNode(meshes, materials, graphics->CreateObjectConstantBuffer());
+		MeshNode* meshNode = new MeshNode(meshes, materials, graphics->CreateObjectConstantBuffer(), node->mName.C_Str());
 		sceneNode.reset(meshNode);
 	}
 	else
 	{
-		sceneNode.reset(new SceneNode());
+		sceneNode.reset(new SceneNode(node->mName.C_Str()));
 	}
 
 	aiVector3D position, scale, rotation;
@@ -278,4 +278,10 @@ ScenePtr Loader::LoadScene(const string& path, const IGraphicsPtr& graphics)
 	SceneNodePtr rootNode = CreateSceneDescription(aiScene, aiScene->mRootNode, directory, graphics, vertexShader, pixelShader);
 	scene->SetRootNode(rootNode);
 	return scene;
+}
+
+SceneNodePtr Loader::LoadSceneNode(const string& path, const IGraphicsPtr& graphics)
+{
+	ScenePtr scene = LoadScene(path, graphics);
+	return scene->GetRootNode();
 }

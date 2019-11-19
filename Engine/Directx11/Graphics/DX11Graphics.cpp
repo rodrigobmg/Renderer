@@ -17,6 +17,8 @@
 #include <General/Graphics/PointLight.h>
 #include <General/Graphics/Font.h>
 #include <General/Graphics/TextureManager.h>
+#include <General/Graphics/Scene.h>
+#include <General/Graphics/PointLightNode.h>
 
 //Reference:http://www.rastertek.com/
 
@@ -428,7 +430,7 @@ bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int scr
 }
 
 static const float kClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-void DX11Graphics::StartRender(const vector<PointLight*>& lights)
+void DX11Graphics::StartRender(const ScenePtr& scene)
 {
 	//Clear back buffer
 	m_deviceContext->ClearRenderTargetView(m_renderTargetView, kClearColor);
@@ -440,9 +442,27 @@ void DX11Graphics::StartRender(const vector<PointLight*>& lights)
 	// Get the view, and projection matrices and set them in the per frame constant buffer
 	m_frameConstantBufferData->m_view = MatrixTranspose(m_activeCamera->GetViewMatrix());
 
-	m_frameConstantBufferData->m_pointLightData[0].m_color = lights[0]->GetColor();
-	m_frameConstantBufferData->m_pointLightData[0].m_position = lights[0]->GetWorldPosition();
-	m_frameConstantBufferData->m_pointLightData[0].m_intensity = lights[0]->GetIntensity();
+	vector<const SceneNode*> nodes;
+	scene->GetNodesOfType(SceneNodeType::kPointLight, nodes);
+
+	for (int i = 0; i < kNumPointLights; i++)
+	{
+		if (i < nodes.size())
+		{
+			assert(nodes[i]->GetType() == SceneNodeType::kPointLight);
+			const PointLightNode* lightNode = static_cast<const PointLightNode*>(nodes[i]);
+			const SharedPtr<PointLight>& light = lightNode->GetLight();
+			assert(light);
+			m_frameConstantBufferData->m_pointLightData[i].m_color = light->GetColor();
+			m_frameConstantBufferData->m_pointLightData[i].m_position = light->GetWorldPosition();
+			m_frameConstantBufferData->m_pointLightData[i].m_intensity = light->GetIntensity();
+		}
+		else
+		{
+			break;
+		}
+	}
+
 	m_frameConstantBufferData->m_cameraPosition = m_activeCamera->GetTransform().m_position;
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
