@@ -10,7 +10,6 @@ public:
 	~PointLightNode();
 
 	virtual void Update();
-	virtual void Render();
 	const SharedPtr<PointLight>& GetLight() const { return m_pointLight; }
 
 private:

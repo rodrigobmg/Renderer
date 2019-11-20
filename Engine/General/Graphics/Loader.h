@@ -6,5 +6,5 @@ class IGraphics;
 namespace Loader
 {
 	ScenePtr LoadScene(const string& path, const IGraphicsPtr& graphics);
-	SceneNodePtr LoadSceneNode(const string& path, const IGraphicsPtr& graphics);
+	SceneNodePtr LoadMeshNode(const string& path, const IGraphicsPtr& graphics);
 }

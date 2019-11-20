@@ -11,13 +11,9 @@ public:
 	PointLight(const PointLight& other);
 	~PointLight() {}
 
-	const Vector3d& GetWorldPosition() const { return m_worldPosition; }
-	void SetPosition(const Vector3d& position);
-	const Quaternion& GetRotationAroundOrigin() const { return m_rotationAroundOrigin; }
-	void SetRotationAroundOrigin(const Quaternion& rotation);
+	const Vector3d& GetPosition() const { return m_position; }
+	void SetPosition(const Vector3d& position) { m_position = position; }
 
 private:
-	Quaternion	m_rotationAroundOrigin;
 	Vector3d	m_position;
-	Vector3d	m_worldPosition;
 };

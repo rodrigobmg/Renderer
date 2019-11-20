@@ -51,6 +51,13 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 		m_scene->GetRootNode()->AddChild(node);
 	}
 
+	vector<SceneNodePtr> nodes;
+	m_scene->GetNodesOfType(SceneNodeType::kPointLight, nodes);
+	SceneNodePtr lightModel = Loader::LoadMeshNode("Assets/pointlight.object", m_graphics);
+	assert(!nodes.empty());
+	nodes[0]->AddChild(lightModel);
+	lightModel->SetParent(nodes[0]);
+
 	assert(m_window);
 }
 
@@ -95,7 +102,6 @@ void Application::Update()
 	m_mousePosY = y;
 
 	m_scene->Update();
-	//m_pointLight.GetScene()->Update();
 }
 
 static const float kCameraSpeed = 1000.0f;

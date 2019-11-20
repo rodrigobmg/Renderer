@@ -22,15 +22,17 @@ public:
 	void AddChild(const SceneNodePtr& child) { m_children.push_back(child); }
 	SceneNodePtr& GetChild(int index);
 	bool ContainsNode(SceneNodeType type) const;
-	void GetNodesOfType(SceneNodeType type, vector<const SceneNode*>& nodes) const;
+	void GetNodesOfType(SceneNodeType type, vector<SceneNodePtr>& nodes);
 	SceneNodeType GetType() const { return m_type; }
 
 	Transform				m_localTransform;
 
 private:
-	Matrix4d GetParentMatrix() const;
+	SceneNode(const SceneNode& other) = delete;
 
 protected:
+	Matrix4d GetParentMatrix() const;
+
 	SceneNodeWeakPtr		m_parent;
 	vector<SceneNodePtr>	m_children;
 	Matrix4d				m_localToWorld;

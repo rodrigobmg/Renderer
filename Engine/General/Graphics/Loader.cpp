@@ -280,7 +280,7 @@ ScenePtr Loader::LoadScene(const string& path, const IGraphicsPtr& graphics)
 	return scene;
 }
 
-SceneNodePtr Loader::LoadSceneNode(const string& path, const IGraphicsPtr& graphics)
+SceneNodePtr Loader::LoadMeshNode(const string& path, const IGraphicsPtr& graphics)
 {
 	ScenePtr scene = LoadScene(path, graphics);
 	return scene->GetRootNode();

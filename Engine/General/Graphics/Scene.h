@@ -13,7 +13,7 @@ public:
 	void Render();
 	SceneNodePtr& GetRootNode() { return m_rootNode; }
 	bool ContainsNode(SceneNodeType nodeType) const;
-	void GetNodesOfType(SceneNodeType nodeType, vector<const SceneNode*>& nodes) const;
+	void GetNodesOfType(SceneNodeType nodeType, vector<SceneNodePtr>& nodes);
 
 private:
 	SceneNodePtr	m_rootNode;

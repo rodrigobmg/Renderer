@@ -442,7 +442,7 @@ void DX11Graphics::StartRender(const ScenePtr& scene)
 	// Get the view, and projection matrices and set them in the per frame constant buffer
 	m_frameConstantBufferData->m_view = MatrixTranspose(m_activeCamera->GetViewMatrix());
 
-	vector<const SceneNode*> nodes;
+	vector<SceneNodePtr> nodes;
 	scene->GetNodesOfType(SceneNodeType::kPointLight, nodes);
 
 	for (int i = 0; i < kNumPointLights; i++)
@@ -450,11 +450,11 @@ void DX11Graphics::StartRender(const ScenePtr& scene)
 		if (i < nodes.size())
 		{
 			assert(nodes[i]->GetType() == SceneNodeType::kPointLight);
-			const PointLightNode* lightNode = static_cast<const PointLightNode*>(nodes[i]);
+			const PointLightNode* lightNode = static_cast<const PointLightNode*>(nodes[i].get());
 			const SharedPtr<PointLight>& light = lightNode->GetLight();
 			assert(light);
 			m_frameConstantBufferData->m_pointLightData[i].m_color = light->GetColor();
-			m_frameConstantBufferData->m_pointLightData[i].m_position = light->GetWorldPosition();
+			m_frameConstantBufferData->m_pointLightData[i].m_position = light->GetPosition();
 			m_frameConstantBufferData->m_pointLightData[i].m_intensity = light->GetIntensity();
 		}
 		else

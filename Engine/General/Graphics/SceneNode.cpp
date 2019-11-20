@@ -52,15 +52,14 @@ bool SceneNode::ContainsNode(SceneNodeType type) const
 	return false;
 }
 
-void SceneNode::GetNodesOfType(SceneNodeType type, vector<const SceneNode*>& nodes) const
+void SceneNode::GetNodesOfType(SceneNodeType type, vector<SceneNodePtr>& nodes)
 {
-	if (m_type == type)
-	{
-		nodes.push_back(this);
-	}
-
 	for (const SceneNodePtr& child : m_children)
 	{
+		if (child->GetType() == type)
+		{
+			nodes.push_back(child);
+		}
 		child->GetNodesOfType(type, nodes);
 	}
 }

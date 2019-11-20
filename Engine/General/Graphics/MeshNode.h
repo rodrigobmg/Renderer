@@ -11,7 +11,9 @@ public:
 	virtual void Render() override;
 	MaterialPtr& GetMaterial(int index);
 
-public:
+private:
+	MeshNode(const MeshNode& other) = delete;
+
 	vector<IMeshPtr>			m_meshes;
 	vector<MaterialPtr>			m_materials;
 	IConstantBufferPtr			m_objectConstantBuffer;
