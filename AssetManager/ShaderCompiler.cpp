@@ -4,8 +4,9 @@
 #include <General/Application/Window.h>
 #include <Directx11/Graphics/DX11Graphics.h>
 
-static const fs::path kVertexShaderExt(".vs");
-static const fs::path kPixelShaderExt(".ps");
+static const fs::path kShaderExt(".hlsl");
+static const fs::path kVertexShaderPostFix("_vs");
+static const fs::path kPixelShaderPostFix("_ps");
 static const string kWindowName("Shader Compiler Window");
 static const int kWindowWidth = 1;
 static const int kWindowHeight = 1;
@@ -24,7 +25,7 @@ void GetShaderFilePaths(const fs::path& inputPath, vector<fs::path>& shaderPaths
 		{
 			fs::path path = entry.path();
 			string ext = path.extension().string();
-			if (path.extension() == kVertexShaderExt || path.extension() == kPixelShaderExt)
+			if (path.extension() == kShaderExt || path.extension() == kShaderExt)
 			{
 				shaderPaths.push_back(path);
 			}
@@ -54,7 +55,7 @@ bool ShaderCompiler::CompileShaders(const fs::path& inputPath)
 			for (const fs::path& path : shaderPaths)
 			{
 				ShaderType shaderType;
-				if (path.extension() == kVertexShaderExt)
+				if (path.string().find(kVertexShaderPostFix.string()) != string::npos)
 				{
 					shaderType = ShaderType::VERTEX_SHADER;
 				}

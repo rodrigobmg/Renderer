@@ -200,16 +200,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Assets\Shaders\color.ps" />
-    <None Include="..\Assets\Shaders\color.vs" />
-    <None Include="..\Assets\Shaders\inputtypes.inc" />
-    <None Include="..\Assets\Shaders\light.ps" />
-    <None Include="..\Assets\Shaders\light.vs" />
+    <None Include="..\Assets\Shaders\color_ps.hlsl" />
+    <None Include="..\Assets\Shaders\color_vs.hlsl" />
+    <None Include="..\Assets\Shaders\inputtypes.hlsli" />
+    <None Include="..\Assets\Shaders\light_ps.hlsl" />
+    <None Include="..\Assets\Shaders\light_vs.hlsl" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Assets\Shaders\constantbuffers.inc" />
-    <Text Include="..\Assets\Shaders\structs.inc" />
+    <Text Include="..\Assets\Shaders\constantbuffers.hlsli" />
+    <Text Include="..\Assets\Shaders\structs.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -309,27 +309,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="..\Assets\Shaders\color.ps">
+    <None Include="..\Assets\Shaders\light_vs.hlsl">
       <Filter>Directx11\Graphics\Shaders</Filter>
     </None>
-    <None Include="..\Assets\Shaders\color.vs">
+    <None Include="..\Assets\Shaders\light_ps.hlsl">
       <Filter>Directx11\Graphics\Shaders</Filter>
     </None>
-    <None Include="..\Assets\Shaders\light.ps">
+    <None Include="..\Assets\Shaders\inputtypes.hlsli">
       <Filter>Directx11\Graphics\Shaders</Filter>
     </None>
-    <None Include="..\Assets\Shaders\light.vs">
+    <None Include="..\Assets\Shaders\color_vs.hlsl">
       <Filter>Directx11\Graphics\Shaders</Filter>
     </None>
-    <None Include="..\Assets\Shaders\inputtypes.inc">
+    <None Include="..\Assets\Shaders\color_ps.hlsl">
       <Filter>Directx11\Graphics\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Assets\Shaders\structs.inc">
+    <Text Include="..\Assets\Shaders\structs.hlsli">
       <Filter>Directx11\Graphics\Shaders</Filter>
     </Text>
-    <Text Include="..\Assets\Shaders\constantbuffers.inc">
+    <Text Include="..\Assets\Shaders\constantbuffers.hlsli">
       <Filter>Directx11\Graphics\Shaders</Filter>
     </Text>
   </ItemGroup>

@@ -1,5 +1,5 @@
-#include "constantbuffers.inc"
-#include "inputtypes.inc"
+#include "constantbuffers.hlsli"
+#include "inputtypes.hlsli"
 
 Texture2D diffuseTexture : register(t0);
 Texture2D specularTexture : register(t1);

@@ -1,4 +1,6 @@
-//InputTypes
+#ifndef INPUTTYPES_HLSLI
+#define INPUTTYPES_HLSLI
+
 struct VertexInputType
 {
 	float3 position : POSITION;
@@ -13,3 +15,5 @@ struct PixelInputType
 	float4 worldSpacePosition : POSITION0;
 	float2 uv : TEXCOORD;
 };
+
+#endif

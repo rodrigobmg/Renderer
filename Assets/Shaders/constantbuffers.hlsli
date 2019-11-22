@@ -1,4 +1,7 @@
-#include "structs.inc"
+#ifndef CONSTANTBUFFERS_HLSLI
+#define CONSTANTBUFFERS_HLSLI
+
+#include "structs.hlsli"
 
 cbuffer FrameBufferData : register(b0)
 {
@@ -18,3 +21,5 @@ cbuffer MaterialBufferData : register(b2)
 {
 	float4 materialData;
 };
+
+#endif
