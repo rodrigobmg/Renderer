@@ -2,6 +2,7 @@
 #include "Matrix4d.h"
 
 #include "Vector3d.h"
+#include "Quaternion.h"
 
 const Matrix4d Matrix4d::kIdentity(
 	1.0f, 0.0f, 0.0f, 0.0f,
@@ -47,6 +48,16 @@ Matrix4d & Matrix4d::operator=(const Matrix4d & other)
 	return *this;
 }
 
+bool Matrix4d::Decompose(Vector3d& position, Vector3d& scale, Quaternion& orientation) const
+{
+	DirectX::XMVECTOR outScale, outRot, outPos;
+	bool result = DirectX::XMMatrixDecompose(&outScale, &outRot, &outPos, *this);
+	position = outPos;
+	scale = outScale;
+	orientation = outRot;
+	return result;
+}
+
 const Matrix4d& Matrix4d::Identity()
 {
 	return kIdentity;
@@ -57,42 +68,42 @@ Matrix4d operator*(const Matrix4d & m1, const Matrix4d & m2)
 	return DirectX::XMMatrixMultiply(m1, m2);
 }
 
-Matrix4d MatrixLookAtLH(const Vector3d & position, const Vector3d & lookAt, const Vector3d & up)
+Matrix4d Math::MatrixLookAtLH(const Vector3d & position, const Vector3d & lookAt, const Vector3d & up)
 {
 	return DirectX::XMMatrixLookAtLH(position, lookAt, up);
 }
 
-Matrix4d MatrixTranspose(const Matrix4d & matrix)
+Matrix4d Math::MatrixTranspose(const Matrix4d & matrix)
 {
 	return DirectX::XMMatrixTranspose(matrix);
 }
 
-Matrix4d MatrixPerspectiveFovLH(float FOV, float aspectRatio, float nearZ, float farZ)
+Matrix4d Math::MatrixPerspectiveFovLH(float FOV, float aspectRatio, float nearZ, float farZ)
 {
 	return DirectX::XMMatrixPerspectiveFovLH(FOV, aspectRatio, nearZ, farZ);
 }
 
-Matrix4d MatrixIdentity()
+Matrix4d Math::MatrixIdentity()
 {
 	return DirectX::XMMatrixIdentity();
 }
 
-Matrix4d MatrixOrthographicLH(float width, float height, float nearZ, float farZ)
+Matrix4d Math::MatrixOrthographicLH(float width, float height, float nearZ, float farZ)
 {
 	return DirectX::XMMatrixOrthographicLH(width, height, nearZ, farZ);
 }
 
-Matrix4d MatrixTranslation(const Vector3d & translation)
+Matrix4d Math::MatrixTranslation(const Vector3d & translation)
 {
 	return DirectX::XMMatrixTranslation(translation.x, translation.y, translation.z);
 }
 
-Matrix4d MatrixScale(const Vector3d & scale)
+Matrix4d Math::MatrixScale(const Vector3d & scale)
 {
 	return DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
 }
 
-Matrix4d MatrixInverse(const Matrix4d & matrix)
+Matrix4d Math::MatrixInverse(const Matrix4d & matrix)
 {
 	return DirectX::XMMatrixInverse(NULL, matrix);
 }

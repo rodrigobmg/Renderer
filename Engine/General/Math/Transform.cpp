@@ -2,8 +2,8 @@
 #include "Transform.h"
 
 Transform::Transform()
-	:m_position(0.0f)
-	,m_scale(1.0f)
+	: m_position(0.0f)
+	, m_scale(1.0f)
 {
 }
 
@@ -15,7 +15,13 @@ Transform & Transform::operator=(const Transform & other)
 	return *this;
 }
 
-const Matrix4d Transform::GetMatrix()
+void Transform::Set(const Matrix4d& matrix)
 {
-	return MatrixScale(m_scale) * m_orientation.GetRotationMatrix() * MatrixTranslation(m_position);
+	bool result = matrix.Decompose(m_position, m_scale, m_orientation);
+	assert(result);
+}
+
+const Matrix4d Transform::GetMatrix() const
+{
+	return Math::MatrixScale(m_scale) * m_orientation.GetRotationMatrix() * Math::MatrixTranslation(m_position);
 }

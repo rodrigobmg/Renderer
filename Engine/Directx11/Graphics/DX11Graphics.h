@@ -27,7 +27,6 @@ public:
 	virtual ISamplerStatePtr CreateSamplerState() const override;
 	virtual IConstantBufferPtr CreateMaterialConstantBuffer() const override;
 	virtual ICameraPtr CreateCamera() const override;
-	virtual void SetActiveCamera(const ICameraPtr& camera) override { m_activeCamera = camera; }
 	virtual bool LoadFont(const string& fontFile) override;
 
 private:
@@ -39,7 +38,6 @@ private:
 	ID3D11DepthStencilState*		m_depthStencilState;
 	ID3D11DepthStencilView*			m_depthStencilView;
 	ID3D11RasterizerState*			m_rasterState;
-	mutable ICameraPtr				m_activeCamera;
 	SharedPtr<IConstantBuffer>		m_frameConstantBuffer;
 	FrameConstantBufferData*		m_frameConstantBufferData;
 	UniquePtr<Font>					m_font;

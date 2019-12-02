@@ -12,11 +12,13 @@
 #include <General/Math/Vector3d.h>
 #include <General/Math/Math.h>
 #include <General/Math/Transform.h>
-#include <General/Graphics/PointLightNode.h>
+#include <General/Graphics/DirectionalLightNode.h>
+#include <General/Graphics/DirectionalLight.h>
+#include <General/Graphics/CameraNode.h>
 
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
-const float kScreenDepth = 1000.0f;
+const float kScreenDepth = 10000.0f;
 const float kScreenNear = 0.1f;
 
 Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight, const char* name)
@@ -30,13 +32,6 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 		return;
 	}
 
-	m_camera = m_graphics->CreateCamera();
-	if (!m_camera)
-	{
-		m_ready = false;
-		return;
-	}
-
 	m_scene = Loader::LoadScene("Assets/cube.object", m_graphics);
 	if (!m_scene)
 	{
@@ -44,15 +39,23 @@ Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight,
 		return;
 	}
 
-	if (!m_scene->ContainsNode(SceneNodeType::kPointLight))
+	if (!m_scene->ContainsNode(SceneNodeType::kDirectionalLight))
 	{
-		SharedPtr<PointLight> light(new PointLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Vector3d(0.0f, 0.0f, -200.0f)));
-		SharedPtr<PointLightNode> node(new PointLightNode(light, "Main Light"));
+		SharedPtr<DirectionalLight> light(new DirectionalLight(Color(1.0f, 1.0f, 1.0f, 1.0f), Quaternion()));
+		SharedPtr<DirectionalLightNode> node(new DirectionalLightNode(light, "Main Light"));
 		m_scene->GetRootNode()->AddChild(node);
+		node->SetParent(m_scene->GetRootNode());
+	}
+
+	if (!m_scene->ContainsNode(SceneNodeType::kCamera))
+	{
+		m_camera = SharedPtr<CameraNode>(new CameraNode(m_graphics->CreateCamera(), "Main Camera"));
+		m_scene->GetRootNode()->AddChild(m_camera);
+		m_camera->SetParent(m_scene->GetRootNode());
 	}
 
 	vector<SceneNodePtr> nodes;
-	m_scene->GetNodesOfType(SceneNodeType::kPointLight, nodes);
+	m_scene->GetNodesOfType(SceneNodeType::kDirectionalLight, nodes);
 	SceneNodePtr lightModel = Loader::LoadMeshNode("Assets/pointlight.object", m_graphics);
 	assert(!nodes.empty());
 	nodes[0]->AddChild(lightModel);
@@ -96,7 +99,10 @@ void Application::Update()
 		RotateLight(x, y);
 	}
 
-	MoveCamera(x, y);
+	if (m_camera)
+	{
+		MoveCamera(x, y);
+	}
 
 	m_mousePosX = x;
 	m_mousePosY = y;
@@ -108,7 +114,7 @@ static const float kCameraSpeed = 1000.0f;
 void Application::MoveCamera(int x, int y)
 {
 	float deltaTime = m_timer.GetDeltaTime();
-	Transform cameraTransform = m_camera->GetTransform();
+	Transform cameraTransform = m_camera->m_localTransform;
 	if (Input::GetMouseButtonDown(Input::MouseButtonType::kLeft))
 	{
 		float deltaX = (x - m_mousePosX) / static_cast<float>(m_window->GetWindowWidth());
@@ -138,7 +144,7 @@ void Application::MoveCamera(int x, int y)
 	{
 		cameraTransform.m_position += side;
 	}
-	m_camera->SetTransform(cameraTransform);
+	m_camera->m_localTransform = cameraTransform;
 }
 
 void Application::RotateLight(int x, int y)

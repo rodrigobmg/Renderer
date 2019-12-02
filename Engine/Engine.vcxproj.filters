@@ -166,6 +166,12 @@
     <ClInclude Include="General\Graphics\PointLightNode.h">
       <Filter>General\Graphics\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="General\Graphics\DirectionalLightNode.h">
+      <Filter>General\Graphics\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Graphics\CameraNode.h">
+      <Filter>General\Graphics\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -272,6 +278,12 @@
       <Filter>General\Graphics\Scene</Filter>
     </ClCompile>
     <ClCompile Include="General\Graphics\PointLightNode.cpp">
+      <Filter>General\Graphics\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\DirectionalLightNode.cpp">
+      <Filter>General\Graphics\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="General\Graphics\CameraNode.cpp">
       <Filter>General\Graphics\Scene</Filter>
     </ClCompile>
   </ItemGroup>

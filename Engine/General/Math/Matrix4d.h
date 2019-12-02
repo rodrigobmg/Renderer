@@ -1,5 +1,6 @@
 #pragma once
 
+class Quaternion;
 class Matrix4d
 {
 public:
@@ -13,6 +14,7 @@ public:
 	Matrix4d(const Matrix4d& other);
 	Matrix4d(const DirectX::XMMATRIX& other);
 	Matrix4d& operator=(const Matrix4d& other);
+	bool Decompose(Vector3d& position, Vector3d& scale, Quaternion& orientation) const;
 	~Matrix4d() {}
 
 	operator DirectX::XMMATRIX() const { return m_matrix; }
@@ -35,12 +37,16 @@ public:
 	static const Matrix4d kIdentity;
 };
 
+
 Matrix4d operator*(const Matrix4d& m1, const Matrix4d& m2);
-Matrix4d MatrixLookAtLH(const Vector3d& position, const Vector3d& lookAt, const Vector3d& up);
-Matrix4d MatrixTranspose(const Matrix4d& matrix);
-Matrix4d MatrixPerspectiveFovLH(float FOV, float aspectRatio, float nearZ, float farZ);
-Matrix4d MatrixIdentity();
-Matrix4d MatrixOrthographicLH(float width, float height, float nearZ, float farZ);
-Matrix4d MatrixTranslation(const Vector3d& translation);
-Matrix4d MatrixScale(const Vector3d& scale);
-Matrix4d MatrixInverse(const Matrix4d& matrix);
+namespace Math
+{
+	Matrix4d MatrixLookAtLH(const Vector3d& position, const Vector3d& lookAt, const Vector3d& up);
+	Matrix4d MatrixTranspose(const Matrix4d& matrix);
+	Matrix4d MatrixPerspectiveFovLH(float FOV, float aspectRatio, float nearZ, float farZ);
+	Matrix4d MatrixIdentity();
+	Matrix4d MatrixOrthographicLH(float width, float height, float nearZ, float farZ);
+	Matrix4d MatrixTranslation(const Vector3d& translation);
+	Matrix4d MatrixScale(const Vector3d& scale);
+	Matrix4d MatrixInverse(const Matrix4d& matrix);
+}

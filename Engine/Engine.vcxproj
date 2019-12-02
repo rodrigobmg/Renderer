@@ -121,7 +121,9 @@
     <ClInclude Include="General\Application\Timer.h" />
     <ClInclude Include="General\Application\Window.h" />
     <ClInclude Include="General\Graphics\Camera.h" />
+    <ClInclude Include="General\Graphics\CameraNode.h" />
     <ClInclude Include="General\Graphics\DirectionalLight.h" />
+    <ClInclude Include="General\Graphics\DirectionalLightNode.h" />
     <ClInclude Include="General\Graphics\Font.h" />
     <ClInclude Include="General\Graphics\FrameConstantBuffer.h" />
     <ClInclude Include="General\Graphics\ICamera.h" />
@@ -174,7 +176,9 @@
     <ClCompile Include="General\Application\Timer.cpp" />
     <ClCompile Include="General\Application\Window.cpp" />
     <ClCompile Include="General\Graphics\Camera.cpp" />
+    <ClCompile Include="General\Graphics\CameraNode.cpp" />
     <ClCompile Include="General\Graphics\DirectionalLight.cpp" />
+    <ClCompile Include="General\Graphics\DirectionalLightNode.cpp" />
     <ClCompile Include="General\Graphics\Font.cpp" />
     <ClCompile Include="General\Graphics\IndexArray.cpp" />
     <ClCompile Include="General\Graphics\Light.cpp" />

@@ -27,8 +27,8 @@ void MeshNode::Render()
 {
 	if (m_objectConstantBufferData)
 	{
-		m_objectConstantBufferData->m_model = MatrixTranspose(m_localToWorld);
-		m_objectConstantBufferData->m_modelInverseTranspose = MatrixInverse(MatrixTranspose(m_objectConstantBufferData->m_model));
+		m_objectConstantBufferData->m_model = Math::MatrixTranspose(m_localToWorld);
+		m_objectConstantBufferData->m_modelInverseTranspose = Math::MatrixInverse(Math::MatrixTranspose(m_objectConstantBufferData->m_model));
 		m_objectConstantBuffer->SetData(m_objectConstantBufferData);
 	}
 

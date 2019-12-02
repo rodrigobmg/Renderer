@@ -10,8 +10,9 @@ public:
 	Transform();
 	~Transform() {}
 	Transform& operator=(const Transform& other);
+	void Set(const Matrix4d& matrix);
 
-	const Matrix4d GetMatrix();
+	const Matrix4d GetMatrix() const;
 
 	Vector3d	m_position;
 	Quaternion	m_orientation;

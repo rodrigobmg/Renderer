@@ -7,7 +7,7 @@ cbuffer FrameBufferData : register(b0)
 {
 	matrix viewMatrix;
 	matrix projectionMatrix;
-	PointLightData pointLight[1];
+	DirectionalLightData directionalLight;
 	float4 cameraPos;
 };
 

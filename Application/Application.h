@@ -15,9 +15,9 @@ public:
 	void RotateObject();
 
 private:
-	ScenePtr	m_scene;
-	ICameraPtr	m_camera;
-	int			m_mousePosX;
-	int			m_mousePosY;
-	bool		m_firstMouseMove;
+	ScenePtr		m_scene;
+	SceneNodePtr	m_camera;
+	int				m_mousePosX;
+	int				m_mousePosY;
+	bool			m_firstMouseMove;
 };

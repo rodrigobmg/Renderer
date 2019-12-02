@@ -1,18 +1,18 @@
 #pragma once
 
 #include "Light.h"
-#include <General/Math/Vector3d.h>
+#include <General/Math/Quaternion.h>
 
 class DirectionalLight : public Light
 {
 public:
-	DirectionalLight();
+	DirectionalLight(const Color& color, const Quaternion& orientation);
 	DirectionalLight(const DirectionalLight& other);
 	~DirectionalLight() {}
 
-	const Vector3d& GetDirection() const { return m_direction; }
-	void SetDirection(const Vector3d& direction) { m_direction = direction; }
+	const Quaternion& GetOrientation() const { return m_orientation; }
+	void SetOrientation(const Quaternion& orientation) { m_orientation = orientation; }
 
 private:
-	Vector3d	m_direction;
+	Quaternion	m_orientation;
 };

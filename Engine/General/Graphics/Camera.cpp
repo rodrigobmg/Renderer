@@ -21,7 +21,7 @@ const Matrix4d& Camera::GetViewMatrix()
 	Vector3d lookAt = m_transform.m_position + forward;
 
 	// Finally create the view matrix from the three updated vectors.
-	m_viewMatrix = MatrixLookAtLH(m_transform.m_position, lookAt, up);
+	m_viewMatrix = Math::MatrixLookAtLH(m_transform.m_position, lookAt, up);
 
 	return m_viewMatrix;
 }

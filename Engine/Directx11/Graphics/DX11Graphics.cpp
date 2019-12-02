@@ -14,11 +14,12 @@
 #include <General/Graphics/IndexArray.h>
 #include <General/Graphics/Material.h>
 #include <General/Graphics/Camera.h>
-#include <General/Graphics/PointLight.h>
+#include <General/Graphics/DirectionalLight.h>
 #include <General/Graphics/Font.h>
 #include <General/Graphics/TextureManager.h>
 #include <General/Graphics/Scene.h>
-#include <General/Graphics/PointLightNode.h>
+#include <General/Graphics/DirectionalLightNode.h>
+#include <General/Graphics/CameraNode.h>
 
 //Reference:http://www.rastertek.com/
 
@@ -31,7 +32,6 @@ DX11Graphics::DX11Graphics()
 	, m_depthStencilState(nullptr)
 	, m_depthStencilView(nullptr)
 	, m_rasterState(nullptr)
-	, m_activeCamera(nullptr)
 	, m_frameConstantBufferData(nullptr)
 	, m_font(new Font())
 	, m_textureManager(nullptr)
@@ -418,10 +418,10 @@ bool DX11Graphics::Initialize(const IWindowPtr& window, int screenWidth, int scr
 		m_frameConstantBufferData = new FrameConstantBufferData();
 
 		//Create the projection matrix
-		m_frameConstantBufferData->m_projection = MatrixTranspose(MatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
+		m_frameConstantBufferData->m_projection = Math::MatrixTranspose(Math::MatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth));
 
 		//Create orthographic projection matrix
-		m_orthoMatrix = MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
+		m_orthoMatrix = Math::MatrixOrthographicLH(static_cast<float>(screenWidth), static_cast<float>(screenHeight), screenNear, screenDepth);
 	}
 
 	m_textureManager.reset(new TextureManager(*this));
@@ -438,32 +438,37 @@ void DX11Graphics::StartRender(const ScenePtr& scene)
 	//Clear depth buffer
 	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-
-	// Get the view, and projection matrices and set them in the per frame constant buffer
-	m_frameConstantBufferData->m_view = MatrixTranspose(m_activeCamera->GetViewMatrix());
-
 	vector<SceneNodePtr> nodes;
-	scene->GetNodesOfType(SceneNodeType::kPointLight, nodes);
+	scene->GetNodesOfType(SceneNodeType::kCamera, nodes);
+
+	if (!nodes.empty())
+	{
+		const CameraNode* cameraNode = static_cast<const CameraNode*>(nodes[0].get());
+		// Get the view, and projection matrices and set them in the per frame constant buffer
+		m_frameConstantBufferData->m_view = Math::MatrixTranspose(cameraNode->GetCamera()->GetViewMatrix());
+		m_frameConstantBufferData->m_cameraPosition = cameraNode->m_localTransform.m_position;
+	}
+
+	nodes.clear();
+	scene->GetNodesOfType(SceneNodeType::kDirectionalLight, nodes);
 
 	for (int i = 0; i < kNumPointLights; i++)
 	{
 		if (i < nodes.size())
 		{
-			assert(nodes[i]->GetType() == SceneNodeType::kPointLight);
-			const PointLightNode* lightNode = static_cast<const PointLightNode*>(nodes[i].get());
-			const SharedPtr<PointLight>& light = lightNode->GetLight();
+			assert(nodes[i]->GetType() == SceneNodeType::kDirectionalLight);
+			const DirectionalLightNode* lightNode = static_cast<const DirectionalLightNode*>(nodes[i].get());
+			const SharedPtr<DirectionalLight>& light = lightNode->GetLight();
 			assert(light);
-			m_frameConstantBufferData->m_pointLightData[i].m_color = light->GetColor();
-			m_frameConstantBufferData->m_pointLightData[i].m_position = light->GetPosition();
-			m_frameConstantBufferData->m_pointLightData[i].m_intensity = light->GetIntensity();
+			m_frameConstantBufferData->m_directionalLightData.m_color = light->GetColor();
+			m_frameConstantBufferData->m_directionalLightData.m_direction = Vector4d(0.0f, 0.0f, -1.0f, 1.0f) * light->GetOrientation().GetRotationMatrix();
+			m_frameConstantBufferData->m_directionalLightData.m_intensity = light->GetIntensity();
 		}
 		else
 		{
 			break;
 		}
 	}
-
-	m_frameConstantBufferData->m_cameraPosition = m_activeCamera->GetTransform().m_position;
 
 	m_frameConstantBuffer->SetData(m_frameConstantBufferData);
 }
@@ -619,12 +624,7 @@ IConstantBufferPtr DX11Graphics::CreateMaterialConstantBuffer() const
 
 ICameraPtr DX11Graphics::CreateCamera() const
 {
-	ICameraPtr camera(new Camera());
-	if (!m_activeCamera)
-	{
-		m_activeCamera = camera;
-	}
-	return camera;
+	return ICameraPtr(new Camera());
 }
 
 bool DX11Graphics::LoadFont(const string& fontFile)

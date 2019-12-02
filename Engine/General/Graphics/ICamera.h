@@ -9,4 +9,5 @@ public:
 	virtual const Matrix4d& GetViewMatrix() = 0;
 	virtual const Transform& GetTransform() const = 0;
 	virtual void SetTransform(const Transform& transform) = 0;
+	virtual void SetTransform(const Matrix4d& transform) = 0;
 };

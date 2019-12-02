@@ -8,4 +8,11 @@ struct PointLightData
 	float intensity;
 };
 
+struct DirectionalLightData
+{
+	float4 color;
+	float3 direction;
+	float intensity;
+};
+
 #endif

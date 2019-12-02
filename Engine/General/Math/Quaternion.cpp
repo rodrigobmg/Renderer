@@ -55,6 +55,11 @@ Quaternion& Quaternion::operator*=(const Quaternion& other)
 	return *this;
 }
 
+Quaternion Quaternion::GetInverse() const
+{
+	return DirectX::XMQuaternionInverse(m_quaternion);
+}
+
 Quaternion operator*(const Quaternion& lhs, const Quaternion& rhs)
 {
 	Quaternion local = lhs;

@@ -7,7 +7,7 @@ PointLightNode::PointLightNode(const SharedPtr<PointLight>& pointLight, const st
 	: SceneNode(name, SceneNodeType::kPointLight)
 	, m_pointLight(pointLight)
 {
-	Matrix4d parentMatrixInv = MatrixInverse(GetParentMatrix());
+	Matrix4d parentMatrixInv = Math::MatrixInverse(GetParentMatrix());
 	m_localTransform.m_position = m_pointLight->GetPosition() * parentMatrixInv;
 }
 

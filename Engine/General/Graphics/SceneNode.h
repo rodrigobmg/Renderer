@@ -6,6 +6,7 @@ enum class SceneNodeType
 	kTransform = 0,
 	kMesh,
 	kPointLight,
+	kDirectionalLight,
 	kCamera
 };
 
