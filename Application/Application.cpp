@@ -18,7 +18,7 @@
 
 const bool kFullscreen = false;
 const bool kVsyncEnabled = true;
-const float kScreenDepth = 10000.0f;
+const float kScreenDepth = 100000.0f;
 const float kScreenNear = 0.1f;
 
 Application::Application(HINSTANCE hInstance, int windowWidth, int windowHeight, const char* name)

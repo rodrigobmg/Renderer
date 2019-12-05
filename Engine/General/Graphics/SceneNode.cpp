@@ -13,7 +13,7 @@ SceneNode::~SceneNode()
 
 void SceneNode::Update()
 {
-	m_localToWorld = GetParentMatrix() * m_localTransform.GetMatrix();
+	m_localToWorld = m_localTransform.GetMatrix() * GetParentMatrix();
 	for (SceneNodePtr& sceneNode : m_children)
 	{
 		sceneNode->Update();

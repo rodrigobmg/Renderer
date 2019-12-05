@@ -231,11 +231,12 @@ SceneNodePtr CreateSceneDescription(const aiScene* scene, const aiNode* node, co
 		sceneNode.reset(new SceneNode(node->mName.C_Str()));
 	}
 
-	aiVector3D position, scale, rotation;
+	aiVector3D position, scale;
+	aiQuaternion rotation;
 	node->mTransformation.Decompose(scale, rotation, position);
 	sceneNode->m_localTransform.m_position = Vector3d(position.x, position.y, position.z);
 	sceneNode->m_localTransform.m_scale = Vector3d(scale.x, scale.y, scale.z);
-	sceneNode->m_localTransform.m_orientation = Quaternion(Vector3d(rotation.x, rotation.y, rotation.z));
+	sceneNode->m_localTransform.m_orientation = Quaternion(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
@@ -266,8 +267,15 @@ ScenePtr Loader::LoadScene(const string& path, const IGraphicsPtr& graphics)
 	IShaderPtr vertexShader = graphics->CreateShader(vertexShaderPath, ShaderType::VERTEX_SHADER);
 	IShaderPtr pixelShader = graphics->CreateShader(pixelShaderPath, ShaderType::PIXEL_SHADER);
 
-	Assimp::Importer importer; 
-	const aiScene* aiScene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals);
+	Assimp::Importer importer;
+	unsigned int importFlags = aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_GenNormals;
+	string trueString("true");
+	if (objectDescription.contains("useLeftHandImport"))
+	{
+		importFlags |= aiProcess_MakeLeftHanded;
+	}
+
+	const aiScene* aiScene = importer.ReadFile(modelPath, importFlags);
 	if (!aiScene || aiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !aiScene->mRootNode) {
 		string error = importer.GetErrorString();
 		ERROR_LOG("ERROR::ASSIMP:: {}", error);
